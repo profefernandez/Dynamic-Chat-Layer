@@ -1,22 +1,26 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Launch Lemonade API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: chat
+    description: Chat operations
+  - name: elements
+    description: Element tile operations
+  - name: subelements
+    description: Sub-element operations
 paths:
   /healthz:
     get:
       operationId: healthCheck
       tags: [health]
       summary: Health check
-      description: Returns server health status
       responses:
         "200":
           description: Healthy
@@ -24,6 +28,205 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /chat:
+    post:
+      operationId: sendChat
+      tags: [chat]
+      summary: Send a message to the Launch Lemonade chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatInput"
+      responses:
+        "200":
+          description: Chat response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+  /elements:
+    get:
+      operationId: listElements
+      tags: [elements]
+      summary: List all element tiles
+      responses:
+        "200":
+          description: List of elements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Element"
+    post:
+      operationId: createElement
+      tags: [elements]
+      summary: Create a new element tile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ElementInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Element"
+
+  /elements/{id}:
+    get:
+      operationId: getElement
+      tags: [elements]
+      summary: Get a single element
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Element
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Element"
+    patch:
+      operationId: updateElement
+      tags: [elements]
+      summary: Update an element tile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ElementUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Element"
+    delete:
+      operationId: deleteElement
+      tags: [elements]
+      summary: Delete an element tile
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
+  /elements/{elementId}/subelements:
+    get:
+      operationId: listSubElements
+      tags: [subelements]
+      summary: List sub-elements for an element
+      parameters:
+        - name: elementId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: List of sub-elements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SubElement"
+    post:
+      operationId: createSubElement
+      tags: [subelements]
+      summary: Create a sub-element
+      parameters:
+        - name: elementId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubElementInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubElement"
+
+  /elements/{elementId}/subelements/{id}:
+    patch:
+      operationId: updateSubElement
+      tags: [subelements]
+      summary: Update a sub-element
+      parameters:
+        - name: elementId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubElementUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubElement"
+    delete:
+      operationId: deleteSubElement
+      tags: [subelements]
+      summary: Delete a sub-element
+      parameters:
+        - name: elementId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "204":
+          description: Deleted
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +237,120 @@ components:
       required:
         - status
 
+    ChatInput:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        sessionId:
+          type: ["string", "null"]
+        hiddenPrompt:
+          type: ["boolean", "null"]
+
+    ChatResponse:
+      type: object
+      required: [reply, sessionId]
+      properties:
+        reply:
+          type: string
+        sessionId:
+          type: string
+
+    Element:
+      type: object
+      required: [id, name, promptText, order]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        promptText:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        order:
+          type: integer
+        subElements:
+          type: array
+          items:
+            $ref: "#/components/schemas/SubElement"
+
+    ElementInput:
+      type: object
+      required: [name, promptText]
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        promptText:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        order:
+          type: integer
+
+    ElementUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        promptText:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        order:
+          type: integer
+
+    SubElement:
+      type: object
+      required: [id, elementId, name, promptText, order]
+      properties:
+        id:
+          type: integer
+        elementId:
+          type: integer
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        promptText:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        order:
+          type: integer
+
+    SubElementInput:
+      type: object
+      required: [name, promptText]
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        promptText:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        order:
+          type: integer
+
+    SubElementUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: ["string", "null"]
+        promptText:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+        order:
+          type: integer

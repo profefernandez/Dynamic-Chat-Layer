@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Launch Lemonade"
+version = "1.0.0"
+id = "artifacts/lemonade-chat"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 20419
+
+[services.development]
+run = "pnpm --filter @workspace/lemonade-chat run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/lemonade-chat", "run", "build" ]
+publicDir = "artifacts/lemonade-chat/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "20419"
+BASE_PATH = "/"
