@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode, useRef, useEffect } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useSendChat } from '@workspace/api-client-react';
 
 export type Message = {
@@ -19,7 +19,10 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Welcome to Launch Lemonade. How can I help you build today?' }
+    {
+      role: 'assistant',
+      content: 'Welcome to 60 Watts of Clarity. I\'m your AI guide for literacy, consultation, and education. Click a service tile or ask me anything to get started.',
+    },
   ]);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [isOverlayOpen, setOverlayOpen] = useState(true);
@@ -27,7 +30,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const { mutate: sendChat, isPending: isSending } = useSendChat();
 
   const sendMessage = (content: string, hiddenPrompt: boolean = false) => {
-    // Add user message immediately if it's not hidden
     if (!hiddenPrompt) {
       setMessages((prev) => [...prev, { role: 'user', content }]);
     } else {
@@ -40,8 +42,6 @@ export function ChatProvider({ children }: { children: ReactNode }) {
         onSuccess: (data) => {
           setSessionId(data.sessionId);
           setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
-          
-          // Optionally slide up overlay on interaction
           if (hiddenPrompt) {
             setOverlayOpen(false);
           }

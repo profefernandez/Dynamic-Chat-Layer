@@ -17,24 +17,31 @@ export function OverlayLayer() {
       <motion.div
         initial={false}
         animate={{
-          y: isOverlayOpen ? 0 : '-70%',
-          opacity: isOverlayOpen ? 1 : 0.4,
-          scale: isOverlayOpen ? 1 : 0.95
+          y: isOverlayOpen ? 0 : '-72%',
+          opacity: isOverlayOpen ? 1 : 0.35,
+          scale: isOverlayOpen ? 1 : 0.97,
         }}
-        transition={{ type: 'spring', bounce: 0, duration: 0.6 }}
+        transition={{ type: 'spring', bounce: 0, duration: 0.55 }}
         className="fixed top-0 left-0 right-0 bottom-24 z-10 origin-top pointer-events-none"
       >
-        <div className="absolute inset-0 glass-panel shadow-2xl overflow-hidden pointer-events-auto flex flex-col border-b border-primary/20 bg-[#0a0a14]/85">
+        <div
+          className="absolute inset-0 shadow-2xl overflow-hidden pointer-events-auto flex flex-col blue-rim-glow"
+          style={{
+            background: 'rgba(13, 11, 8, 0.86)',
+            backdropFilter: 'blur(20px)',
+            borderBottom: '1px solid rgba(201, 151, 58, 0.15)',
+          }}
+        >
           <NavBar onToggle={() => setOverlayOpen(!isOverlayOpen)} isOpen={isOverlayOpen} />
-          
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+
+          <div className="flex-1 overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.28 }}
                 className="min-h-full"
               >
                 <Switch>
