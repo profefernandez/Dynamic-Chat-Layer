@@ -1,63 +1,48 @@
 import React from 'react';
 import { Link, useLocation } from 'wouter';
-import { ChevronDown, ChevronUp } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 
 export function NavBar({ onToggle, isOpen }: { onToggle: () => void; isOpen: boolean }) {
   const [location] = useLocation();
 
   const links = [
-    { href: '/', label: 'Home' },
-    { href: '/services', label: 'Services' },
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/',           label: 'Training' },
+    { href: '/services',   label: 'Consultation' },
+    { href: '/about',      label: 'Web Dev' },
+    { href: '/contact',    label: 'Community' },
   ];
 
   return (
-    <nav className="sticky top-0 z-50 px-6 py-4 flex items-center justify-between border-b border-[rgba(201,151,58,0.12)] bg-[rgba(13,11,8,0.90)] backdrop-blur-md">
-      <Link href="/" className="flex items-center gap-3 group">
-        <div
-          className="w-8 h-8 rounded-sm flex items-center justify-center text-xs font-black"
-          style={{
-            background: 'radial-gradient(circle at 35% 30%, rgba(224,176,80,0.9), rgba(160,100,20,0.7) 50%, rgba(80,50,10,0.4))',
-            boxShadow: '0 0 12px rgba(201,151,58,0.5)',
-          }}
-        >
-          <span className="text-[#0d0b08]">60</span>
-        </div>
-        <span className="font-bold text-base tracking-tight text-[#f0ece0] group-hover:text-[#c9973a] transition-colors">
-          60 Watts of Clarity
-        </span>
-      </Link>
-
-      <div className="hidden md:flex items-center gap-8">
-        {links.map(link => (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={`text-sm font-medium transition-all ${
-              location === link.href
-                ? 'text-[#c9973a] drop-shadow-[0_0_8px_rgba(201,151,58,0.5)]'
-                : 'text-[#8a7f6e] hover:text-[#f0ece0]'
-            }`}
-          >
-            {link.label}
-          </Link>
-        ))}
+    <nav className="sticky top-0 z-50 flex justify-between items-center px-margin-desktop h-20 bg-surface/80 backdrop-blur-xl border-b border-white/10 transition-transform">
+      <div className="font-headline-md text-headline-md text-primary">
+        60 Watts of Clarity
       </div>
 
-      <Button
-        variant="ghost"
-        size="sm"
+      <div className="hidden md:flex items-center gap-8">
+        {links.map(link => {
+          const active = location === link.href;
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={[
+                'font-label-sm text-label-sm uppercase tracking-widest transition-colors',
+                active
+                  ? 'text-primary font-bold border-b-2 border-primary pb-1'
+                  : 'text-on-surface-variant hover:text-primary hover:bg-white/5 px-3 py-2 rounded-md transition-all duration-300',
+              ].join(' ')}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
+      </div>
+
+      <button
         onClick={onToggle}
-        className="text-[#8a7f6e] hover:text-[#c9973a] hover:bg-[rgba(201,151,58,0.08)] text-xs"
+        className="font-label-sm text-label-sm uppercase tracking-widest bg-primary text-on-primary px-6 py-2.5 rounded-full hover:shadow-[0_0_15px_rgba(242,202,80,0.5)] transition-all duration-300 active:scale-90 scale-95"
       >
-        {isOpen ? (
-          <span className="flex items-center gap-1.5">Hide Overlay <ChevronUp className="w-3.5 h-3.5" /></span>
-        ) : (
-          <span className="flex items-center gap-1.5">Show Overlay <ChevronDown className="w-3.5 h-3.5" /></span>
-        )}
-      </Button>
+        {isOpen ? 'Hide' : 'Get Started'}
+      </button>
     </nav>
   );
 }

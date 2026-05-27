@@ -2,50 +2,35 @@ import React from 'react';
 
 export function About() {
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12 md:py-16">
-      <p className="text-xs tracking-[0.2em] uppercase text-[#8a7f6e] mb-3">About</p>
-      <h1 className="text-4xl md:text-5xl font-black tracking-tight text-[#f0ece0] mb-8 leading-tight">
-        Illuminating AI<br />
-        <span className="text-gold-gradient">One Watt at a Time</span>
-      </h1>
-
-      <div className="space-y-6 text-[#8a7f6e] text-base leading-relaxed">
-        <p>
-          60 Watts of Clarity was founded on a simple belief: artificial intelligence should not be the exclusive domain of technologists. 
-          It belongs to social workers, community advocates, educators, nonprofits, and everyday families navigating an AI-shaped world.
-        </p>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-6">
-          {[
-            { label: 'Licensed Social Worker', description: 'Grounding every service in human-centered values and community accountability.' },
-            { label: 'AI Consultant', description: 'Translating complex technology into accessible, practical knowledge for organizations and individuals.' },
-            { label: 'Educator', description: 'Teaching AI literacy in plain language — no jargon, no gatekeeping.' },
-          ].map(({ label, description }) => (
-            <div
-              key={label}
-              className="p-5 rounded-xl service-tile relative overflow-hidden"
-            >
-              <div
-                className="absolute top-0 right-0 w-24 h-24 rounded-full blur-3xl"
-                style={{ background: 'rgba(201,151,58,0.1)' }}
-              />
-              <h3 className="text-sm font-bold text-[#c9973a] mb-2 uppercase tracking-wider">{label}</h3>
-              <p className="text-xs text-[#8a7f6e] leading-relaxed">{description}</p>
-            </div>
-          ))}
+    <main className="flex flex-col items-center pt-16 pb-20 px-margin-mobile md:px-margin-desktop">
+      <div className="z-10 text-center max-w-3xl mx-auto mb-14">
+        <div className="flex items-center justify-center gap-4 mb-6 opacity-70">
+          <div className="h-px w-12 bg-on-surface-variant" />
+          <span className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">
+            Website Development
+          </span>
+          <div className="h-px w-12 bg-on-surface-variant" />
         </div>
-
-        <p>
-          The name says it all — 60 watts is enough light to read by, to see clearly, to move through a space with confidence. 
-          That is what we bring to every engagement: not blinding floodlights or impenetrable darkness, 
-          but exactly the right amount of clarity for where you are and where you are going.
-        </p>
-
-        <p className="text-[#5a5040] text-sm">
-          Click any service tile on the home screen to start a guided conversation with the AI, 
-          or type freely in the bar below. Your questions shape the light.
+        <h2 className="font-headline-lg text-headline-lg text-on-surface mb-4">
+          AI-Assisted Websites
+        </h2>
+        <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+          We build clean, accessible websites for helping professionals, nonprofits, and community businesses — powered by AI.
         </p>
       </div>
-    </div>
+
+      <div className="z-10 w-full max-w-container-max mx-auto grid grid-cols-1 md:grid-cols-3 gap-gutter">
+        {[
+          { title: 'Nonprofit Websites', body: 'Mission-driven sites built for impact, accessibility, and community reach.' },
+          { title: 'Professional Practice', body: 'Personal sites for social workers, consultants, and educators that build trust fast.' },
+          { title: 'AI-Enhanced Tools', body: 'Chatbots, intake forms, and resource finders embedded directly in your site.' },
+        ].map(({ title, body }) => (
+          <div key={title} className="glass-card rounded-xl p-6">
+            <h3 className="font-body-lg text-body-lg text-white font-semibold mb-3">{title}</h3>
+            <p className="font-body-md text-sm text-on-surface-variant">{body}</p>
+          </div>
+        ))}
+      </div>
+    </main>
   );
 }

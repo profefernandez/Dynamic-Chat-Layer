@@ -25,11 +25,11 @@ export function OverlayLayer() {
         className="fixed top-0 left-0 right-0 bottom-24 z-10 origin-top pointer-events-none"
       >
         <div
-          className="absolute inset-0 shadow-2xl overflow-hidden pointer-events-auto flex flex-col blue-rim-glow"
+          className="absolute inset-0 overflow-hidden pointer-events-auto flex flex-col"
           style={{
-            background: 'rgba(13, 11, 8, 0.86)',
+            background: 'rgba(18, 19, 23, 0.92)',
             backdropFilter: 'blur(20px)',
-            borderBottom: '1px solid rgba(201, 151, 58, 0.15)',
+            borderBottom: '1px solid rgba(255,255,255,0.08)',
           }}
         >
           <NavBar onToggle={() => setOverlayOpen(!isOverlayOpen)} isOpen={isOverlayOpen} />
@@ -38,17 +38,17 @@ export function OverlayLayer() {
             <AnimatePresence mode="wait">
               <motion.div
                 key={location}
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.28 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.25 }}
                 className="min-h-full"
               >
                 <Switch>
-                  <Route path="/" component={Home} />
-                  <Route path="/services" component={Services} />
-                  <Route path="/about" component={About} />
-                  <Route path="/contact" component={Contact} />
+                  <Route path="/"          component={Home} />
+                  <Route path="/services"  component={Services} />
+                  <Route path="/about"     component={About} />
+                  <Route path="/contact"   component={Contact} />
                 </Switch>
               </motion.div>
             </AnimatePresence>
