@@ -351,7 +351,7 @@ export function Home() {
                   ? [0, 1, 2, 3].map((i) => (
                       <div key={i} className="glass-card rounded-xl p-6 h-64 animate-pulse" />
                     ))
-                  : orderedItems.map((element, index) => (
+                  : orderedItems.slice(0, 4).map((element, index) => (
                       <TileCard
                         key={element.id}
                         element={element}
@@ -373,6 +373,23 @@ export function Home() {
                   </button>
                 )}
               </div>
+
+              {orderedItems.length > 4 && (
+                <div className="mt-12 pt-8 border-t border-white/10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                    {orderedItems.slice(4).map((element, i) => (
+                      <TileCard
+                        key={element.id}
+                        element={element}
+                        visualIndex={i + 4}
+                        editMode={editMode}
+                        onActivate={() => handleTileActivate(element)}
+                        onEdit={() => setEditingTile(element)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </SortableContext>
           </DndContext>
         </div>
