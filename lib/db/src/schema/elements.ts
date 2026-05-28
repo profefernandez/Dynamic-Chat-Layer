@@ -8,6 +8,7 @@ export const elementsTable = pgTable("elements", {
   description: text("description"),
   promptText: text("prompt_text").notNull(),
   photoUrl: text("photo_url"),
+  linkUrl: text("link_url"),
   order: integer("order").notNull().default(0),
 });
 
@@ -18,6 +19,7 @@ export const subElementsTable = pgTable("sub_elements", {
   description: text("description"),
   promptText: text("prompt_text").notNull(),
   photoUrl: text("photo_url"),
+  linkUrl: text("link_url"),
   order: integer("order").notNull().default(0),
 });
 
