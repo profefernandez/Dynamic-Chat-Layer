@@ -90,7 +90,7 @@ export function ChatLayer() {
       </div>
 
       <div
-        className="absolute bottom-12 left-0 right-0 px-3 pt-8 pb-3 md:px-4 md:pt-10 md:pb-4 z-50"
+        className="absolute bottom-12 left-0 right-0 px-3 pt-4 pb-2 md:px-4 md:pt-6 md:pb-3 z-50"
         style={{ background: 'linear-gradient(to top, #121317 60%, transparent)' }}
       >
         <div className="max-w-3xl mx-auto relative">
@@ -131,7 +131,7 @@ export function ChatLayer() {
           />
           <form
             onSubmit={handleSubmit}
-            className="relative flex items-center rounded-full p-2 shadow-2xl transition-colors"
+            className="relative flex items-center rounded-full p-1 shadow-2xl transition-colors"
             style={{
               background: 'rgba(30, 31, 35, 0.95)',
               border: '1px solid rgba(242, 202, 80, 0.28)',
@@ -141,17 +141,17 @@ export function ChatLayer() {
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
               placeholder={placeholder}
-              className="flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-4 text-base placeholder:text-outline h-12 font-body-md"
+              className="flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-4 text-sm placeholder:text-outline h-10 font-body-md"
               onFocus={() => setOverlayOpen(false)}
             />
             <Button
               type="submit"
               size="icon"
-              className="rounded-full h-12 w-12 shrink-0 transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]"
+              className="rounded-full h-10 w-10 shrink-0 transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]"
               style={{ background: '#f2ca50', color: '#3c2f00' }}
               disabled={!inputValue.trim() || isSending}
             >
-              <Send className="h-5 w-5" />
+              <Send className="h-4 w-4" />
             </Button>
           </form>
         </div>
