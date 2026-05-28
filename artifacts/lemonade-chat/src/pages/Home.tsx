@@ -111,7 +111,7 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
       ref={setNodeRef}
       style={style}
       className={[
-        'glass-card rounded-xl p-5 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
+        'glass-card rounded-xl p-4 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
         v.offset ? 'lg:mt-12' : '',
         editMode ? 'cursor-default' : 'cursor-pointer',
       ].join(' ')}
@@ -156,11 +156,11 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </div>
       )}
 
-      <div className="h-28 w-full mb-3 relative flex items-center justify-center">
+      <div className="h-24 w-full mb-3 relative flex items-center justify-center">
         <div className={`absolute inset-0 ${v.glowClass} rounded-full blur-xl ${v.glowHoverClass} transition-colors`} />
         <img
           alt={element.name}
-          className={`w-24 h-24 object-cover rounded-full border ${v.imgBorderClass} z-10 opacity-80 mix-blend-screen ${v.imgShadowClass}`}
+          className={`w-20 h-20 object-cover rounded-full border ${v.imgBorderClass} z-10 opacity-80 mix-blend-screen ${v.imgShadowClass}`}
           src={imgSrc}
           onError={(e) => {
             const img = e.target as HTMLImageElement;
@@ -172,8 +172,8 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </span>
       </div>
 
-      <h3 className="font-body-lg text-xl text-white font-semibold mb-2">{element.name}</h3>
-      <p className="font-body-md text-base text-on-surface-variant flex-grow">{element.description}</p>
+      <h3 className="font-body-lg text-lg text-white font-semibold mb-1.5">{element.name}</h3>
+      <p className="font-body-md text-sm text-on-surface-variant flex-grow">{element.description}</p>
     </div>
   );
 }
@@ -341,7 +341,7 @@ export function Home() {
           />
         </div>
 
-        <div className="z-10 w-full max-w-container-max mx-auto">
+        <div className="z-10 w-full max-w-6xl mx-auto">
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={orderedItems.map((it) => it.id)} strategy={rectSortingStrategy}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter relative">
