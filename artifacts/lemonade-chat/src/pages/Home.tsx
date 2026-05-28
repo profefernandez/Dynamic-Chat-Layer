@@ -172,8 +172,8 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </span>
       </div>
 
-      <h3 className="font-body-lg text-body-lg text-white font-semibold mb-2">{element.name}</h3>
-      <p className="font-body-md text-sm text-on-surface-variant flex-grow">{element.description}</p>
+      <h3 className="font-body-lg text-xl text-white font-semibold mb-2">{element.name}</h3>
+      <p className="font-body-md text-base text-on-surface-variant flex-grow">{element.description}</p>
     </div>
   );
 }
