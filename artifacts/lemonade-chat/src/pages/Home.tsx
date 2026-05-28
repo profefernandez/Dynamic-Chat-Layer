@@ -111,7 +111,7 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
       ref={setNodeRef}
       style={style}
       className={[
-        'glass-card rounded-xl p-4 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
+        'glass-card rounded-xl p-5 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full text-center items-center',
         v.offset ? 'lg:mt-12' : '',
         editMode ? 'cursor-default' : 'cursor-pointer',
       ].join(' ')}
@@ -172,8 +172,8 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </span>
       </div>
 
-      <h3 className="font-body-lg text-lg text-white font-semibold mb-1.5">{element.name}</h3>
-      <p className="font-body-md text-sm text-on-surface-variant flex-grow">{element.description}</p>
+      <h3 className="font-body-lg text-xl text-white font-semibold mb-2">{element.name}</h3>
+      <p className="font-body-md text-base text-on-surface-variant flex-grow">{element.description}</p>
     </div>
   );
 }
