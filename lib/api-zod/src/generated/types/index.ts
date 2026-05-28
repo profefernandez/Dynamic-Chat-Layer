@@ -7,11 +7,19 @@
  */
 
 export * from './chatInput';
+export * from './chatInputMode';
 export * from './chatResponse';
 export * from './element';
 export * from './elementInput';
 export * from './elementUpdate';
+export * from './generatedImage';
+export * from './generateImageInput';
 export * from './healthStatus';
+export * from './reorderInput';
+export * from './siteSettings';
+export * from './siteSettingsUpdate';
 export * from './subElement';
 export * from './subElementInput';
 export * from './subElementUpdate';
+export * from './uploadUrlRequest';
+export * from './uploadUrlResponse';

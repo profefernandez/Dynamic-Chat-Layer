@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useSendChat } from '@workspace/api-client-react';
+import { useAdmin } from './AdminContext';
 
 export type Message = {
   role: 'user' | 'assistant';
@@ -18,10 +19,13 @@ type ChatContextType = {
 const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export function ChatProvider({ children }: { children: ReactNode }) {
+  const { editMode } = useAdmin();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: 'assistant',
-      content: 'Welcome to 60 Watts of Clarity. I\'m your AI guide for literacy, consultation, and education. Click a service tile or ask me anything to get started.',
+      content: editMode
+        ? "Admin mode preview: chat responses will be tagged with [ADMIN MODE] so your Lemonade can respond differently. Tiles and copy below are editable."
+        : "Welcome to 60 Watts of Clarity. I'm your AI guide for literacy, consultation, and education. Click a service tile or ask me anything to get started.",
     },
   ]);
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -37,7 +41,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
 
     sendChat(
-      { data: { message: content, sessionId, hiddenPrompt } },
+      { data: { message: content, sessionId, hiddenPrompt, mode: editMode ? 'admin' : 'public' } },
       {
         onSuccess: (data) => {
           setSessionId(data.sessionId);

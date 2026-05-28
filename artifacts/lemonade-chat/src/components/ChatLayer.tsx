@@ -1,17 +1,33 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChat } from '../context/ChatContext';
-import { Send, Sparkles } from 'lucide-react';
+import { useAdmin } from '../context/AdminContext';
+import { useGetSiteSettings, useUpdateSiteSettings, getGetSiteSettingsQueryKey } from '@workspace/api-client-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { Send, Sparkles, Pencil, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 export function ChatLayer() {
   const { messages, sendMessage, isSending, setOverlayOpen } = useChat();
+  const { editMode } = useAdmin();
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { data: settings } = useGetSiteSettings();
+  const placeholder = settings?.chatPlaceholder ?? 'Ask anything or click a tile to explore...';
+
+  const queryClient = useQueryClient();
+  const { mutate: updateSettings } = useUpdateSiteSettings();
+  const [editingPlaceholder, setEditingPlaceholder] = useState(false);
+  const [draftPlaceholder, setDraftPlaceholder] = useState(placeholder);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  useEffect(() => {
+    setDraftPlaceholder(placeholder);
+  }, [placeholder]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,16 +36,26 @@ export function ChatLayer() {
     setInputValue('');
   };
 
+  const savePlaceholder = () => {
+    if (draftPlaceholder !== placeholder) {
+      updateSettings(
+        { data: { chatPlaceholder: draftPlaceholder } },
+        {
+          onSuccess: () => queryClient.invalidateQueries({ queryKey: getGetSiteSettingsQueryKey() }),
+        },
+      );
+    }
+    setEditingPlaceholder(false);
+  };
+
   return (
     <div className="fixed inset-0 z-0 flex flex-col pt-16" style={{ background: '#121317' }}>
-      {/* Ambient glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="bg-pattern absolute inset-0 opacity-50" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[100px]" style={{ background: 'rgba(242,202,80,0.1)' }} />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[100px]" style={{ background: 'rgba(191,205,255,0.1)' }} />
       </div>
 
-      {/* Message thread */}
       <div className="flex-1 overflow-y-auto px-6 py-8 pb-32 relative z-10">
         <div className="max-w-3xl mx-auto space-y-6">
           {messages.filter(m => !m.hidden).map((msg, i) => (
@@ -63,12 +89,42 @@ export function ChatLayer() {
         </div>
       </div>
 
-      {/* ── Chat Input Bar — NEVER COVERED, NEVER CHANGED ── */}
       <div
         className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-50"
         style={{ background: 'linear-gradient(to top, #121317 60%, transparent)' }}
       >
         <div className="max-w-3xl mx-auto relative">
+          {editMode && (
+            <div className="flex justify-end mb-2 text-xs">
+              {editingPlaceholder ? (
+                <div className="flex items-center gap-2 bg-[#1e1f23] border border-primary/40 rounded px-2 py-1">
+                  <span className="text-on-surface-variant">Placeholder:</span>
+                  <input
+                    autoFocus
+                    value={draftPlaceholder}
+                    onChange={(e) => setDraftPlaceholder(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') savePlaceholder();
+                      if (e.key === 'Escape') { setDraftPlaceholder(placeholder); setEditingPlaceholder(false); }
+                    }}
+                    className="bg-[#121317] border border-white/10 rounded px-2 py-0.5 text-on-surface min-w-[260px]"
+                  />
+                  <button onClick={savePlaceholder} className="text-primary"><Check className="w-3 h-3" /></button>
+                  <button onClick={() => { setDraftPlaceholder(placeholder); setEditingPlaceholder(false); }}>
+                    <X className="w-3 h-3 text-on-surface-variant" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setEditingPlaceholder(true)}
+                  className="flex items-center gap-1 text-on-surface-variant hover:text-primary"
+                  title="Edit chat placeholder"
+                >
+                  <Pencil className="w-3 h-3" /> Edit chat placeholder
+                </button>
+              )}
+            </div>
+          )}
           <div
             className="absolute -inset-1 rounded-full opacity-40 pointer-events-none"
             style={{ background: 'radial-gradient(ellipse at center, rgba(242,202,80,0.2), transparent 70%)', filter: 'blur(12px)' }}
@@ -84,7 +140,7 @@ export function ChatLayer() {
             <Input
               value={inputValue}
               onChange={e => setInputValue(e.target.value)}
-              placeholder="Ask anything or click a tile to explore..."
+              placeholder={placeholder}
               className="flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-4 text-base placeholder:text-outline h-12 font-body-md"
               onFocus={() => setOverlayOpen(false)}
             />

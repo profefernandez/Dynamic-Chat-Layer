@@ -5,6 +5,7 @@
  * Launch Lemonade API
  * OpenAPI spec version: 0.1.0
  */
+import type { ChatInputMode } from './chatInputMode';
 
 export interface ChatInput {
   message: string;
@@ -12,4 +13,6 @@ export interface ChatInput {
   sessionId?: string | null;
   /** @nullable */
   hiddenPrompt?: boolean | null;
+  /** @nullable */
+  mode?: ChatInputMode;
 }

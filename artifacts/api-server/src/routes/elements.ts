@@ -1,12 +1,13 @@
 import { Router } from "express";
 import { db, elementsTable, subElementsTable } from "@workspace/db";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import {
   CreateElementBody,
   UpdateElementParams,
   UpdateElementBody,
   DeleteElementParams,
   GetElementParams,
+  ReorderElementsBody,
 } from "@workspace/api-zod";
 import { requireAuth } from "../middlewares/requireAuth";
 
@@ -42,6 +43,7 @@ router.post("/", requireAuth, async (req, res) => {
         description: parsed.data.description ?? null,
         promptText: parsed.data.promptText,
         photoUrl: parsed.data.photoUrl ?? null,
+        linkUrl: parsed.data.linkUrl ?? null,
         order: parsed.data.order ?? 0,
       })
       .returning();
@@ -49,6 +51,37 @@ router.post("/", requireAuth, async (req, res) => {
     return res.status(201).json({ ...element, subElements: [] });
   } catch {
     return res.status(500).json({ error: "Failed to create element" });
+  }
+});
+
+router.post("/reorder", requireAuth, async (req, res) => {
+  const parsed = ReorderElementsBody.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ error: "Invalid request body" });
+  }
+
+  try {
+    const ids = parsed.data.ids;
+    if (ids.length === 0) {
+      return res.status(204).send();
+    }
+    // Validate all ids exist
+    const existing = await db
+      .select({ id: elementsTable.id })
+      .from(elementsTable)
+      .where(inArray(elementsTable.id, ids));
+    if (existing.length !== ids.length) {
+      return res.status(400).json({ error: "Unknown element id in reorder" });
+    }
+
+    await Promise.all(
+      ids.map((id, idx) =>
+        db.update(elementsTable).set({ order: idx }).where(eq(elementsTable.id, id)),
+      ),
+    );
+    return res.status(204).send();
+  } catch {
+    return res.status(500).json({ error: "Failed to reorder elements" });
   }
 });
 
@@ -92,6 +125,7 @@ router.patch("/:id", requireAuth, async (req, res) => {
     if (body.description !== undefined) updates.description = body.description;
     if (body.promptText !== undefined) updates.promptText = body.promptText;
     if (body.photoUrl !== undefined) updates.photoUrl = body.photoUrl;
+    if (body.linkUrl !== undefined) updates.linkUrl = body.linkUrl;
     if (body.order !== undefined) updates.order = body.order;
 
     const [updated] = await db

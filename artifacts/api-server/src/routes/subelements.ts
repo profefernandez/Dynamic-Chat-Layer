@@ -48,6 +48,7 @@ router.post("/", requireAuth, async (req, res) => {
         description: bodyParsed.data.description ?? null,
         promptText: bodyParsed.data.promptText,
         photoUrl: bodyParsed.data.photoUrl ?? null,
+        linkUrl: bodyParsed.data.linkUrl ?? null,
         order: bodyParsed.data.order ?? 0,
       })
       .returning();
@@ -75,6 +76,7 @@ router.patch("/:id", requireAuth, async (req, res) => {
     if (body.description !== undefined) updates.description = body.description;
     if (body.promptText !== undefined) updates.promptText = body.promptText;
     if (body.photoUrl !== undefined) updates.photoUrl = body.photoUrl;
+    if (body.linkUrl !== undefined) updates.linkUrl = body.linkUrl;
     if (body.order !== undefined) updates.order = body.order;
 
     const [updated] = await db

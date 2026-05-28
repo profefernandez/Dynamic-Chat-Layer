@@ -15,6 +15,12 @@ tags:
     description: Element tile operations
   - name: subelements
     description: Sub-element operations
+  - name: siteSettings
+    description: Site-wide editable content
+  - name: storage
+    description: File upload and serving
+  - name: images
+    description: AI image generation
 paths:
   /healthz:
     get:
@@ -79,6 +85,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Element"
+
+  /elements/reorder:
+    post:
+      operationId: reorderElements
+      tags: [elements]
+      summary: Reorder element tiles in bulk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReorderInput"
+      responses:
+        "204":
+          description: Reordered
 
   /elements/{id}:
     get:
@@ -227,6 +248,74 @@ paths:
         "204":
           description: Deleted
 
+  /site-settings:
+    get:
+      operationId: getSiteSettings
+      tags: [siteSettings]
+      summary: Get site-wide editable content
+      responses:
+        "200":
+          description: Site settings
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+    patch:
+      operationId: updateSiteSettings
+      tags: [siteSettings]
+      summary: Update site-wide editable content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SiteSettingsUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettings"
+
+  /storage/uploads/request-url:
+    post:
+      operationId: requestUploadUrl
+      tags: [storage]
+      summary: Request a presigned URL for file upload
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UploadUrlRequest"
+      responses:
+        "200":
+          description: Presigned upload URL
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UploadUrlResponse"
+
+  /images/generate:
+    post:
+      operationId: generateTileImage
+      tags: [images]
+      summary: Generate an image via Gemini and store it
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GenerateImageInput"
+      responses:
+        "200":
+          description: Generated image
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GeneratedImage"
+
 components:
   schemas:
     HealthStatus:
@@ -247,6 +336,9 @@ components:
           type: ["string", "null"]
         hiddenPrompt:
           type: ["boolean", "null"]
+        mode:
+          type: ["string", "null"]
+          enum: ["public", "admin", null]
 
     ChatResponse:
       type: object
@@ -271,6 +363,8 @@ components:
           type: string
         photoUrl:
           type: ["string", "null"]
+        linkUrl:
+          type: ["string", "null"]
         order:
           type: integer
         subElements:
@@ -290,6 +384,8 @@ components:
           type: string
         photoUrl:
           type: ["string", "null"]
+        linkUrl:
+          type: ["string", "null"]
         order:
           type: integer
 
@@ -303,6 +399,8 @@ components:
         promptText:
           type: string
         photoUrl:
+          type: ["string", "null"]
+        linkUrl:
           type: ["string", "null"]
         order:
           type: integer
@@ -323,6 +421,8 @@ components:
           type: string
         photoUrl:
           type: ["string", "null"]
+        linkUrl:
+          type: ["string", "null"]
         order:
           type: integer
 
@@ -338,6 +438,8 @@ components:
           type: string
         photoUrl:
           type: ["string", "null"]
+        linkUrl:
+          type: ["string", "null"]
         order:
           type: integer
 
@@ -352,5 +454,96 @@ components:
           type: string
         photoUrl:
           type: ["string", "null"]
+        linkUrl:
+          type: ["string", "null"]
         order:
           type: integer
+
+    ReorderInput:
+      type: object
+      required: [ids]
+      properties:
+        ids:
+          type: array
+          items:
+            type: integer
+
+    SiteSettings:
+      type: object
+      required:
+        - heroEyebrow
+        - heroTitle
+        - heroSubtitle
+        - chatPlaceholder
+        - footerTagline
+        - footerCopyright
+      properties:
+        heroEyebrow:
+          type: string
+        heroTitle:
+          type: string
+        heroSubtitle:
+          type: string
+        chatPlaceholder:
+          type: string
+        footerTagline:
+          type: string
+        footerCopyright:
+          type: string
+
+    SiteSettingsUpdate:
+      type: object
+      properties:
+        heroEyebrow:
+          type: string
+        heroTitle:
+          type: string
+        heroSubtitle:
+          type: string
+        chatPlaceholder:
+          type: string
+        footerTagline:
+          type: string
+        footerCopyright:
+          type: string
+
+    UploadUrlRequest:
+      type: object
+      required: [name, size, contentType]
+      properties:
+        name:
+          type: string
+          minLength: 1
+        size:
+          type: integer
+          minimum: 1
+        contentType:
+          type: string
+          minLength: 1
+
+    UploadUrlResponse:
+      type: object
+      required: [uploadURL, objectPath]
+      properties:
+        uploadURL:
+          type: string
+          format: uri
+        objectPath:
+          type: string
+        metadata:
+          $ref: "#/components/schemas/UploadUrlRequest"
+
+    GenerateImageInput:
+      type: object
+      required: [prompt]
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+
+    GeneratedImage:
+      type: object
+      required: [objectPath]
+      properties:
+        objectPath:
+          type: string

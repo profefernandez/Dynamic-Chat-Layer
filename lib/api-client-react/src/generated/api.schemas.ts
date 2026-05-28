@@ -9,12 +9,25 @@ export interface HealthStatus {
   status: string;
 }
 
+/**
+ * @nullable
+ */
+export type ChatInputMode = typeof ChatInputMode[keyof typeof ChatInputMode] | null;
+
+
+export const ChatInputMode = {
+  public: 'public',
+  admin: 'admin',
+} as const;
+
 export interface ChatInput {
   message: string;
   /** @nullable */
   sessionId?: string | null;
   /** @nullable */
   hiddenPrompt?: boolean | null;
+  /** @nullable */
+  mode?: ChatInputMode;
 }
 
 export interface ChatResponse {
@@ -31,6 +44,8 @@ export interface SubElement {
   promptText: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order: number;
 }
 
@@ -42,6 +57,8 @@ export interface Element {
   promptText: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order: number;
   subElements?: SubElement[];
 }
@@ -53,6 +70,8 @@ export interface ElementInput {
   promptText: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order?: number;
 }
 
@@ -63,6 +82,8 @@ export interface ElementUpdate {
   promptText?: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order?: number;
 }
 
@@ -73,6 +94,8 @@ export interface SubElementInput {
   promptText: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order?: number;
 }
 
@@ -83,6 +106,54 @@ export interface SubElementUpdate {
   promptText?: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order?: number;
+}
+
+export interface ReorderInput {
+  ids: number[];
+}
+
+export interface SiteSettings {
+  heroEyebrow: string;
+  heroTitle: string;
+  heroSubtitle: string;
+  chatPlaceholder: string;
+  footerTagline: string;
+  footerCopyright: string;
+}
+
+export interface SiteSettingsUpdate {
+  heroEyebrow?: string;
+  heroTitle?: string;
+  heroSubtitle?: string;
+  chatPlaceholder?: string;
+  footerTagline?: string;
+  footerCopyright?: string;
+}
+
+export interface UploadUrlRequest {
+  /** @minLength 1 */
+  name: string;
+  /** @minimum 1 */
+  size: number;
+  /** @minLength 1 */
+  contentType: string;
+}
+
+export interface UploadUrlResponse {
+  uploadURL: string;
+  objectPath: string;
+  metadata?: UploadUrlRequest;
+}
+
+export interface GenerateImageInput {
+  /** @minLength 1 */
+  prompt: string;
+}
+
+export interface GeneratedImage {
+  objectPath: string;
 }
 

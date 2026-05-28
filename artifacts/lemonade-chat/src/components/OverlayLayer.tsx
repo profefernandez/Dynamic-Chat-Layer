@@ -46,6 +46,7 @@ export function OverlayLayer() {
               >
                 <Switch>
                   <Route path="/"          component={Home} />
+                  <Route path="/admin"     component={Home} />
                   <Route path="/services"  component={Services} />
                   <Route path="/about"     component={About} />
                   <Route path="/contact"   component={Contact} />

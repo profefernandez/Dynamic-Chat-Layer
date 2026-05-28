@@ -13,5 +13,7 @@ export interface SubElementUpdate {
   promptText?: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order?: number;
 }

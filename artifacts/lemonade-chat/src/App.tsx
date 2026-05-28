@@ -10,6 +10,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { ChatProvider } from "./context/ChatContext";
+import { AdminProvider } from "./context/AdminContext";
 import { ChatLayer } from "./components/ChatLayer";
 import { OverlayLayer } from "./components/OverlayLayer";
 import { Admin } from "./pages/Admin";
@@ -125,6 +126,23 @@ function ClerkQueryClientCacheInvalidator() {
   return null;
 }
 
+function RoutedShell() {
+  const [location] = useLocation();
+  const editMode = location.startsWith("/admin");
+  return (
+    <AdminProvider editMode={editMode}>
+      <ChatProvider>
+        <Switch>
+          <Route path="/sign-in/*?" component={SignInPage} />
+          <Route path="/sign-up/*?" component={SignUpPage} />
+          <Route path="/admin" component={ProtectedAdmin} />
+          <Route path="/.*" component={MainApp} />
+        </Switch>
+      </ChatProvider>
+    </AdminProvider>
+  );
+}
+
 function ClerkProviderWithRoutes() {
   const [, setLocation] = useLocation();
   return (
@@ -143,14 +161,7 @@ function ClerkProviderWithRoutes() {
     >
       <QueryClientProvider client={queryClient}>
         <ClerkQueryClientCacheInvalidator />
-        <ChatProvider>
-          <Switch>
-            <Route path="/sign-in/*?" component={SignInPage} />
-            <Route path="/sign-up/*?" component={SignUpPage} />
-            <Route path="/admin" component={ProtectedAdmin} />
-            <Route path="/.*" component={MainApp} />
-          </Switch>
-        </ChatProvider>
+        <RoutedShell />
         <Toaster />
       </QueryClientProvider>
     </ClerkProvider>

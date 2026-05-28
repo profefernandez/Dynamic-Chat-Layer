@@ -22,7 +22,8 @@ export const HealthCheckResponse = zod.object({
 export const SendChatBody = zod.object({
   "message": zod.string(),
   "sessionId": zod.string().nullish(),
-  "hiddenPrompt": zod.boolean().nullish()
+  "hiddenPrompt": zod.boolean().nullish(),
+  "mode": zod.union([zod.literal('public'),zod.literal('admin'),zod.literal(null)]).nullish()
 })
 
 export const SendChatResponse = zod.object({
@@ -40,6 +41,7 @@ export const ListElementsResponseItem = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number(),
   "subElements": zod.array(zod.object({
   "id": zod.number(),
@@ -48,6 +50,7 @@ export const ListElementsResponseItem = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number()
 })).optional()
 })
@@ -62,7 +65,16 @@ export const CreateElementBody = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number().optional()
+})
+
+
+/**
+ * @summary Reorder element tiles in bulk
+ */
+export const ReorderElementsBody = zod.object({
+  "ids": zod.array(zod.number())
 })
 
 
@@ -79,6 +91,7 @@ export const GetElementResponse = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number(),
   "subElements": zod.array(zod.object({
   "id": zod.number(),
@@ -87,6 +100,7 @@ export const GetElementResponse = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number()
 })).optional()
 })
@@ -104,6 +118,7 @@ export const UpdateElementBody = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string().optional(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number().optional()
 })
 
@@ -113,6 +128,7 @@ export const UpdateElementResponse = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number(),
   "subElements": zod.array(zod.object({
   "id": zod.number(),
@@ -121,6 +137,7 @@ export const UpdateElementResponse = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number()
 })).optional()
 })
@@ -148,6 +165,7 @@ export const ListSubElementsResponseItem = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number()
 })
 export const ListSubElementsResponse = zod.array(ListSubElementsResponseItem)
@@ -165,6 +183,7 @@ export const CreateSubElementBody = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number().optional()
 })
 
@@ -182,6 +201,7 @@ export const UpdateSubElementBody = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string().optional(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number().optional()
 })
 
@@ -192,6 +212,7 @@ export const UpdateSubElementResponse = zod.object({
   "description": zod.string().nullish(),
   "promptText": zod.string(),
   "photoUrl": zod.string().nullish(),
+  "linkUrl": zod.string().nullish(),
   "order": zod.number()
 })
 
@@ -202,6 +223,86 @@ export const UpdateSubElementResponse = zod.object({
 export const DeleteSubElementParams = zod.object({
   "elementId": zod.coerce.number(),
   "id": zod.coerce.number()
+})
+
+
+/**
+ * @summary Get site-wide editable content
+ */
+export const GetSiteSettingsResponse = zod.object({
+  "heroEyebrow": zod.string(),
+  "heroTitle": zod.string(),
+  "heroSubtitle": zod.string(),
+  "chatPlaceholder": zod.string(),
+  "footerTagline": zod.string(),
+  "footerCopyright": zod.string()
+})
+
+
+/**
+ * @summary Update site-wide editable content
+ */
+export const UpdateSiteSettingsBody = zod.object({
+  "heroEyebrow": zod.string().optional(),
+  "heroTitle": zod.string().optional(),
+  "heroSubtitle": zod.string().optional(),
+  "chatPlaceholder": zod.string().optional(),
+  "footerTagline": zod.string().optional(),
+  "footerCopyright": zod.string().optional()
+})
+
+export const UpdateSiteSettingsResponse = zod.object({
+  "heroEyebrow": zod.string(),
+  "heroTitle": zod.string(),
+  "heroSubtitle": zod.string(),
+  "chatPlaceholder": zod.string(),
+  "footerTagline": zod.string(),
+  "footerCopyright": zod.string()
+})
+
+
+/**
+ * @summary Request a presigned URL for file upload
+ */
+
+
+
+
+
+export const RequestUploadUrlBody = zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1),
+  "contentType": zod.string().min(1)
+})
+
+
+
+
+
+
+export const RequestUploadUrlResponse = zod.object({
+  "uploadURL": zod.string().url(),
+  "objectPath": zod.string(),
+  "metadata": zod.object({
+  "name": zod.string().min(1),
+  "size": zod.number().min(1),
+  "contentType": zod.string().min(1)
+}).optional()
+})
+
+
+/**
+ * @summary Generate an image via Gemini and store it
+ */
+
+
+
+export const GenerateTileImageBody = zod.object({
+  "prompt": zod.string().min(1)
+})
+
+export const GenerateTileImageResponse = zod.object({
+  "objectPath": zod.string()
 })
 
 

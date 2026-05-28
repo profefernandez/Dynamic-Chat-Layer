@@ -13,5 +13,7 @@ export interface ElementUpdate {
   promptText?: string;
   /** @nullable */
   photoUrl?: string | null;
+  /** @nullable */
+  linkUrl?: string | null;
   order?: number;
 }
