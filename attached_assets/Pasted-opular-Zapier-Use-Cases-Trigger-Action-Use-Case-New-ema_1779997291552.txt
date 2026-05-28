@@ -1,0 +1,92 @@
+opular Zapier Use Cases
+Trigger	Action	Use Case
+New email received	Send to Lemonade	Auto-draft responses
+New form submission	Send to Lemonade	Process and categorize leads
+Scheduled time	Query Lemonade	Generate daily reports
+Slack message	Send to Lemonade	Answer team questions
+​
+Error Handling
+​
+Common Error Codes
+Code	Meaning	Solution
+401	Unauthorized	Check your API key
+404	Not found	Verify the Lemonade ID
+429	Rate limited	Wait and retry
+500	Server error	Contact support
+​
+Error Response Format
+{
+  "error": {
+    "code": "rate_limited",
+    "message": "Too many requests. Please wait before retrying.",
+    "retry_after": 60
+  }
+}
+​
+Code Examples
+​
+Python
+import requests
+
+API_KEY = "your-api-key"
+LEMONADE_ID = "your-lemonade-id"
+
+response = requests.post(
+    "https://api.launchlemonade.app/v1/chat",
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "lemonade_id": LEMONADE_ID,
+        "message": "What can you help me with?"
+    }
+)
+
+print(response.json()["response"])
+​
+JavaScript
+const response = await fetch('https://api.launchlemonade.app/v1/chat', {
+  method: 'POST',
+  headers: {
+    'Authorization': `Bearer ${API_KEY}`,
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    lemonade_id: 'your-lemonade-id',
+    message: 'What can you help me with?'
+  })
+});
+
+const data = await response.json();
+console.log(data.response);
+​
+cURL
+curl -X POST https://api.launchlemonade.app/v1/chat \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"lemonade_id": "your-lemonade-id", "message": "Hello!"}'
+​
+Best Practices
+Performance Tips:
+Cache responses when appropriate
+Use conversation IDs to maintain context
+Implement exponential backoff for retries
+Store your API key securely – Use environment variables
+Handle errors gracefully – Implement proper error handling
+Monitor usage – Track your API calls to stay within limits
+Use conversation IDs – Maintain context across multiple messages
+​
+Notes
+If a conversation ID is not provided in the run_assistant request, a new conversation is created.
+Keep a delay of 10 seconds between each call to the get_run_assistant. If no response, retry after another 10 seconds for up to 1 minute.
+Responses are returned in Markdown format for easy readability and formatting.
+Make sure your API token is valid and included in the headers for authentication.
+​
+What’s Next
+Lemonade Editor
+Customise your Lemonade before integrating
+Deploy Your Lemonade
+Share your AI tool with the world
+youtube
+linkedin
