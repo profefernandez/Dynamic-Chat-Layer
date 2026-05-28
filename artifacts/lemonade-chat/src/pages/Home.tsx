@@ -16,6 +16,7 @@ import { useChat } from '../context/ChatContext';
 import { useAdmin } from '../context/AdminContext';
 import { EditableText } from '../components/EditableText';
 import { TileEditor, TileDraft } from '../components/TileEditor';
+import { TileCardBody, TileVisual } from '../components/TileCardBase';
 import { Plus, Pencil, GripVertical, ExternalLink } from 'lucide-react';
 import {
   DndContext,
@@ -156,24 +157,13 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </div>
       )}
 
-      <div className="h-24 w-full mb-3 relative flex items-center justify-center">
-        <div className={`absolute inset-0 ${v.glowClass} rounded-full blur-xl ${v.glowHoverClass} transition-colors`} />
-        <img
-          alt={element.name}
-          className={`w-20 h-20 object-cover rounded-full border ${v.imgBorderClass} z-10 opacity-80 mix-blend-screen ${v.imgShadowClass}`}
-          src={imgSrc}
-          onError={(e) => {
-            const img = e.target as HTMLImageElement;
-            if (img.src !== v.fallbackImg) img.src = v.fallbackImg;
-          }}
-        />
-        <span className={`material-symbols-outlined absolute ${v.iconColorClass} text-3xl z-20 mix-blend-screen`}>
-          {v.icon}
-        </span>
-      </div>
-
-      <h3 className="font-body-lg text-xl text-white font-semibold mb-2">{element.name}</h3>
-      <p className="font-body-md text-base text-on-surface-variant flex-grow">{element.description}</p>
+      <TileCardBody
+        visual={v as TileVisual}
+        title={element.name}
+        description={element.description ?? ''}
+        imgSrc={imgSrc}
+        alt={element.name}
+      />
     </div>
   );
 }
