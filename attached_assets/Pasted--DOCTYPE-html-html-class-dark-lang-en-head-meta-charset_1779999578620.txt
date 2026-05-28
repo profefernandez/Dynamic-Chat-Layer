@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>60 Watts of Clarity</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&amp;family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#e9c349",
+                      "secondary-container": "#454950",
+                      "on-error-container": "#ffdad6",
+                      "surface": "#121317",
+                      "secondary-fixed": "#dfe2eb",
+                      "on-tertiary-container": "#254188",
+                      "primary-container": "#d4af37",
+                      "on-secondary-container": "#b5b8c1",
+                      "surface-bright": "#38393d",
+                      "outline": "#99907c",
+                      "on-primary-fixed": "#241a00",
+                      "tertiary": "#bfcdff",
+                      "on-surface": "#e3e2e7",
+                      "on-tertiary": "#082b72",
+                      "tertiary-fixed-dim": "#b4c5ff",
+                      "surface-tint": "#e9c349",
+                      "surface-dim": "#121317",
+                      "tertiary-container": "#97b0ff",
+                      "error-container": "#93000a",
+                      "surface-container-high": "#292a2e",
+                      "on-secondary": "#2d3137",
+                      "inverse-primary": "#735c00",
+                      "primary-fixed": "#ffe088",
+                      "inverse-on-surface": "#2f3034",
+                      "surface-container-lowest": "#0d0e12",
+                      "primary": "#f2ca50",
+                      "background": "#121317",
+                      "secondary-fixed-dim": "#c3c6cf",
+                      "tertiary-fixed": "#dbe1ff",
+                      "on-primary": "#3c2f00",
+                      "outline-variant": "#4d4635",
+                      "on-primary-fixed-variant": "#574500",
+                      "on-tertiary-fixed-variant": "#27438a",
+                      "surface-container-low": "#1a1b1f",
+                      "on-tertiary-fixed": "#00174b",
+                      "on-secondary-fixed": "#181c22",
+                      "surface-container-highest": "#343539",
+                      "surface-container": "#1e1f23",
+                      "on-error": "#690005",
+                      "on-background": "#e3e2e7",
+                      "error": "#ffb4ab",
+                      "on-secondary-fixed-variant": "#43474e",
+                      "on-primary-container": "#554300",
+                      "on-surface-variant": "#d0c5af",
+                      "surface-variant": "#343539",
+                      "secondary": "#c3c6cf",
+                      "inverse-surface": "#e3e2e7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-max": "1280px",
+                      "margin-desktop": "64px",
+                      "unit": "8px",
+                      "margin-mobile": "20px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-md": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-xl": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-lg-mobile": [
+                              "Libre Caslon Text"
+                      ],
+                      "headline-lg": [
+                              "Libre Caslon Text"
+                      ],
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "1",
+                                      "letterSpacing": "0.1em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "1.3",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "64px",
+                              {
+                                      "lineHeight": "1.1",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "32px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "40px",
+                              {
+                                      "lineHeight": "1.2",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "1.6",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+            },
+          }
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(18, 19, 23, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(242, 202, 80, 0.3);
+        }
+        .bg-pattern {
+            background-image: radial-gradient(circle at center, rgba(242, 202, 80, 0.05) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md min-h-screen flex flex-col relative overflow-x-hidden selection:bg-primary/30">
+<!-- Top Navigation -->
+<nav class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 bg-surface/80 backdrop-blur-xl border-b border-white/10 transition-transform">
+<div class="font-headline-md text-headline-md text-primary">60 Watts of Clarity</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold border-b-2 border-primary pb-1" href="#">Training</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-md" href="#">Consultation</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-md" href="#">Web Dev</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-md" href="#">Community</a>
+</div>
+<button class="font-label-sm text-label-sm uppercase tracking-widest bg-primary text-on-primary px-6 py-2.5 rounded-full hover:shadow-[0_0_15px_rgba(242,202,80,0.5)] transition-all duration-300 scale-95 active:scale-90">Get Started</button>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-grow flex flex-col items-center justify-center pt-32 pb-20 relative px-margin-mobile md:px-margin-desktop">
+<!-- Abstract Background Glows -->
+<div class="absolute inset-0 z-0 pointer-events-none bg-pattern opacity-50"></div>
+<div class="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none"></div>
+<div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] z-0 pointer-events-none"></div>
+<!-- Hero Section -->
+<div class="z-10 text-center max-w-4xl mx-auto mb-20">
+<div class="flex items-center justify-center gap-4 mb-6 opacity-70">
+<div class="h-px w-12 bg-on-surface-variant"></div>
+<span class="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">AI Literacy Education and Development</span>
+<div class="h-px w-12 bg-on-surface-variant"></div>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-6 leading-tight">
+<span class="text-white">60 Watts of </span><span class="text-primary text-glow italic pr-2">Clarity</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8">
+                Licensed Social Worker • AI Consultant • Educator • Website Designer
+            </p>
+</div>
+<!-- Services Grid -->
+<div class="z-10 w-full max-w-container-max mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter relative">
+<!-- Central Connection Lines (Decorative for Desktop) -->
+<div class="hidden lg:block absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent -translate-y-1/2 z-0"></div>
+<!-- Card 1 -->
+<div class="glass-card rounded-xl p-6 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full">
+<div class="absolute -top-3 left-6 bg-primary text-on-primary font-label-sm text-[10px] uppercase px-2 py-0.5 rounded-full z-20 shadow-[0_0_10px_rgba(242,202,80,0.5)]">New</div>
+<div class="h-32 w-full mb-6 relative flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:bg-primary/30 transition-colors"></div>
+<img alt="Glowing golden crystal structure representing community networks" class="w-24 h-24 object-cover rounded-full border border-primary/30 z-10 opacity-80 mix-blend-screen shadow-[0_0_30px_rgba(242,202,80,0.3)]" data-alt="A macro shot of a glowing, transparent golden geometric crystal hovering in a dark void. Inside the crystal, intricate illuminated circuitry lines map out connections like a neural network. The lighting is dramatic, emitting a warm amber and gold light-source from within the crystal against a pitch-black background, creating a high-tech, luxurious glassmorphism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0IP6-OTzk9ReY4bBuGkLqjDcZ2TMcf5JvVOTzjA5PD8Ibw8wwPEdHnZ-99sJQTLOGK_PfhRdnsQtE2oUfGFqlXsVXzmAZQnBKFZHIhrKCV6JIg5HrD7v9yIMXXdPbSHyssuKgoLs3P5MCnUwq1dDbba6ImY-dFXgnsQfK7DJ8uk8jhwCvzEXZ9Xtq4xJXOnC5zU-THL-1CSHJV8hm1wEv1XEc6h4USslr6PnjEXd6slS46_j0yZ1JJPaP_Qa_GLqALnMRXl5Ou-8"/>
+<span class="material-symbols-outlined absolute text-primary text-3xl z-20 mix-blend-screen" data-icon="groups">groups</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-white font-semibold mb-3">Community AI Training</h3>
+<p class="font-body-md text-sm text-on-surface-variant flex-grow">Plain-language AI learning for social workers, families, and community groups.</p>
+</div>
+<!-- Card 2 -->
+<div class="glass-card rounded-xl p-6 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full lg:mt-12">
+<div class="h-32 w-full mb-6 relative flex items-center justify-center">
+<div class="absolute inset-0 bg-tertiary/20 rounded-full blur-xl group-hover:bg-tertiary/30 transition-colors"></div>
+<img alt="Cool blue transparent geometric crystal representing corporate structure" class="w-24 h-24 object-cover rounded-full border border-tertiary/30 z-10 opacity-80 mix-blend-screen shadow-[0_0_30px_rgba(151,176,255,0.3)]" data-alt="A macro shot of a glowing, transparent ice-blue geometric crystal hovering in a dark void. Inside the crystal, intricate illuminated silver circuitry lines map out connections like a corporate network. The lighting is dramatic, emitting a cool blue light-source from within the crystal against a pitch-black background, creating a high-tech, professional glassmorphism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrzE3M-iY3ztcO9IJpasEOLYeYNUiL3LNlrCtnwoDHOPyo-Ynj-YEG9jJkx8yWnvj4fWzCzuSLEYohtKITeiPl7cAh1lzlbbULPpN2rHb07g91_r2pIhh6ASf7_1yHtOM4lwMGHzGwIzPi8F0v4wyb_wJ36mp8iRM-_wlzhvJrAbc681ZrF_VV94E79h6mf4s5YKo7DWGJ-PYJxKCE1bv9vUr1G0ennItFXIlI0RAT04Cw-2OPYy9OtSxVcIAoon1Lp7Xkk5C-WeM"/>
+<span class="material-symbols-outlined absolute text-tertiary text-3xl z-20 mix-blend-screen" data-icon="corporate_fare">corporate_fare</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-white font-semibold mb-3">Organization AI Consultation</h3>
+<p class="font-body-md text-sm text-on-surface-variant flex-grow">Adoption strategy, training plans, and ethical implementation support for teams.</p>
+</div>
+<!-- Card 3 -->
+<div class="glass-card rounded-xl p-6 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full">
+<div class="h-32 w-full mb-6 relative flex items-center justify-center">
+<div class="absolute inset-0 bg-secondary/20 rounded-full blur-xl group-hover:bg-secondary/30 transition-colors"></div>
+<img alt="Silver geometric crystal representing web structure" class="w-24 h-24 object-cover rounded-full border border-secondary/30 z-10 opacity-80 mix-blend-screen shadow-[0_0_30px_rgba(195,198,207,0.3)]" data-alt="A macro shot of a glowing, transparent silver and white geometric crystal hovering in a dark void. Inside the crystal, intricate illuminated web-like circuitry lines map out connections. The lighting is dramatic, emitting a stark white light-source from within the crystal against a pitch-black background, creating a high-tech, clean glassmorphism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMdO9TdRwRSwWlyVrgMGBvMwlMju6cw0M5UuUnV8oNFENzc7IyrV_7DTcUkVln_51LnotlJIZE5gTXpKon0f8VqeUbRAcOdE3vKf14kQZmMPxxQcxh-V_-UkEf4_VCenTohnbCzB4QOqztyZjvsjUk_y6B7T33yOR4MsCDrxH7l4zVAnfs8uE7gkPQjDrAPkPfogHL-egydwSIMlkOidtXdbLWz89YIB3ie_8TmtUSJa1Q_TQIWS_5WGraivzMP6KWptfvqr3nWiU"/>
+<span class="material-symbols-outlined absolute text-secondary text-3xl z-20 mix-blend-screen" data-icon="web">web</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-white font-semibold mb-3">Website Development</h3>
+<p class="font-body-md text-sm text-on-surface-variant flex-grow">AI-assisted websites for helping professionals, nonprofits, and community businesses.</p>
+</div>
+<!-- Card 4 -->
+<div class="glass-card rounded-xl p-6 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full lg:mt-12">
+<div class="absolute -top-3 left-6 bg-primary text-on-primary font-label-sm text-[10px] uppercase px-2 py-0.5 rounded-full z-20 shadow-[0_0_10px_rgba(242,202,80,0.5)]">New</div>
+<div class="h-32 w-full mb-6 relative flex items-center justify-center">
+<div class="absolute inset-0 bg-primary/20 rounded-full blur-xl group-hover:bg-primary/30 transition-colors"></div>
+<img alt="Glowing golden crystal structure representing vibrant community networks" class="w-24 h-24 object-cover rounded-full border border-primary/30 z-10 opacity-80 mix-blend-screen shadow-[0_0_30px_rgba(242,202,80,0.4)]" data-alt="A macro shot of an intensely glowing, transparent golden geometric crystal hovering in a dark void. Inside the crystal, complex illuminated circuitry lines intersect to form a central hub. The lighting is dramatic and warm, emitting a strong amber and gold light-source from within the crystal against a pitch-black background, creating a high-tech, luxurious glassmorphism aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkiX7Bk0XbkrlVb_EsPJvUm264PsVHK8YJ7IFJ__xPIgSvF9E0xrYrN-3oPYGrsIpxR2g0isvIPy13L9N_1s-X1throZIFghbK43deJeHJ6tZ5k-HXoGWLMyy4VslCsS3_gULVZxPOmRnaY5jn9RYMf8Onn46D9dGEU5DpESljG8IKisEVp7fPVDCczXqI1HLwBF_oOcH-Cq2fMI0ouL9vWrbPfCC7ZhIBTTc-QgJt3e0szmDKncpJpmR-Kx7rLH9artnXW-Q2bvE"/>
+<span class="material-symbols-outlined absolute text-primary text-3xl z-20 mix-blend-screen" data-icon="hub">hub</span>
+</div>
+<h3 class="font-body-lg text-body-lg text-white font-semibold mb-3">Join the 60 Watts AI Rollidex Community</h3>
+<p class="font-body-md text-sm text-on-surface-variant flex-grow">A growing circle for people learning how AI is shaping work, practice, and everyday life.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-12 px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8 bg-surface-container-lowest border-t border-white/5">
+<div class="font-headline-md text-headline-md text-primary">60 Watts of Clarity</div>
+<div class="font-body-md text-body-md text-on-surface-variant text-sm">© 2024 60 Watts of Clarity. Illuminating AI Literacy for a Brighter Future.</div>
+<div class="flex gap-6">
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-sm opacity-80 hover:opacity-100 transition-opacity" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-sm opacity-80 hover:opacity-100 transition-opacity" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-sm opacity-80 hover:opacity-100 transition-opacity" href="#">Contact Us</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors font-body-md text-sm opacity-80 hover:opacity-100 transition-opacity" href="#">LinkedIn</a>
+</div>
+</footer>
+</body></html>
