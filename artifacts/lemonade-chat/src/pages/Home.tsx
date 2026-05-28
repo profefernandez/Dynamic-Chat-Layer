@@ -111,7 +111,7 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
       ref={setNodeRef}
       style={style}
       className={[
-        'glass-card rounded-xl p-4 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
+        'glass-card rounded-xl p-5 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
         v.offset ? 'lg:mt-12' : '',
         editMode ? 'cursor-default' : 'cursor-pointer',
       ].join(' ')}
@@ -305,12 +305,12 @@ export function Home() {
 
   return (
     <>
-      <main className="flex-grow flex flex-col items-center justify-center pt-24 pb-4 relative px-margin-mobile md:px-margin-desktop selection:bg-primary/30">
+      <main className="flex-grow flex flex-col items-center justify-start pt-6 pb-4 relative px-margin-mobile md:px-margin-desktop selection:bg-primary/30">
         <div className="absolute inset-0 z-0 pointer-events-none bg-pattern opacity-50" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
 
-        <div className="z-10 text-center max-w-4xl mx-auto mb-6">
+        <div className="z-10 text-center max-w-4xl mx-auto mb-10">
           <div className="flex items-center justify-center gap-4 mb-3 opacity-70">
             <div className="h-px w-12 bg-on-surface-variant" />
             <EditableText
@@ -395,7 +395,7 @@ export function Home() {
         </div>
       </main>
 
-      <footer className="w-full py-3 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-3 bg-surface-container-lowest border-t border-white/5 relative z-10">
+      <footer className="w-full mt-8 py-6 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6 bg-surface-container-lowest border-t border-white/5 relative z-10">
         <EditableText
           as="div"
           value={footerTagline}
