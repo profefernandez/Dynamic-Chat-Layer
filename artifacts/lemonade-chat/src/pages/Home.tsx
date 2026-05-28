@@ -351,7 +351,7 @@ export function Home() {
                   ? [0, 1, 2, 3].map((i) => (
                       <div key={i} className="glass-card rounded-xl p-6 h-64 animate-pulse" />
                     ))
-                  : orderedItems.map((element, index) => (
+                  : orderedItems.slice(0, 4).map((element, index) => (
                       <TileCard
                         key={element.id}
                         element={element}
