@@ -56,7 +56,7 @@ export function ChatLayer() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[100px]" style={{ background: 'rgba(191,205,255,0.1)' }} />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-8 pb-32 relative z-10">
+      <div className="flex-1 overflow-y-auto px-6 py-8 pb-44 relative z-10">
         <div className="max-w-3xl mx-auto space-y-6">
           {messages.filter(m => !m.hidden).map((msg, i) => (
             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -90,7 +90,7 @@ export function ChatLayer() {
       </div>
 
       <div
-        className="absolute bottom-0 left-0 right-0 p-4 md:p-6 z-50"
+        className="absolute bottom-12 left-0 right-0 p-3 md:p-4 z-50"
         style={{ background: 'linear-gradient(to top, #121317 60%, transparent)' }}
       >
         <div className="max-w-3xl mx-auto relative">

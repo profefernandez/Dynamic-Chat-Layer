@@ -395,46 +395,6 @@ export function Home() {
         </div>
       </main>
 
-      <footer className="w-full mt-8 py-5 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 bg-surface-container-lowest border-t border-white/5 relative z-10">
-        <EditableText
-          as="div"
-          value={footerCopyright}
-          onSave={saveSetting('footerCopyright')}
-          className="font-body-md text-body-md text-on-surface-variant text-sm whitespace-nowrap"
-        />
-        <div className="flex gap-8 flex-wrap items-center">
-          {footerLinks.map((link, i) => (
-            <div key={i} className="flex flex-col items-center gap-1">
-              {editMode ? (
-                <>
-                  <EditableText
-                    as="span"
-                    value={link.label}
-                    onSave={saveFooterLinkLabel(i)}
-                    className="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest"
-                  />
-                  <EditableText
-                    as="span"
-                    value={link.url}
-                    onSave={saveFooterLinkUrl(i)}
-                    className="text-on-surface-variant/60 text-xs font-mono"
-                  />
-                </>
-              ) : (
-                <a
-                  href={link.url}
-                  target={link.url.startsWith('http') ? '_blank' : undefined}
-                  rel="noopener noreferrer"
-                  className="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest"
-                >
-                  {link.label}
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      </footer>
-
       {(creating || editingTile) && (
         <TileEditor
           initial={editingTile}

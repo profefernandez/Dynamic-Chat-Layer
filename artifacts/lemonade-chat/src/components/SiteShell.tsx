@@ -1,6 +1,7 @@
 import React from 'react';
 import { ChatLayer } from './ChatLayer';
 import { OverlayLayer } from './OverlayLayer';
+import { SiteFooter } from './SiteFooter';
 import { useAdmin } from '../context/AdminContext';
 
 export function SiteShell() {
@@ -14,6 +15,7 @@ export function SiteShell() {
       )}
       <ChatLayer />
       <OverlayLayer />
+      <SiteFooter />
     </div>
   );
 }
