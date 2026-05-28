@@ -43,7 +43,7 @@ export function OverlayLayer() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -14 }}
                 transition={{ duration: 0.25 }}
-                className="min-h-full"
+                className="h-full"
               >
                 <Switch>
                   <Route path="/"          component={Home} />

@@ -40,42 +40,36 @@ const TILES: ConsultTile[] = [
   },
 ];
 
-const OFFICE_HOURS_PROMPT =
-  'Tell me about weekly office hours as an add-on for ongoing consultation and adoption support.';
-
 export function Services() {
   const { sendMessage } = useChat();
 
   return (
-    <main className="h-full flex flex-col justify-center relative px-margin-mobile md:px-margin-desktop overflow-hidden">
+    <main className="h-full flex flex-col justify-center py-8 relative px-margin-mobile md:px-margin-desktop overflow-hidden">
       <div className="absolute inset-0 z-0 pointer-events-none bg-pattern opacity-50" />
       <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#bfa0ff]/10 rounded-full blur-[100px] z-0 pointer-events-none" />
 
       <div className="z-10 w-full max-w-[1280px] mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-        {/* LEFT — image + description */}
-        <div className="w-full lg:w-[38%] flex-shrink-0 flex flex-col items-center lg:items-start text-center lg:text-left">
+        {/* LEFT — title above image */}
+        <div className="w-full lg:w-[38%] flex-shrink-0 flex flex-col items-center text-center">
+          <div className="flex items-center gap-4 mb-3 opacity-70">
+            <div className="h-px w-10 bg-on-surface-variant" />
+            <span className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">
+              Advisory &amp; Strategy
+            </span>
+            <div className="h-px w-10 bg-on-surface-variant" />
+          </div>
+          <h1 className="font-headline-xl text-headline-xl text-on-surface leading-tight mb-6">
+            AI Consultation
+          </h1>
           <div className="relative w-full max-w-[360px]">
             <div className="absolute -inset-3 bg-primary/15 rounded-3xl blur-2xl" />
             <img
               src={consultantPortrait}
               alt="Portrait of the lead AI consultant"
-              className="relative w-full h-[280px] lg:h-[420px] object-cover rounded-3xl border border-primary/25 shadow-[0_0_40px_rgba(242,202,80,0.18)]"
+              className="relative w-full h-[280px] lg:h-[400px] object-cover rounded-3xl border border-primary/25 shadow-[0_0_40px_rgba(242,202,80,0.18)]"
             />
           </div>
-          <div className="flex items-center gap-4 mt-6 mb-3 opacity-70">
-            <div className="h-px w-10 bg-on-surface-variant" />
-            <span className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">
-              Advisory &amp; Strategy
-            </span>
-          </div>
-          <h1 className="font-headline-xl text-headline-xl text-on-surface leading-tight mb-3">
-            AI Consultation
-          </h1>
-          <p className="font-body-md text-base text-on-surface-variant max-w-md">
-            We partner with leaders and teams to make AI useful, safe, and human —
-            from first steps to org-wide rollout, meeting you where you are.
-          </p>
         </div>
 
         {/* RIGHT — duplicated Home cards, restacked */}
@@ -105,17 +99,6 @@ export function Services() {
               </div>
             </motion.div>
           ))}
-
-          <button
-            type="button"
-            onClick={() => sendMessage(OFFICE_HOURS_PROMPT, true)}
-            className="mt-1 self-start inline-flex items-center gap-2 text-sm text-primary hover:text-primary-fixed-dim transition-colors"
-          >
-            <span className="material-symbols-outlined text-lg">schedule</span>
-            <span className="font-body-md">
-              Add weekly office hours to any engagement →
-            </span>
-          </button>
         </div>
       </div>
     </main>
