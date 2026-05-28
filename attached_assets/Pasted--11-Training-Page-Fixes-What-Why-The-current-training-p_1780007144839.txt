@@ -1,0 +1,36 @@
+#11 - Training Page Fixes
+What & Why
+The current /training page got the structure right but the visual hierarchy and details are off. This task corrects them. The page must read as: large, confident headline at top → supporting hero (no humans) → compact tile row at the bottom — top is the biggest element on the page, tiles are smaller and supporting.
+
+Issues to fix
+H1/H2 too small at top. The "AI Training" headline doesn't read as the page title. Bump it up so it visually dominates the page; "Learn With Us" eyebrow can stay small but the headline should be larger than today (text-headline-xl or close to it on desktop), with more weight.
+Cards too large. The three tiles are bigger than the headline, inverting the hierarchy. Shrink them: smaller icon block (e.g. h-16–h-20 instead of h-24), tighter padding (p-4), title can drop to text-lg, body to text-sm. Keep the same tile design language — just smaller scale on this page.
+Hero image — no humans. Replace training-hero.jpg with an abstract/symbolic image that fits the brand (e.g. soft lemon/amber gradient texture, abstract knowledge/light motif, geometric pattern, or generated illustration). No people, no faces.
+Tile icons must match Home's set exactly. Home uses groups, corporate_fare, web, hub. Training currently uses school and bolt — those must go. Reassign tile icons to Home's set:
+$60 / 60 min → groups (amber/primary glow)
+$30 / 30 min → hub (tertiary/blue glow)
+Customized → corporate_fare (violet glow)
+Remove the per-tile CTAs. Drop the "Book" and "Contact" buttons. Make the whole tile clickable instead (same pattern as Home tiles) — clicking the tile opens chat with the same pre-filled prompt that the button used to send.
+Top-heavy composition. The header block + hero should occupy more vertical space than the tile row. Tiles should look like a quiet 3-up index at the bottom, not the page's hero.
+Hard constraints (still apply)
+No scroll on desktop (1440x900). Tighter tiles + smaller hero + larger headline should still fit.
+Same tile design language as Home — only size and color/glow change per page, never the icon set.
+Done looks like
+"AI Training" headline visually dominates the page (largest text element on screen).
+Hero image is abstract / object-only — no humans or faces.
+Three tiles are visibly smaller than the header and use Home's icons (groups, hub, corporate_fare).
+Tiles have no buttons — entire tile is clickable and opens chat with the booking/contact prompt.
+Page fits 1440x900 with no vertical scroll.
+Hierarchy reads cleanly: eyebrow (small) → headline (largest) → hero (medium) → tile row (smallest).
+Steps
+Bump headline typography (text-headline-xl or similar) and increase its top breathing room; keep the eyebrow small.
+Replace training-hero.jpg with a no-humans image — either swap to an existing abstract asset or generate one via the media-generation skill (warm amber/charcoal palette).
+Shrink the tile visual scale on Training: smaller icon block (h-16–h-20), reduced padding (p-4), title text-lg, body text-sm, tighter row gap.
+Reassign tile icons to Home's set per the mapping above.
+Remove the CTA <button> from each Training tile; wrap the tile (or wire its onClick) to call sendMessage(prompt, true) when clicked.
+Verify at 1440x900: headline is the dominant element, tiles read as a supporting bottom row, no scroll, icons match Home.
+Relevant files
+artifacts/lemonade-chat/src/pages/Training.tsx
+artifacts/lemonade-chat/src/components/TileCardBase.tsx
+artifacts/lemonade-chat/src/assets/training-hero.jpg
+artifacts/lemonade-chat/src/pages/Home.tsx:30-90 (Home's CARD_VISUALS for icon reference)

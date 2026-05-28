@@ -17,6 +17,7 @@ export function TileCardBody({
   imgSrc,
   alt,
   footer,
+  compact = false,
 }: {
   visual: TileVisual;
   title: string;
@@ -24,17 +25,24 @@ export function TileCardBody({
   imgSrc?: string;
   alt?: string;
   footer?: React.ReactNode;
+  compact?: boolean;
 }) {
+  const blockH = compact ? 'h-16' : 'h-24';
+  const imgWH = compact ? 'w-14 h-14' : 'w-20 h-20';
+  const iconSize = compact ? 'text-2xl' : 'text-3xl';
+  const titleSize = compact ? 'text-lg mb-1' : 'text-xl mb-2';
+  const descSize = compact ? 'text-sm' : 'text-base';
+  const blockMb = compact ? 'mb-2' : 'mb-3';
   return (
     <>
-      <div className="h-24 w-full mb-3 relative flex items-center justify-center">
+      <div className={`${blockH} w-full ${blockMb} relative flex items-center justify-center`}>
         <div
           className={`absolute inset-0 ${visual.glowClass} rounded-full blur-xl ${visual.glowHoverClass} transition-colors`}
         />
         {imgSrc ? (
           <img
             alt={alt ?? title}
-            className={`w-20 h-20 object-cover rounded-full border ${visual.imgBorderClass} z-10 opacity-80 mix-blend-screen ${visual.imgShadowClass}`}
+            className={`${imgWH} object-cover rounded-full border ${visual.imgBorderClass} z-10 opacity-80 mix-blend-screen ${visual.imgShadowClass}`}
             src={imgSrc}
             onError={(e) => {
               const img = e.target as HTMLImageElement;
@@ -43,17 +51,17 @@ export function TileCardBody({
           />
         ) : (
           <div
-            className={`w-20 h-20 rounded-full border ${visual.imgBorderClass} z-10 ${visual.imgShadowClass} bg-surface/40`}
+            className={`${imgWH} rounded-full border ${visual.imgBorderClass} z-10 ${visual.imgShadowClass} bg-surface/40`}
           />
         )}
         <span
-          className={`material-symbols-outlined absolute ${visual.iconColorClass} text-3xl z-20 mix-blend-screen`}
+          className={`material-symbols-outlined absolute ${visual.iconColorClass} ${iconSize} z-20 mix-blend-screen`}
         >
           {visual.icon}
         </span>
       </div>
-      <h3 className="font-body-lg text-xl text-white font-semibold mb-2">{title}</h3>
-      <p className="font-body-md text-base text-on-surface-variant flex-grow">{description}</p>
+      <h3 className={`font-body-lg ${titleSize} text-white font-semibold`}>{title}</h3>
+      <p className={`font-body-md ${descSize} text-on-surface-variant flex-grow`}>{description}</p>
       {footer}
     </>
   );
