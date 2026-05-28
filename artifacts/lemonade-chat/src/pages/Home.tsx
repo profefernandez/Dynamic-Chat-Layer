@@ -362,17 +362,35 @@ export function Home() {
                       />
                     ))}
 
-                {editMode && (
-                  <button
-                    type="button"
-                    onClick={() => setCreating(true)}
-                    className="glass-card rounded-xl p-6 h-64 z-10 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-primary/30 hover:border-primary/60 hover:-translate-y-1 transition-all text-on-surface-variant hover:text-primary"
-                  >
-                    <Plus className="w-8 h-8" />
-                    <span className="font-body-md text-sm">Add tile</span>
-                  </button>
-                )}
               </div>
+
+              {editMode && (
+                <div className="mt-12 pt-8 border-t border-white/10">
+                  <div className="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-4">
+                    Additional tiles (admin only)
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+                    {orderedItems.slice(4).map((element, i) => (
+                      <TileCard
+                        key={element.id}
+                        element={element}
+                        visualIndex={i + 4}
+                        editMode={editMode}
+                        onActivate={() => handleTileActivate(element)}
+                        onEdit={() => setEditingTile(element)}
+                      />
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => setCreating(true)}
+                      className="glass-card rounded-xl p-6 h-64 z-10 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-primary/30 hover:border-primary/60 hover:-translate-y-1 transition-all text-on-surface-variant hover:text-primary"
+                    >
+                      <Plus className="w-8 h-8" />
+                      <span className="font-body-md text-sm">Add tile</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </SortableContext>
           </DndContext>
         </div>
