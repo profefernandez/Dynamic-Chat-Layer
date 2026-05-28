@@ -8,6 +8,7 @@ import {
   DeleteElementParams,
   GetElementParams,
 } from "@workspace/api-zod";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
@@ -27,7 +28,7 @@ router.get("/", async (_req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", requireAuth, async (req, res) => {
   const parsed = CreateElementBody.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid request body" });
@@ -77,7 +78,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", requireAuth, async (req, res) => {
   const paramsParsed = UpdateElementParams.safeParse({ id: Number(req.params.id) });
   const bodyParsed = UpdateElementBody.safeParse(req.body);
   if (!paramsParsed.success || !bodyParsed.success) {
@@ -113,7 +114,7 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   const parsed = DeleteElementParams.safeParse({ id: Number(req.params.id) });
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid id" });

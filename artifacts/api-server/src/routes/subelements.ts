@@ -9,11 +9,12 @@ import {
   DeleteSubElementParams,
   ListSubElementsParams,
 } from "@workspace/api-zod";
+import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router({ mergeParams: true });
 
 router.get("/", async (req, res) => {
-  const parsed = ListSubElementsParams.safeParse({ elementId: Number(req.params.elementId) });
+  const parsed = ListSubElementsParams.safeParse({ elementId: Number((req.params as { elementId: string }).elementId) });
   if (!parsed.success) {
     return res.status(400).json({ error: "Invalid elementId" });
   }
@@ -31,8 +32,8 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
-  const paramsParsed = CreateSubElementParams.safeParse({ elementId: Number(req.params.elementId) });
+router.post("/", requireAuth, async (req, res) => {
+  const paramsParsed = CreateSubElementParams.safeParse({ elementId: Number((req.params as { elementId: string }).elementId) });
   const bodyParsed = CreateSubElementBody.safeParse(req.body);
   if (!paramsParsed.success || !bodyParsed.success) {
     return res.status(400).json({ error: "Invalid request" });
@@ -57,9 +58,9 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", requireAuth, async (req, res) => {
   const paramsParsed = UpdateSubElementParams.safeParse({
-    elementId: Number(req.params.elementId),
+    elementId: Number((req.params as { elementId: string }).elementId),
     id: Number(req.params.id),
   });
   const bodyParsed = UpdateSubElementBody.safeParse(req.body);
@@ -95,9 +96,9 @@ router.patch("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", requireAuth, async (req, res) => {
   const parsed = DeleteSubElementParams.safeParse({
-    elementId: Number(req.params.elementId),
+    elementId: Number((req.params as { elementId: string }).elementId),
     id: Number(req.params.id),
   });
   if (!parsed.success) {

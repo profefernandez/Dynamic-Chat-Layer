@@ -57,7 +57,8 @@ export function Home() {
   const items = elements ?? [];
 
   return (
-    /* Exact translation of the HTML <main> block */
+   <>
+    {/* Exact translation of the HTML <main> block */}
     <main className="flex-grow flex flex-col items-center justify-center pt-32 pb-20 relative px-margin-mobile md:px-margin-desktop selection:bg-primary/30">
 
       {/* Abstract Background Glows */}
@@ -86,7 +87,7 @@ export function Home() {
       </div>
 
       {/* Services Grid */}
-      <div className="z-10 w-full max-w-container-max mx-auto">
+      <div className="z-10 w-full max-w-container-max mx-auto mb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter relative">
 
           {/* Central Connection Lines (Decorative for Desktop) */}
@@ -137,6 +138,22 @@ export function Home() {
               })}
         </div>
       </div>
+
     </main>
+
+    {/* Footer — exact HTML translation, full-width sibling of <main> */}
+    <footer className="w-full py-12 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-8 bg-surface-container-lowest border-t border-white/5 relative z-10">
+      <div className="font-headline-md text-headline-md text-primary">60 Watts of Clarity</div>
+      <div className="font-body-md text-body-md text-on-surface-variant text-sm">
+        © 2024 60 Watts of Clarity. Illuminating AI Literacy for a Brighter Future.
+      </div>
+      <div className="flex gap-6">
+        <a href="#" className="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest">Privacy Policy</a>
+        <a href="#" className="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest">Terms of Service</a>
+        <a href="#" className="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest">Contact Us</a>
+        <a href="#" className="text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest">LinkedIn</a>
+      </div>
+    </footer>
+  </>
   );
 }
