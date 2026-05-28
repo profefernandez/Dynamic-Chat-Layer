@@ -1,4 +1,13 @@
-import { pgTable, text, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, jsonb } from "drizzle-orm/pg-core";
+
+export type FooterLink = { label: string; url: string };
+
+const defaultFooterLinks: FooterLink[] = [
+  { label: "Privacy Policy", url: "#" },
+  { label: "Terms of Service", url: "#" },
+  { label: "Contact Us", url: "#" },
+  { label: "LinkedIn", url: "#" },
+];
 
 export const siteSettingsTable = pgTable("site_settings", {
   id: integer("id").primaryKey().default(1),
@@ -14,6 +23,7 @@ export const siteSettingsTable = pgTable("site_settings", {
   footerCopyright: text("footer_copyright").notNull().default(
     "© 60 Watts of Clarity. All rights reserved.",
   ),
+  footerLinks: jsonb("footer_links").$type<FooterLink[]>().notNull().default(defaultFooterLinks),
 });
 
 export type SiteSettings = typeof siteSettingsTable.$inferSelect;

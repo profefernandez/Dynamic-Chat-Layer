@@ -235,7 +235,11 @@ export const GetSiteSettingsResponse = zod.object({
   "heroSubtitle": zod.string(),
   "chatPlaceholder": zod.string(),
   "footerTagline": zod.string(),
-  "footerCopyright": zod.string()
+  "footerCopyright": zod.string(),
+  "footerLinks": zod.array(zod.object({
+  "label": zod.string(),
+  "url": zod.string()
+}))
 })
 
 
@@ -248,7 +252,11 @@ export const UpdateSiteSettingsBody = zod.object({
   "heroSubtitle": zod.string().optional(),
   "chatPlaceholder": zod.string().optional(),
   "footerTagline": zod.string().optional(),
-  "footerCopyright": zod.string().optional()
+  "footerCopyright": zod.string().optional(),
+  "footerLinks": zod.array(zod.object({
+  "label": zod.string(),
+  "url": zod.string()
+})).optional()
 })
 
 export const UpdateSiteSettingsResponse = zod.object({
@@ -257,7 +265,11 @@ export const UpdateSiteSettingsResponse = zod.object({
   "heroSubtitle": zod.string(),
   "chatPlaceholder": zod.string(),
   "footerTagline": zod.string(),
-  "footerCopyright": zod.string()
+  "footerCopyright": zod.string(),
+  "footerLinks": zod.array(zod.object({
+  "label": zod.string(),
+  "url": zod.string()
+}))
 })
 
 

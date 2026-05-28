@@ -5,6 +5,7 @@
  * Launch Lemonade API
  * OpenAPI spec version: 0.1.0
  */
+import type { FooterLink } from './footerLink';
 
 export interface SiteSettingsUpdate {
   heroEyebrow?: string;
@@ -13,4 +14,5 @@ export interface SiteSettingsUpdate {
   chatPlaceholder?: string;
   footerTagline?: string;
   footerCopyright?: string;
+  footerLinks?: FooterLink[];
 }

@@ -12,6 +12,7 @@ export * from './chatResponse';
 export * from './element';
 export * from './elementInput';
 export * from './elementUpdate';
+export * from './footerLink';
 export * from './generatedImage';
 export * from './generateImageInput';
 export * from './healthStatus';

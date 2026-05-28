@@ -115,6 +115,11 @@ export interface ReorderInput {
   ids: number[];
 }
 
+export interface FooterLink {
+  label: string;
+  url: string;
+}
+
 export interface SiteSettings {
   heroEyebrow: string;
   heroTitle: string;
@@ -122,6 +127,7 @@ export interface SiteSettings {
   chatPlaceholder: string;
   footerTagline: string;
   footerCopyright: string;
+  footerLinks: FooterLink[];
 }
 
 export interface SiteSettingsUpdate {
@@ -131,6 +137,7 @@ export interface SiteSettingsUpdate {
   chatPlaceholder?: string;
   footerTagline?: string;
   footerCopyright?: string;
+  footerLinks?: FooterLink[];
 }
 
 export interface UploadUrlRequest {

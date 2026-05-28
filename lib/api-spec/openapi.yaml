@@ -468,6 +468,15 @@ components:
           items:
             type: integer
 
+    FooterLink:
+      type: object
+      required: [label, url]
+      properties:
+        label:
+          type: string
+        url:
+          type: string
+
     SiteSettings:
       type: object
       required:
@@ -477,6 +486,7 @@ components:
         - chatPlaceholder
         - footerTagline
         - footerCopyright
+        - footerLinks
       properties:
         heroEyebrow:
           type: string
@@ -490,6 +500,10 @@ components:
           type: string
         footerCopyright:
           type: string
+        footerLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/FooterLink"
 
     SiteSettingsUpdate:
       type: object
@@ -506,6 +520,10 @@ components:
           type: string
         footerCopyright:
           type: string
+        footerLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/FooterLink"
 
     UploadUrlRequest:
       type: object

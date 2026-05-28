@@ -11,6 +11,9 @@ const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 const apiBase = `${basePath}/api`;
 
 function objectPathToUrl(objectPath: string): string {
+  // objectPath like "/objects/uploads/<uuid>" -> "/api/images/file/<uuid>"
+  const m = objectPath.match(/\/objects\/uploads\/(.+)$/);
+  if (m) return `${apiBase}/images/file/${m[1]}`;
   return `${apiBase}/storage${objectPath}`;
 }
 
@@ -26,26 +29,15 @@ export function ImagePicker({ value, onChange }: Props) {
     setUploading(true);
     setError(null);
     try {
-      const r = await fetch(`${apiBase}/storage/uploads/request-url`, {
+      const form = new FormData();
+      form.append('file', file);
+      const r = await fetch(`${apiBase}/images/upload`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({
-          name: file.name,
-          size: file.size,
-          contentType: file.type || 'application/octet-stream',
-        }),
+        body: form,
       });
-      if (!r.ok) throw new Error(`Upload URL request failed (${r.status})`);
-      const { uploadURL, objectPath } = (await r.json()) as { uploadURL: string; objectPath: string };
-
-      const put = await fetch(uploadURL, {
-        method: 'PUT',
-        headers: { 'Content-Type': file.type || 'application/octet-stream' },
-        body: file,
-      });
-      if (!put.ok) throw new Error(`Upload failed (${put.status})`);
-
+      if (!r.ok) throw new Error(`Upload failed (${r.status})`);
+      const { objectPath } = (await r.json()) as { objectPath: string };
       onChange(objectPathToUrl(objectPath));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Upload failed');

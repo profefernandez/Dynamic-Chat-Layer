@@ -11,8 +11,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { ChatProvider } from "./context/ChatContext";
 import { AdminProvider } from "./context/AdminContext";
-import { ChatLayer } from "./components/ChatLayer";
-import { OverlayLayer } from "./components/OverlayLayer";
+import { SiteShell } from "./components/SiteShell";
 import { Admin } from "./pages/Admin";
 
 const queryClient = new QueryClient();
@@ -103,12 +102,7 @@ function ProtectedAdmin() {
 }
 
 function MainApp() {
-  return (
-    <div className="relative w-full min-h-[100dvh] overflow-hidden bg-surface">
-      <ChatLayer />
-      <OverlayLayer />
-    </div>
-  );
+  return <SiteShell />;
 }
 
 function ClerkQueryClientCacheInvalidator() {

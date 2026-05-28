@@ -38,6 +38,7 @@ router.patch("/", requireAuth, async (req, res) => {
     if (body.chatPlaceholder !== undefined) updates.chatPlaceholder = body.chatPlaceholder;
     if (body.footerTagline !== undefined) updates.footerTagline = body.footerTagline;
     if (body.footerCopyright !== undefined) updates.footerCopyright = body.footerCopyright;
+    if (body.footerLinks !== undefined) updates.footerLinks = body.footerLinks;
 
     const [updated] = await db
       .update(siteSettingsTable)
