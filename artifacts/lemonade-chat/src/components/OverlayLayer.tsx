@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { NavBar } from './NavBar';
 import { Switch, Route, useLocation } from 'wouter';
 import { Home } from '../pages/Home';
+import { Training } from '../pages/Training';
 import { Services } from '../pages/Services';
 import { About } from '../pages/About';
 import { Contact } from '../pages/Contact';
@@ -47,6 +48,7 @@ export function OverlayLayer() {
                 <Switch>
                   <Route path="/"          component={Home} />
                   <Route path="/admin"     component={Home} />
+                  <Route path="/training"  component={Training} />
                   <Route path="/services"  component={Services} />
                   <Route path="/about"     component={About} />
                   <Route path="/contact"   component={Contact} />

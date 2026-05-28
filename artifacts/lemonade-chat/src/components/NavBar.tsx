@@ -14,7 +14,8 @@ export function NavBar({ onToggle }: NavBarProps) {
   const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   const links = [
-    { href: '/',         label: 'Training' },
+    { href: '/',         label: 'Home' },
+    { href: '/training', label: 'Training' },
     { href: '/services', label: 'Consultation' },
     { href: '/about',    label: 'Web Dev' },
     { href: '/contact',  label: 'Community' },
