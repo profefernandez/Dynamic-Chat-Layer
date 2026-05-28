@@ -341,7 +341,7 @@ export function Home() {
           />
         </div>
 
-        <div className="z-10 w-full max-w-6xl mx-auto">
+        <div className="z-10 w-full max-w-[1400px] mx-auto">
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
             <SortableContext items={orderedItems.map((it) => it.id)} strategy={rectSortingStrategy}>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter relative">

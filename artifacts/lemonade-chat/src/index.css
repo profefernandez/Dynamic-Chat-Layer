@@ -107,7 +107,7 @@
   /* ── Spacing tokens (generates px-*, gap-*, max-w-*, etc.) ─ */
   --spacing-margin-desktop:  64px;
   --spacing-margin-mobile:   20px;
-  --spacing-gutter:          36px;
+  --spacing-gutter:          56px;
   --spacing-container-max:   1280px;
   --spacing-unit:            8px;
 
