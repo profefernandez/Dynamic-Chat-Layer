@@ -395,21 +395,14 @@ export function Home() {
         </div>
       </main>
 
-      <footer className="w-full mt-8 py-6 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-6 bg-surface-container-lowest border-t border-white/5 relative z-10">
-        <EditableText
-          as="div"
-          value={footerTagline}
-          onSave={saveSetting('footerTagline')}
-          className="font-headline-md text-headline-md text-primary"
-        />
+      <footer className="w-full mt-8 py-5 px-margin-mobile md:px-margin-desktop flex flex-col md:flex-row justify-between items-center gap-4 bg-surface-container-lowest border-t border-white/5 relative z-10">
         <EditableText
           as="div"
           value={footerCopyright}
           onSave={saveSetting('footerCopyright')}
-          multiline
-          className="font-body-md text-body-md text-on-surface-variant text-sm"
+          className="font-body-md text-body-md text-on-surface-variant text-sm whitespace-nowrap"
         />
-        <div className="flex gap-6 flex-wrap items-center">
+        <div className="flex gap-8 flex-wrap items-center">
           {footerLinks.map((link, i) => (
             <div key={i} className="flex flex-col items-center gap-1">
               {editMode ? (
