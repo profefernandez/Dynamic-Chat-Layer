@@ -111,7 +111,7 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
       ref={setNodeRef}
       style={style}
       className={[
-        'glass-card rounded-xl p-6 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
+        'glass-card rounded-xl p-4 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full',
         v.offset ? 'lg:mt-12' : '',
         editMode ? 'cursor-default' : 'cursor-pointer',
       ].join(' ')}
@@ -156,11 +156,11 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </div>
       )}
 
-      <div className="h-32 w-full mb-6 relative flex items-center justify-center">
+      <div className="h-20 w-full mb-3 relative flex items-center justify-center">
         <div className={`absolute inset-0 ${v.glowClass} rounded-full blur-xl ${v.glowHoverClass} transition-colors`} />
         <img
           alt={element.name}
-          className={`w-24 h-24 object-cover rounded-full border ${v.imgBorderClass} z-10 opacity-80 mix-blend-screen ${v.imgShadowClass}`}
+          className={`w-16 h-16 object-cover rounded-full border ${v.imgBorderClass} z-10 opacity-80 mix-blend-screen ${v.imgShadowClass}`}
           src={imgSrc}
           onError={(e) => {
             const img = e.target as HTMLImageElement;
@@ -172,7 +172,7 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
         </span>
       </div>
 
-      <h3 className="font-body-lg text-body-lg text-white font-semibold mb-3">{element.name}</h3>
+      <h3 className="font-body-lg text-body-lg text-white font-semibold mb-2">{element.name}</h3>
       <p className="font-body-md text-sm text-on-surface-variant flex-grow">{element.description}</p>
     </div>
   );
@@ -305,13 +305,13 @@ export function Home() {
 
   return (
     <>
-      <main className="flex-grow flex flex-col items-center justify-center pt-32 pb-20 relative px-margin-mobile md:px-margin-desktop selection:bg-primary/30">
+      <main className="flex-grow flex flex-col items-center justify-center pt-24 pb-40 relative px-margin-mobile md:px-margin-desktop selection:bg-primary/30">
         <div className="absolute inset-0 z-0 pointer-events-none bg-pattern opacity-50" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
 
-        <div className="z-10 text-center max-w-4xl mx-auto mb-20">
-          <div className="flex items-center justify-center gap-4 mb-6 opacity-70">
+        <div className="z-10 text-center max-w-4xl mx-auto mb-6">
+          <div className="flex items-center justify-center gap-4 mb-3 opacity-70">
             <div className="h-px w-12 bg-on-surface-variant" />
             <EditableText
               as="span"
@@ -322,7 +322,7 @@ export function Home() {
             <div className="h-px w-12 bg-on-surface-variant" />
           </div>
 
-          <h1 className="font-headline-xl text-headline-xl text-on-surface mb-6 leading-tight">
+          <h1 className="font-headline-xl text-headline-xl text-on-surface mb-3 leading-tight">
             <span className="text-white">60 Watts of </span>
             <EditableText
               as="span"
@@ -337,7 +337,7 @@ export function Home() {
             value={heroSubtitle}
             onSave={saveSetting('heroSubtitle')}
             multiline
-            className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto mb-8 block"
+            className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto block"
           />
         </div>
 
