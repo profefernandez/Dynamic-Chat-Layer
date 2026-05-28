@@ -1,0 +1,8 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "kMdGWrqLgPmOyAFBCEKJx"
+uri = "file://artifacts/lemonade-chat/src/assets/training-hero.png"
+type = "image"
+title = "training abstract hero"

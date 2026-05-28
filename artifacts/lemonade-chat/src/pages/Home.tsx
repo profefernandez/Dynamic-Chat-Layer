@@ -34,7 +34,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
-const CARD_VISUALS = [
+export const CARD_VISUALS = [
   {
     badge: true,
     offset: false,
