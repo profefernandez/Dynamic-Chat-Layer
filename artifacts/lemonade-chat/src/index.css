@@ -159,13 +159,15 @@
    COMPONENT STYLES — exact from the 60 Watts HTML
 ───────────────────────────────────────────────────────────── */
 .glass-card {
-  background: rgba(18, 19, 23, 0.4);
+  background: rgba(28, 30, 38, 0.72);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top:    1px solid rgba(255, 255, 255, 0.2);
-  border-left:   1px solid rgba(255, 255, 255, 0.2);
-  border-right:  1px solid rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top:    1px solid rgba(255, 255, 255, 0.32);
+  border-left:   1px solid rgba(255, 255, 255, 0.28);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.05) inset,
+    0 8px 28px rgba(0, 0, 0, 0.45);
 }
 
 .text-glow {
