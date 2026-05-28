@@ -90,7 +90,7 @@ export function ChatLayer() {
       </div>
 
       <div
-        className="absolute bottom-12 left-0 right-0 px-3 pt-4 pb-2 md:px-4 md:pt-6 md:pb-3 z-50"
+        className="absolute bottom-12 left-0 right-0 px-3 pt-1 pb-2 md:px-4 md:pt-1 md:pb-3 z-50"
         style={{ background: 'linear-gradient(to top, #121317 60%, transparent)' }}
       >
         <div className="max-w-3xl mx-auto relative">
