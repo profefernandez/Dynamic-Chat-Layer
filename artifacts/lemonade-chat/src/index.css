@@ -180,6 +180,45 @@
   );
 }
 
+/* Hero card frame — thin glowing border with photo backdrop */
+.hero-card {
+  position: relative;
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgba(18, 19, 23, 0.85) 0%, rgba(10, 11, 15, 0.92) 100%);
+  border: 1px solid rgba(155, 130, 255, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(242, 202, 80, 0.08) inset,
+    0 0 60px rgba(155, 130, 255, 0.12),
+    0 0 120px rgba(242, 202, 80, 0.06);
+  overflow: hidden;
+}
+.hero-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 40%, rgba(242,202,80,0.10), transparent 55%),
+    radial-gradient(ellipse at 80% 60%, rgba(155,130,255,0.10), transparent 55%);
+  pointer-events: none;
+}
+
+.crystal-glow {
+  filter: drop-shadow(0 0 12px rgba(242,202,80,0.55))
+          drop-shadow(0 0 24px rgba(242,202,80,0.35));
+}
+
+.tile-mini {
+  background: rgba(18, 19, 23, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.75rem;
+}
+.tile-mini:hover {
+  border-color: rgba(242, 202, 80, 0.35);
+}
+
 /* ─────────────────────────────────────────────────────────────
    BASE
 ───────────────────────────────────────────────────────────── */
