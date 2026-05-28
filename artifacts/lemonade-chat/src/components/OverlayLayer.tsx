@@ -22,7 +22,7 @@ export function OverlayLayer() {
           scale: isOverlayOpen ? 1 : 0.97,
         }}
         transition={{ type: 'spring', bounce: 0, duration: 0.55 }}
-        className="fixed top-0 left-0 right-0 bottom-32 z-10 origin-top pointer-events-none"
+        className="fixed top-0 left-0 right-0 bottom-40 z-10 origin-top pointer-events-none"
       >
         <div
           className="absolute inset-0 overflow-hidden pointer-events-auto flex flex-col"
