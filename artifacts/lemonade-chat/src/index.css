@@ -58,7 +58,7 @@
 
   --color-on-surface:         #e3e2e7;
   --color-on-surface-variant: #d0c5af;
-  --color-outline:            #99907c;
+  --color-outline:            #c2b89e;
   --color-outline-variant:    #4d4635;
 
   --color-background:         #121317;
@@ -107,7 +107,7 @@
   /* ── Spacing tokens (generates px-*, gap-*, max-w-*, etc.) ─ */
   --spacing-margin-desktop:  64px;
   --spacing-margin-mobile:   20px;
-  --spacing-gutter:          24px;
+  --spacing-gutter:          36px;
   --spacing-container-max:   1280px;
   --spacing-unit:            8px;
 
