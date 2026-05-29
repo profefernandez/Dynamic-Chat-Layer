@@ -8,6 +8,17 @@ type Turn = { role: "user" | "model"; content: string };
 
 const conversations = new Map<string, Turn[]>();
 const MAX_TURNS = 20;
+const MAX_SESSIONS = 1000;
+
+function touchSession(sessionId: string, turns: Turn[]) {
+  conversations.delete(sessionId);
+  conversations.set(sessionId, turns.slice(-MAX_TURNS));
+  while (conversations.size > MAX_SESSIONS) {
+    const oldest = conversations.keys().next().value;
+    if (oldest === undefined) break;
+    conversations.delete(oldest);
+  }
+}
 
 const SYSTEM_PROMPT = `You are the AI guide for "60 Watts of Clarity", a practice that helps everyday people, nonprofits, and small organizations understand and use AI with confidence. The founder is a licensed social worker, AI consultant, educator, and website designer.
 
@@ -61,7 +72,7 @@ router.post("/", async (req, res) => {
       "I'm sorry — I didn't quite catch that. Could you rephrase your question?";
 
     history.push({ role: "model", content: reply });
-    conversations.set(newSessionId, history.slice(-MAX_TURNS));
+    touchSession(newSessionId, history);
 
     return res.json({ reply, sessionId: newSessionId });
   } catch (err) {

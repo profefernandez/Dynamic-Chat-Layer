@@ -1,24 +1,22 @@
 import { GoogleGenAI, Modality } from "@google/genai";
 
-const apiKey = process.env.GEMINI_API_KEY;
+const baseUrl = process.env.AI_INTEGRATIONS_GEMINI_BASE_URL;
+const apiKey = process.env.AI_INTEGRATIONS_GEMINI_API_KEY;
 
-if (!apiKey) {
+if (!baseUrl || !apiKey) {
   console.warn(
-    "[gemini] GEMINI_API_KEY is not set. Image generation will fail until it is configured.",
+    "[gemini] AI_INTEGRATIONS_GEMINI_BASE_URL or AI_INTEGRATIONS_GEMINI_API_KEY is not set. Gemini calls will fail until the integration is configured.",
   );
 }
 
 export const ai = new GoogleGenAI({
   apiKey: apiKey || "missing",
+  httpOptions: { apiVersion: "", baseUrl },
 });
 
 export async function generateImage(
   prompt: string,
 ): Promise<{ b64_json: string; mimeType: string }> {
-  if (!process.env.GEMINI_API_KEY) {
-    throw new Error("GEMINI_API_KEY is not set");
-  }
-
   const response = await ai.models.generateContent({
     model: "gemini-2.5-flash-image",
     contents: [{ role: "user", parts: [{ text: prompt }] }],
