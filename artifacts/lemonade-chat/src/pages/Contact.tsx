@@ -29,7 +29,7 @@ export function Contact() {
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
 
-      <div className="z-10 text-center max-w-4xl mx-auto mb-8">
+      <div className="z-10 text-center max-w-4xl mx-auto mb-6">
         <div className="flex items-center justify-center gap-4 mb-3 opacity-70">
           <div className="h-px w-12 bg-on-surface-variant" />
           <span className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">
@@ -46,7 +46,7 @@ export function Contact() {
       </div>
 
       <div className="z-10 w-full max-w-[1180px] mx-auto">
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
           {PARTNERS.map((partner, i) => (
             <motion.div
               key={partner.id}
@@ -59,7 +59,7 @@ export function Contact() {
               <img
                 src={partner.img}
                 alt={partner.name}
-                className="w-full h-36 md:h-44 object-cover transition-transform duration-500 group-hover:scale-105"
+                className="w-full h-32 md:h-40 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent pointer-events-none" />
               <div className="absolute inset-x-0 bottom-0 p-3">

@@ -3,9 +3,29 @@ import { useChat } from '../context/ChatContext';
 import { useAdmin } from '../context/AdminContext';
 import { useGetSiteSettings, useUpdateSiteSettings, getGetSiteSettingsQueryKey } from '@workspace/api-client-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Send, Sparkles, Pencil, Check, X } from 'lucide-react';
+import {
+  Send,
+  Sparkles,
+  Pencil,
+  Check,
+  X,
+  Accessibility,
+  Mic,
+  Paperclip,
+  Languages,
+  User,
+  MapPin,
+  LineChart,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+
+const SUGGESTIONS = [
+  { icon: User, label: 'Learn AI in plain language', prompt: 'Teach me about AI in plain language — where do I start?' },
+  { icon: MapPin, label: 'Find local resources', prompt: 'What local resources can help me learn about AI?' },
+  { icon: LineChart, label: 'Build an AI training plan', prompt: 'Help me build an AI training plan.' },
+  { icon: User, label: 'Talk to a person', prompt: "I'd like to talk to a real person — how can I reach someone?" },
+];
 
 export function ChatLayer() {
   const { messages, sendMessage, isSending, setOverlayOpen } = useChat();
@@ -36,6 +56,12 @@ export function ChatLayer() {
     setInputValue('');
   };
 
+  const handleSuggestion = (prompt: string) => {
+    if (isSending) return;
+    setOverlayOpen(false);
+    sendMessage(prompt);
+  };
+
   const savePlaceholder = () => {
     if (draftPlaceholder !== placeholder) {
       updateSettings(
@@ -56,7 +82,7 @@ export function ChatLayer() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[100px]" style={{ background: 'rgba(191,205,255,0.1)' }} />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-8 pb-44 relative z-10">
+      <div className="flex-1 overflow-y-auto px-6 py-8 pb-56 relative z-10">
         <div className="max-w-3xl mx-auto space-y-6">
           {messages.filter(m => !m.hidden).map((msg, i) => (
             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -90,8 +116,8 @@ export function ChatLayer() {
       </div>
 
       <div
-        className="absolute bottom-12 left-0 right-0 px-3 pt-1 pb-2 md:px-4 md:pt-1 md:pb-3 z-50"
-        style={{ background: 'linear-gradient(to top, #121317 60%, transparent)' }}
+        className="absolute bottom-3 left-0 right-0 px-3 pt-2 pb-2 md:px-4 z-50"
+        style={{ background: 'linear-gradient(to top, #121317 72%, transparent)' }}
       >
         <div className="max-w-3xl mx-auto relative">
           {editMode && (
@@ -126,34 +152,82 @@ export function ChatLayer() {
             </div>
           )}
           <div
-            className="absolute -inset-1 rounded-full opacity-40 pointer-events-none"
+            className="absolute -inset-1 rounded-3xl opacity-40 pointer-events-none"
             style={{ background: 'radial-gradient(ellipse at center, rgba(242,202,80,0.2), transparent 70%)', filter: 'blur(12px)' }}
           />
-          <form
-            onSubmit={handleSubmit}
-            className="relative flex items-center rounded-full p-1 shadow-2xl transition-colors"
+          <div
+            className="relative rounded-3xl p-2.5 md:p-3 shadow-2xl"
             style={{
               background: 'rgba(30, 31, 35, 0.95)',
               border: '1px solid rgba(242, 202, 80, 0.28)',
             }}
           >
-            <Input
-              value={inputValue}
-              onChange={e => setInputValue(e.target.value)}
-              placeholder={placeholder}
-              className="flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-4 text-sm placeholder:text-outline h-10 font-body-md"
-              onFocus={() => setOverlayOpen(false)}
-            />
-            <Button
-              type="submit"
-              size="icon"
-              className="rounded-full h-10 w-10 shrink-0 transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]"
-              style={{ background: '#f2ca50', color: '#3c2f00' }}
-              disabled={!inputValue.trim() || isSending}
-            >
-              <Send className="h-4 w-4" />
-            </Button>
-          </form>
+            <form onSubmit={handleSubmit} className="flex items-center gap-1.5 md:gap-2">
+              <div className="flex items-center gap-1.5 shrink-0">
+                {[
+                  { Icon: Accessibility, label: 'Accessibility options' },
+                  { Icon: Mic, label: 'Voice input' },
+                  { Icon: Paperclip, label: 'Attach an image' },
+                ].map(({ Icon, label }) => (
+                  <button
+                    key={label}
+                    type="button"
+                    title={label}
+                    aria-label={label}
+                    className="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors"
+                    style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </button>
+                ))}
+              </div>
+              <Input
+                value={inputValue}
+                onChange={e => setInputValue(e.target.value)}
+                placeholder={placeholder}
+                className="flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-3 text-sm placeholder:text-outline h-9 font-body-md"
+                onFocus={() => setOverlayOpen(false)}
+              />
+              <button
+                type="button"
+                title="Translate"
+                aria-label="Translate"
+                className="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shrink-0"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <Languages className="h-4 w-4" />
+              </button>
+              <Button
+                type="submit"
+                size="icon"
+                className="rounded-full h-10 w-10 shrink-0 transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]"
+                style={{ background: '#f2ca50', color: '#3c2f00' }}
+                disabled={!inputValue.trim() || isSending}
+              >
+                <Send className="h-4 w-4" />
+              </Button>
+            </form>
+
+            <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 mt-2.5">
+              {SUGGESTIONS.map(({ icon: Icon, label, prompt }) => (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() => handleSuggestion(prompt)}
+                  disabled={isSending}
+                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-on-surface transition-colors disabled:opacity-50"
+                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                >
+                  <Icon className="h-3.5 w-3.5 text-primary" />
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-center font-body-md text-[11px] md:text-xs text-on-surface-variant/70 mt-2">
+            Voice • image upload • translation • read-aloud — built so everyone in the community can use it.
+          </p>
         </div>
       </div>
     </div>
