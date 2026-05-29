@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useChat } from '../context/ChatContext';
 import { useAdmin } from '../context/AdminContext';
+import { useAdminUI } from '../context/AdminUIContext';
 import { useGetSiteSettings, useUpdateSiteSettings, getGetSiteSettingsQueryKey } from '@workspace/api-client-react';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -45,6 +46,8 @@ const DEFAULT_SUGGESTIONS: ChatSuggestion[] = [
 export function ChatLayer() {
   const { messages, sendMessage, isSending, setOverlayOpen } = useChat();
   const { editMode } = useAdmin();
+  const { railWidth, openChatChipsToken } = useAdminUI();
+  const leftOffset = editMode ? railWidth : 0;
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -93,6 +96,10 @@ export function ChatLayer() {
     setDraftPlaceholder(placeholder);
   }, [placeholder]);
 
+  useEffect(() => {
+    if (openChatChipsToken > 0) setOverlayOpen(false);
+  }, [openChatChipsToken, setOverlayOpen]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim() || isSending) return;
@@ -119,7 +126,10 @@ export function ChatLayer() {
   };
 
   return (
-    <div className="fixed inset-0 z-0 flex flex-col pt-16" style={{ background: '#121317' }}>
+    <div
+      className="fixed top-0 right-0 bottom-0 z-0 flex flex-col pt-16 transition-[left] duration-300 ease-out"
+      style={{ background: '#121317', left: leftOffset }}
+    >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="bg-pattern absolute inset-0 opacity-50" />
         <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full blur-[100px]" style={{ background: 'rgba(242,202,80,0.1)' }} />

@@ -43,7 +43,8 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="fixed bottom-0 left-0 right-0 z-40 h-12 px-margin-mobile md:px-margin-desktop flex items-center justify-between gap-4 bg-surface-container-lowest border-t border-white/5"
+      id="admin-footer"
+      className="relative z-10 mt-12 px-margin-mobile md:px-margin-desktop py-5 flex flex-wrap items-center justify-between gap-4 bg-surface-container-lowest border-t border-white/10"
     >
       <EditableText
         as="div"

@@ -123,7 +123,7 @@ function ClerkQueryClientCacheInvalidator() {
 
 function RoutedShell() {
   const [location] = useLocation();
-  const editMode = location.startsWith("/admin");
+  const editMode = location === "/admin" || location.startsWith("/admin/");
   return (
     <AdminProvider editMode={editMode}>
       <ContentProvider>
@@ -132,6 +132,7 @@ function RoutedShell() {
           <Route path="/sign-in/*?" component={SignInPage} />
           <Route path="/sign-up/*?" component={SignUpPage} />
           <Route path="/admin" component={ProtectedAdmin} />
+          <Route path="/admin/:rest*" component={ProtectedAdmin} />
           <Route path="/.*" component={MainApp} />
         </Switch>
       </ChatProvider>

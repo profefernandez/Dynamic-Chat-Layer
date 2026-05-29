@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Show, useClerk, useUser } from '@clerk/react';
 import { Menu, X, Pencil, Trash2, Plus, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../context/ChatContext';
 import { useAdmin } from '../context/AdminContext';
+import { useAdminUI } from '../context/AdminUIContext';
 import {
   useGetSiteSettings,
   useUpdateSiteSettings,
@@ -27,6 +28,7 @@ export function NavBar() {
   const { user } = useUser();
   const { setOverlayOpen } = useChat();
   const { editMode } = useAdmin();
+  const { openMenuLinksToken } = useAdminUI();
   const [menuOpen, setMenuOpen] = useState(false);
   const [editingLinks, setEditingLinks] = useState(false);
   const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -60,6 +62,15 @@ export function NavBar() {
     setOverlayOpen(true);
     setMenuOpen(false);
   };
+
+  useEffect(() => {
+    if (openMenuLinksToken > 0) {
+      setMenuOpen(true);
+      setDraftLinks(links);
+      setEditingLinks(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openMenuLinksToken]);
 
   return (
     <nav className="sticky top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-14 bg-surface/70 backdrop-blur-xl border-b border-white/10">
