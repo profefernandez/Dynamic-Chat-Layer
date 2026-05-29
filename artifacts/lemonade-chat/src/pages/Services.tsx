@@ -49,7 +49,7 @@ export function Services() {
       <div className="absolute top-1/3 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-[#bfa0ff]/10 rounded-full blur-[100px] z-0 pointer-events-none" />
 
-      <div className="z-10 text-center max-w-4xl mx-auto mb-6">
+      <div className="z-10 text-center max-w-4xl mx-auto mb-10">
         <div className="flex items-center justify-center gap-4 mb-3 opacity-70">
           <div className="h-px w-12 bg-on-surface-variant" />
           <span className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">
@@ -70,13 +70,13 @@ export function Services() {
             <img
               src={consultantPortrait}
               alt="Portrait of the lead AI consultant"
-              className="relative w-full h-[280px] lg:h-[400px] object-cover rounded-3xl border border-primary/25 shadow-[0_0_40px_rgba(242,202,80,0.18)]"
+              className="relative w-full h-[300px] lg:h-[440px] object-cover rounded-3xl border border-primary/25 shadow-[0_0_40px_rgba(242,202,80,0.18)]"
             />
           </div>
         </div>
 
         {/* RIGHT — duplicated Home cards, restacked */}
-        <div className="w-full lg:w-[62%] flex flex-col gap-4">
+        <div className="w-full lg:w-[62%] flex flex-col gap-6">
           {TILES.map((tile) => (
             <motion.div
               key={tile.id}
@@ -91,7 +91,7 @@ export function Services() {
               }}
               whileHover={{ x: 6 }}
               transition={{ duration: 0.25 }}
-              className="glass-card rounded-xl p-4 relative group transition-transform duration-300 z-10 flex flex-row items-center gap-5 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
+              className="glass-card rounded-xl p-5 relative group transition-transform duration-300 z-10 flex flex-row items-center gap-5 text-left cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
               <div className="flex-shrink-0">
                 <TileCardImageIcon visual={tile.visual} alt={tile.title} />
