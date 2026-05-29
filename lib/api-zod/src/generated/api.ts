@@ -50,6 +50,7 @@ export const ListElementsResponseItem = zod.object({
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number(),
+  "colSpan": zod.number().optional(),
   "subElements": zod.array(zod.object({
   "id": zod.number(),
   "elementId": zod.number(),
@@ -75,7 +76,8 @@ export const CreateElementBody = zod.object({
   "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
-  "order": zod.number().optional()
+  "order": zod.number().optional(),
+  "colSpan": zod.number().optional()
 })
 
 
@@ -104,6 +106,7 @@ export const GetElementResponse = zod.object({
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number(),
+  "colSpan": zod.number().optional(),
   "subElements": zod.array(zod.object({
   "id": zod.number(),
   "elementId": zod.number(),
@@ -132,7 +135,8 @@ export const UpdateElementBody = zod.object({
   "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
-  "order": zod.number().optional()
+  "order": zod.number().optional(),
+  "colSpan": zod.number().optional()
 })
 
 export const UpdateElementResponse = zod.object({
@@ -145,6 +149,7 @@ export const UpdateElementResponse = zod.object({
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number(),
+  "colSpan": zod.number().optional(),
   "subElements": zod.array(zod.object({
   "id": zod.number(),
   "elementId": zod.number(),

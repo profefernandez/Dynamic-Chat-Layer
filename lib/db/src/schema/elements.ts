@@ -12,6 +12,7 @@ export const elementsTable = pgTable("elements", {
   photoUrl: text("photo_url"),
   linkUrl: text("link_url"),
   order: integer("order").notNull().default(0),
+  colSpan: integer("col_span").notNull().default(1),
 });
 
 export const subElementsTable = pgTable("sub_elements", {

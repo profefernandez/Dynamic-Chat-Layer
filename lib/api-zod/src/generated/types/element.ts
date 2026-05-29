@@ -21,5 +21,6 @@ export interface Element {
   /** @nullable */
   linkUrl?: string | null;
   order: number;
+  colSpan?: number;
   subElements?: SubElement[];
 }

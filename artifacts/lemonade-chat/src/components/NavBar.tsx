@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Show, useClerk, useUser } from '@clerk/react';
-import { Menu, X, Pencil, Trash2, Plus, Check } from 'lucide-react';
+import { Menu, X, Pencil, Trash2, Plus, Check, ChevronUp, ChevronDown } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../context/ChatContext';
 import { useAdmin } from '../context/AdminContext';
@@ -129,13 +129,43 @@ export function NavBar() {
                 <div className="p-1 space-y-2">
                   {draftLinks.map((link, i) => (
                     <div key={i} className="flex items-center gap-1.5">
+                      <div className="flex flex-col">
+                        <button
+                          type="button"
+                          disabled={i === 0}
+                          onClick={() => {
+                            if (i === 0) return;
+                            const next = [...draftLinks];
+                            [next[i - 1], next[i]] = [next[i], next[i - 1]];
+                            setDraftLinks(next);
+                          }}
+                          className="text-on-surface-variant hover:text-primary disabled:opacity-30 disabled:hover:text-on-surface-variant"
+                          title="Move up"
+                        >
+                          <ChevronUp className="w-3 h-3" />
+                        </button>
+                        <button
+                          type="button"
+                          disabled={i === draftLinks.length - 1}
+                          onClick={() => {
+                            if (i === draftLinks.length - 1) return;
+                            const next = [...draftLinks];
+                            [next[i + 1], next[i]] = [next[i], next[i + 1]];
+                            setDraftLinks(next);
+                          }}
+                          className="text-on-surface-variant hover:text-primary disabled:opacity-30 disabled:hover:text-on-surface-variant"
+                          title="Move down"
+                        >
+                          <ChevronDown className="w-3 h-3" />
+                        </button>
+                      </div>
                       <input
                         value={link.label}
                         onChange={(e) =>
                           setDraftLinks(draftLinks.map((l, j) => (j === i ? { ...l, label: e.target.value } : l)))
                         }
                         placeholder="Label"
-                        className="w-1/2 bg-[#121317] border border-white/10 rounded px-2 py-1 text-xs text-on-surface"
+                        className="w-1/3 bg-[#121317] border border-white/10 rounded px-2 py-1 text-xs text-on-surface"
                       />
                       <input
                         value={link.href}

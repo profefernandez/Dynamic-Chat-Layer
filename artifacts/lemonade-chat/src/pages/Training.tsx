@@ -40,12 +40,14 @@ export function Training() {
           as="h1"
           value={get('training.title', 'AI Training')}
           onSave={(v) => save('training.title', v)}
+          styleKey="style:training.title"
           className="font-headline-xl text-headline-xl text-on-surface leading-tight mb-3"
         />
         <EditableText
           as="p"
           value={get('training.subtitle', 'Plain-language AI lessons, one session at a time.')}
           onSave={(v) => save('training.subtitle', v)}
+          styleKey="style:training.subtitle"
           multiline
           className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto block"
         />
@@ -81,8 +83,11 @@ export function Training() {
                         editMode={tiles.editMode}
                         hasLink={!!element.linkUrl}
                         hasNudge={!!element.aiGuidance}
+                        colSpan={element.colSpan}
                         onActivate={() => tiles.activate(element)}
                         onEdit={() => tiles.startEdit(element)}
+                        onDuplicate={() => tiles.duplicate(element)}
+                        onResize={(n) => tiles.resize(element, n)}
                         className="glass-card rounded-xl p-5 transition-transform hover:-translate-y-1 duration-300 flex flex-col h-full text-center items-center"
                       >
                         <TileCardBody

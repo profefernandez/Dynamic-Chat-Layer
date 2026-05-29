@@ -44,11 +44,13 @@ export function About() {
             as="span"
             value={get('about.titleLead', 'Meet Your New')}
             onSave={(v) => save('about.titleLead', v)}
+            styleKey="style:about.titleLead"
           />{' '}
           <EditableText
             as="span"
             value={get('about.titleAccent', 'Website Assistant')}
             onSave={(v) => save('about.titleAccent', v)}
+            styleKey="style:about.titleAccent"
             className="text-primary text-glow italic pr-1"
           />
         </h1>
@@ -56,6 +58,7 @@ export function About() {
           as="p"
           value={get('about.subtitle', 'Above the fold, no scrolling — your website begins with a conversation.')}
           onSave={(v) => save('about.subtitle', v)}
+          styleKey="style:about.subtitle"
           multiline
           className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto block"
         />
@@ -85,8 +88,11 @@ export function About() {
                         hasLink={!!element.linkUrl}
                         hasNudge={!!element.aiGuidance}
                         badge={badge}
+                        colSpan={element.colSpan}
                         onActivate={() => tiles.activate(element)}
                         onEdit={() => tiles.startEdit(element)}
+                        onDuplicate={() => tiles.duplicate(element)}
+                        onResize={(n) => tiles.resize(element, n)}
                         className="glass-card rounded-xl p-6 transition-transform hover:-translate-y-1 duration-300 flex flex-col h-full text-center items-center"
                       >
                         <TileCardBody

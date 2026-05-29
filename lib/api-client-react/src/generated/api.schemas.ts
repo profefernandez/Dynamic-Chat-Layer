@@ -65,6 +65,7 @@ export interface Element {
   /** @nullable */
   linkUrl?: string | null;
   order: number;
+  colSpan?: number;
   subElements?: SubElement[];
 }
 
@@ -81,6 +82,7 @@ export interface ElementInput {
   /** @nullable */
   linkUrl?: string | null;
   order?: number;
+  colSpan?: number;
 }
 
 export interface ElementUpdate {
@@ -96,6 +98,7 @@ export interface ElementUpdate {
   /** @nullable */
   linkUrl?: string | null;
   order?: number;
+  colSpan?: number;
 }
 
 export interface SubElementInput {

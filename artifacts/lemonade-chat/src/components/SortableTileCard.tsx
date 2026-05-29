@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Pencil, GripVertical, ExternalLink, Sparkles } from 'lucide-react';
+import { Pencil, GripVertical, ExternalLink, Sparkles, Copy, Maximize2, Minimize2 } from 'lucide-react';
 
 type Props = {
   id: number;
@@ -10,8 +10,11 @@ type Props = {
   hasNudge?: boolean;
   className?: string;
   badge?: React.ReactNode;
+  colSpan?: number;
   onActivate: () => void;
   onEdit: () => void;
+  onDuplicate?: () => void;
+  onResize?: (colSpan: number) => void;
   children: React.ReactNode;
 };
 
@@ -22,8 +25,11 @@ export function SortableTileCard({
   hasNudge,
   className,
   badge,
+  colSpan = 1,
   onActivate,
   onEdit,
+  onDuplicate,
+  onResize,
   children,
 }: Props) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -44,6 +50,7 @@ export function SortableTileCard({
       tabIndex={0}
       className={[
         'relative group z-10',
+        colSpan === 2 ? 'md:col-span-2' : '',
         editMode ? 'cursor-default' : 'cursor-pointer',
         className ?? '',
       ].join(' ')}
@@ -82,6 +89,26 @@ export function SortableTileCard({
           >
             <GripVertical className="w-3.5 h-3.5" />
           </button>
+          {onResize && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onResize(colSpan === 2 ? 1 : 2); }}
+              className="p-1.5 rounded bg-black/60 text-on-surface-variant hover:text-primary"
+              title={colSpan === 2 ? 'Make standard width' : 'Make wide'}
+            >
+              {colSpan === 2 ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+            </button>
+          )}
+          {onDuplicate && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
+              className="p-1.5 rounded bg-black/60 text-on-surface-variant hover:text-primary"
+              title="Duplicate tile"
+            >
+              <Copy className="w-3.5 h-3.5" />
+            </button>
+          )}
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); onEdit(); }}

@@ -71,6 +71,7 @@ export function Services() {
           as="h1"
           value={get('services.title', 'AI Consultation')}
           onSave={(v) => save('services.title', v)}
+          styleKey="style:services.title"
           className="font-headline-xl text-headline-xl text-on-surface leading-tight mb-3"
         />
       </div>
@@ -109,6 +110,7 @@ export function Services() {
                         hasNudge={!!element.aiGuidance}
                         onActivate={() => tiles.activate(element)}
                         onEdit={() => tiles.startEdit(element)}
+                        onDuplicate={() => tiles.duplicate(element)}
                         className="glass-card rounded-xl p-5 transition-transform hover:translate-x-1.5 duration-300 flex flex-row items-center gap-5 text-left"
                       >
                         <div className="flex-shrink-0">

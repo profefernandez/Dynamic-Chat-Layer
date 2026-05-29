@@ -74,6 +74,32 @@ export function usePageTiles(page: string) {
     }
   };
 
+  const duplicate = (el: Element) => {
+    createElement(
+      {
+        data: {
+          page,
+          name: el.name,
+          description: el.description ?? null,
+          promptText: el.promptText,
+          aiGuidance: el.aiGuidance ?? null,
+          photoUrl: el.photoUrl ?? null,
+          linkUrl: el.linkUrl ?? null,
+          colSpan: el.colSpan ?? 1,
+          order: items.length,
+        },
+      },
+      { onSuccess: () => invalidate() },
+    );
+  };
+
+  const resize = (el: Element, colSpan: number) => {
+    updateElement(
+      { id: el.id, data: { colSpan } },
+      { onSuccess: () => invalidate() },
+    );
+  };
+
   const remove = () => {
     if (!editing?.id) return;
     deleteElement(
@@ -113,6 +139,8 @@ export function usePageTiles(page: string) {
     startEdit: (el: Element) => setEditing(el),
     startCreate: () => setCreating(true),
     save,
+    duplicate,
+    resize,
     remove,
     cancel,
   };

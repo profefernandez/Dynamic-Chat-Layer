@@ -10,6 +10,7 @@ export type TileDraft = {
   aiGuidance: string | null;
   photoUrl: string | null;
   linkUrl: string | null;
+  colSpan: number;
 };
 
 type Props = {
@@ -28,6 +29,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
   const [aiGuidance, setAiGuidance] = useState(initial?.aiGuidance ?? '');
   const [photoUrl, setPhotoUrl] = useState<string | null>(initial?.photoUrl ?? null);
   const [linkUrl, setLinkUrl] = useState<string | null>(initial?.linkUrl ?? null);
+  const [colSpan, setColSpan] = useState<number>(initial?.colSpan ?? 1);
 
   useEffect(() => {
     setName(initial?.name ?? '');
@@ -36,6 +38,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
     setAiGuidance(initial?.aiGuidance ?? '');
     setPhotoUrl(initial?.photoUrl ?? null);
     setLinkUrl(initial?.linkUrl ?? null);
+    setColSpan(initial?.colSpan ?? 1);
   }, [initial]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,6 +51,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
       aiGuidance: aiGuidance.trim() || null,
       photoUrl: photoUrl || null,
       linkUrl: linkUrl?.trim() || null,
+      colSpan,
     });
   };
 
@@ -127,6 +131,29 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
           <div>
             <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-2">Image</label>
             <ImagePicker value={photoUrl} onChange={setPhotoUrl} />
+          </div>
+
+          <div>
+            <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-1">Tile width</label>
+            <div className="flex gap-2">
+              {[
+                { label: 'Standard', value: 1 },
+                { label: 'Wide', value: 2 },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setColSpan(opt.value)}
+                  className={`flex-1 px-3 py-2 text-sm rounded border transition-colors ${
+                    colSpan === opt.value
+                      ? 'bg-primary text-on-primary border-primary'
+                      : 'bg-[#121317] text-on-surface border-white/10 hover:border-primary/40'
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
 

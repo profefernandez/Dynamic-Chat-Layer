@@ -90,11 +90,13 @@ export function Contact() {
             as="span"
             value={get('contact.titleLead', 'Collaborative Partners')}
             onSave={(v) => save('contact.titleLead', v)}
+            styleKey="style:contact.titleLead"
           />{' '}
           <EditableText
             as="span"
             value={get('contact.titleAccent', 'in the Community')}
             onSave={(v) => save('contact.titleAccent', v)}
+            styleKey="style:contact.titleAccent"
             className="text-primary text-glow italic"
           />
         </h1>
@@ -105,6 +107,7 @@ export function Contact() {
             "A few of the community partners and organizations we've had the privilege to work with.",
           )}
           onSave={(v) => save('contact.subtitle', v)}
+          styleKey="style:contact.subtitle"
           multiline
           className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto block"
         />

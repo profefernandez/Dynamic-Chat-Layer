@@ -67,6 +67,7 @@ router.post("/", requireAuth, async (req, res) => {
         photoUrl: parsed.data.photoUrl ?? null,
         linkUrl: parsed.data.linkUrl ?? null,
         order: parsed.data.order ?? 0,
+        colSpan: parsed.data.colSpan ?? 1,
       })
       .returning();
 
@@ -153,6 +154,7 @@ router.patch("/:id", requireAuth, async (req, res) => {
     if (body.photoUrl !== undefined) updates.photoUrl = body.photoUrl;
     if (body.linkUrl !== undefined) updates.linkUrl = body.linkUrl;
     if (body.order !== undefined) updates.order = body.order;
+    if (body.colSpan !== undefined) updates.colSpan = body.colSpan;
 
     const [updated] = await db
       .update(elementsTable)

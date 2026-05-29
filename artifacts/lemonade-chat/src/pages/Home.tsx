@@ -17,7 +17,7 @@ import { useAdmin } from '../context/AdminContext';
 import { EditableText } from '../components/EditableText';
 import { TileEditor, TileDraft } from '../components/TileEditor';
 import { TileCardBody, TileVisual } from '../components/TileCardBase';
-import { Plus, Pencil, GripVertical, ExternalLink, Sparkles } from 'lucide-react';
+import { Plus, Pencil, GripVertical, ExternalLink, Sparkles, Copy, Maximize2, Minimize2 } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -91,9 +91,11 @@ type TileCardProps = {
   editMode: boolean;
   onActivate: () => void;
   onEdit: () => void;
+  onDuplicate: () => void;
+  onResize: (colSpan: number) => void;
 };
 
-function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCardProps) {
+function TileCard({ element, visualIndex, editMode, onActivate, onEdit, onDuplicate, onResize }: TileCardProps) {
   const v = CARD_VISUALS[visualIndex % CARD_VISUALS.length];
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: element.id,
@@ -113,6 +115,7 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
       style={style}
       className={[
         'glass-card rounded-xl p-5 relative group transition-transform hover:-translate-y-1 duration-300 z-10 flex flex-col h-full text-center items-center',
+        element.colSpan === 2 ? 'md:col-span-2' : '',
         v.offset ? 'lg:mt-12' : '',
         editMode ? 'cursor-default' : 'cursor-pointer',
       ].join(' ')}
@@ -147,6 +150,22 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
             onClick={(e) => e.stopPropagation()}
           >
             <GripVertical className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onResize(element.colSpan === 2 ? 1 : 2); }}
+            className="p-1.5 rounded bg-black/60 text-on-surface-variant hover:text-primary"
+            title={element.colSpan === 2 ? 'Make standard width' : 'Make wide'}
+          >
+            {element.colSpan === 2 ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+          </button>
+          <button
+            type="button"
+            onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
+            className="p-1.5 rounded bg-black/60 text-on-surface-variant hover:text-primary"
+            title="Duplicate tile"
+          >
+            <Copy className="w-3.5 h-3.5" />
           </button>
           <button
             type="button"
@@ -260,6 +279,29 @@ export function Home() {
     }
   };
 
+  const handleDuplicateTile = (el: Element) => {
+    createElement(
+      {
+        data: {
+          page: 'home',
+          name: el.name,
+          description: el.description ?? null,
+          promptText: el.promptText,
+          aiGuidance: el.aiGuidance ?? null,
+          photoUrl: el.photoUrl ?? null,
+          linkUrl: el.linkUrl ?? null,
+          colSpan: el.colSpan ?? 1,
+          order: items.length,
+        },
+      },
+      { onSuccess: invalidateElements },
+    );
+  };
+
+  const handleResizeTile = (el: Element, colSpan: number) => {
+    updateElement({ id: el.id, data: { colSpan } }, { onSuccess: invalidateElements });
+  };
+
   const handleDeleteTile = () => {
     if (!editingTile?.id) return;
     deleteElement(
@@ -319,6 +361,7 @@ export function Home() {
               as="span"
               value={heroEyebrow}
               onSave={saveSetting('heroEyebrow')}
+              styleKey="style:home.heroEyebrow"
               className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant"
             />
             <div className="h-px w-12 bg-on-surface-variant" />
@@ -329,12 +372,14 @@ export function Home() {
               as="span"
               value={heroTitlePrefix}
               onSave={saveSetting('heroTitlePrefix')}
+              styleKey="style:home.heroTitlePrefix"
               className="text-white"
             />{' '}
             <EditableText
               as="span"
               value={heroTitleSecond}
               onSave={saveSetting('heroTitle')}
+              styleKey="style:home.heroTitle"
               className="text-primary text-glow italic pr-2"
             />
           </h1>
@@ -343,6 +388,7 @@ export function Home() {
             as="p"
             value={heroSubtitle}
             onSave={saveSetting('heroSubtitle')}
+            styleKey="style:home.heroSubtitle"
             multiline
             className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto block"
           />
@@ -366,6 +412,8 @@ export function Home() {
                         editMode={editMode}
                         onActivate={() => handleTileActivate(element)}
                         onEdit={() => setEditingTile(element)}
+                        onDuplicate={() => handleDuplicateTile(element)}
+                        onResize={(n) => handleResizeTile(element, n)}
                       />
                     ))}
               </div>
@@ -381,6 +429,8 @@ export function Home() {
                         editMode={editMode}
                         onActivate={() => handleTileActivate(element)}
                         onEdit={() => setEditingTile(element)}
+                        onDuplicate={() => handleDuplicateTile(element)}
+                        onResize={(n) => handleResizeTile(element, n)}
                       />
                     ))}
                   </div>

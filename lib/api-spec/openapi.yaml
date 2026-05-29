@@ -419,6 +419,8 @@ components:
           type: ["string", "null"]
         order:
           type: integer
+        colSpan:
+          type: integer
         subElements:
           type: array
           items:
@@ -444,6 +446,8 @@ components:
           type: ["string", "null"]
         order:
           type: integer
+        colSpan:
+          type: integer
 
     ElementUpdate:
       type: object
@@ -463,6 +467,8 @@ components:
         linkUrl:
           type: ["string", "null"]
         order:
+          type: integer
+        colSpan:
           type: integer
 
     SubElement:

@@ -19,4 +19,5 @@ export interface ElementUpdate {
   /** @nullable */
   linkUrl?: string | null;
   order?: number;
+  colSpan?: number;
 }
