@@ -184,7 +184,7 @@ export function Home() {
     { query: { queryKey: getListElementsQueryKey({ page: 'home' }) } },
   );
   const { data: settings } = useGetSiteSettings();
-  const { sendMessage, setOverlayOpen } = useChat();
+  const { sendElement, setOverlayOpen } = useChat();
 
   const { mutate: updateSettings } = useUpdateSiteSettings();
   const { mutate: createElement } = useCreateElement();
@@ -233,7 +233,7 @@ export function Home() {
       setOverlayOpen(false);
       return;
     }
-    sendMessage(el.promptText, true, el.id);
+    sendElement(el);
   };
 
   const handleSaveTile = (draft: TileDraft) => {

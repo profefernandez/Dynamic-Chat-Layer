@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InlineTileCard } from './InlineTileCard';
 
 import type { ChatSuggestion } from '@workspace/api-client-react';
 
@@ -127,24 +128,30 @@ export function ChatLayer() {
 
       <div className="flex-1 overflow-y-auto px-6 py-8 pb-56 relative z-10">
         <div className="max-w-3xl mx-auto space-y-6">
-          {messages.filter(m => !m.hidden).map((msg, i) => (
-            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div
-                className={`max-w-[80%] rounded-xl px-5 py-3 ${
-                  msg.role === 'user'
-                    ? 'bg-primary/15 text-on-surface border border-primary/25'
-                    : 'glass-card text-on-surface'
-                }`}
-              >
-                <div className="flex items-center gap-2 mb-1 text-xs uppercase tracking-wider text-on-surface-variant opacity-70">
-                  {msg.role === 'assistant' && <Sparkles className="w-3 h-3 text-primary" />}
-                  {msg.role === 'user' ? 'You' : '60 Watts AI'}
-                </div>
-                <div className="font-body-md text-sm leading-relaxed whitespace-pre-wrap">
-                  {msg.content}
+          {messages.filter(m => !m.hidden).map((msg) => (
+            msg.element ? (
+              <div key={msg.id} className="flex justify-end">
+                <InlineTileCard element={msg.element} />
+              </div>
+            ) : (
+              <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div
+                  className={`max-w-[80%] rounded-xl px-5 py-3 ${
+                    msg.role === 'user'
+                      ? 'bg-primary/15 text-on-surface border border-primary/25'
+                      : 'glass-card text-on-surface'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1 text-xs uppercase tracking-wider text-on-surface-variant opacity-70">
+                    {msg.role === 'assistant' && <Sparkles className="w-3 h-3 text-primary" />}
+                    {msg.role === 'user' ? 'You' : '60 Watts AI'}
+                  </div>
+                  <div className="font-body-md text-sm leading-relaxed whitespace-pre-wrap">
+                    {msg.content}
+                  </div>
                 </div>
               </div>
-            </div>
+            )
           ))}
           {isSending && (
             <div className="flex justify-start">

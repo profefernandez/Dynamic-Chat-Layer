@@ -1,16 +1,24 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { useSendChat } from '@workspace/api-client-react';
+import { useSendChat, Element } from '@workspace/api-client-react';
 import { useAdmin } from './AdminContext';
 
 export type Message = {
+  id: string;
   role: 'user' | 'assistant';
   content: string;
   hidden?: boolean;
+  element?: Element;
 };
+
+const makeId = () =>
+  typeof crypto !== 'undefined' && 'randomUUID' in crypto
+    ? crypto.randomUUID()
+    : Math.random().toString(36).slice(2);
 
 type ChatContextType = {
   messages: Message[];
   sendMessage: (content: string, hiddenPrompt?: boolean, elementId?: number | null) => void;
+  sendElement: (element: Element) => void;
   isSending: boolean;
   isOverlayOpen: boolean;
   setOverlayOpen: (open: boolean) => void;
@@ -22,6 +30,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
   const { editMode } = useAdmin();
   const [messages, setMessages] = useState<Message[]>([
     {
+      id: makeId(),
       role: 'assistant',
       content: editMode
         ? "Admin mode preview: chat responses will be tagged with [ADMIN MODE] so your Lemonade can respond differently. Tiles and copy below are editable."
@@ -38,18 +47,14 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     hiddenPrompt: boolean = false,
     elementId: number | null = null,
   ) => {
-    if (!hiddenPrompt) {
-      setMessages((prev) => [...prev, { role: 'user', content }]);
-    } else {
-      setMessages((prev) => [...prev, { role: 'user', content, hidden: true }]);
-    }
+    setMessages((prev) => [...prev, { id: makeId(), role: 'user', content, hidden: hiddenPrompt }]);
 
     sendChat(
       { data: { message: content, sessionId, hiddenPrompt, mode: editMode ? 'admin' : 'public', elementId } },
       {
         onSuccess: (data) => {
           setSessionId(data.sessionId);
-          setMessages((prev) => [...prev, { role: 'assistant', content: data.reply }]);
+          setMessages((prev) => [...prev, { id: makeId(), role: 'assistant', content: data.reply }]);
           if (hiddenPrompt) {
             setOverlayOpen(false);
           }
@@ -58,8 +63,32 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     );
   };
 
+  const sendElement = (element: Element) => {
+    const snapshot: Element = { ...element };
+    setMessages((prev) => [...prev, { id: makeId(), role: 'user', content: snapshot.name, element: snapshot }]);
+
+    sendChat(
+      {
+        data: {
+          message: element.promptText,
+          sessionId,
+          hiddenPrompt: true,
+          mode: editMode ? 'admin' : 'public',
+          elementId: element.id,
+        },
+      },
+      {
+        onSuccess: (data) => {
+          setSessionId(data.sessionId);
+          setMessages((prev) => [...prev, { id: makeId(), role: 'assistant', content: data.reply }]);
+          setOverlayOpen(false);
+        },
+      },
+    );
+  };
+
   return (
-    <ChatContext.Provider value={{ messages, sendMessage, isSending, isOverlayOpen, setOverlayOpen }}>
+    <ChatContext.Provider value={{ messages, sendMessage, sendElement, isSending, isOverlayOpen, setOverlayOpen }}>
       {children}
     </ChatContext.Provider>
   );

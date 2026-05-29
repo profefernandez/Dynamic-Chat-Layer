@@ -23,7 +23,7 @@ import { TileDraft } from '../components/TileEditor';
 export function usePageTiles(page: string) {
   const { editMode } = useAdmin();
   const queryClient = useQueryClient();
-  const { sendMessage, setOverlayOpen } = useChat();
+  const { sendElement, setOverlayOpen } = useChat();
 
   const queryKey = getListElementsQueryKey({ page });
   const { data: elements, isLoading } = useListElements({ page }, { query: { queryKey } });
@@ -57,7 +57,7 @@ export function usePageTiles(page: string) {
       setOverlayOpen(false);
       return;
     }
-    sendMessage(el.promptText, true, el.id);
+    sendElement(el);
   };
 
   const save = (draft: TileDraft) => {

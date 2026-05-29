@@ -56,16 +56,16 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
       <form
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="bg-[#1e1f23] border border-white/10 rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-[#1e1f23] border border-white/10 rounded-xl w-full max-w-lg max-h-[85vh] flex flex-col"
       >
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+        <div className="flex items-center justify-between p-4 border-b border-white/10 shrink-0">
           <h3 className="text-on-surface font-semibold">{title ?? (initial?.id ? 'Edit tile' : 'New tile')}</h3>
           <button type="button" onClick={onCancel} className="text-on-surface-variant hover:text-on-surface p-1">
             <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="p-4 space-y-4">
+        <div className="p-4 space-y-4 overflow-y-auto flex-1 min-h-0">
           <div>
             <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-1">Title</label>
             <input
@@ -130,7 +130,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-4 border-t border-white/10">
+        <div className="flex items-center justify-between p-4 border-t border-white/10 shrink-0">
           {onDelete ? (
             <button
               type="button"
