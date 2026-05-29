@@ -62,7 +62,7 @@ export function NavBar() {
   };
 
   return (
-    <nav className="sticky top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-14 bg-surface/70 backdrop-blur-xl border-b border-white/10">
+    <nav className="sticky top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-14 bg-surface/70 backdrop-blur-xl border-b border-white/10">
       <div className="flex items-center">
         <button
           onClick={toggleMenu}
@@ -107,7 +107,7 @@ export function NavBar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ duration: 0.18 }}
-              className="absolute top-full left-margin-desktop mt-3 z-50 w-72 rounded-2xl p-2 shadow-2xl"
+              className="absolute top-full left-margin-mobile md:left-margin-desktop mt-3 z-50 w-72 max-w-[calc(100vw-2.5rem)] rounded-2xl p-2 shadow-2xl"
               style={{
                 background: 'rgba(24, 25, 29, 0.98)',
                 border: '1px solid rgba(242, 202, 80, 0.22)',

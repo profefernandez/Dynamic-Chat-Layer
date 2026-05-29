@@ -205,7 +205,7 @@ export function ChatLayer() {
               border: '1px solid rgba(242, 202, 80, 0.28)',
             }}
           >
-            <form onSubmit={handleSubmit} className="flex items-center gap-1.5 md:gap-2">
+            <form onSubmit={handleSubmit} className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 md:gap-2">
               <div className="flex items-center gap-1.5 shrink-0">
                 {[
                   { Icon: Accessibility, label: 'Accessibility options' },
@@ -228,7 +228,7 @@ export function ChatLayer() {
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 placeholder={placeholder}
-                className="flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-3 text-sm placeholder:text-outline h-9 font-body-md"
+                className="order-first basis-full sm:order-none sm:basis-0 sm:flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-3 text-sm placeholder:text-outline h-9 font-body-md"
                 onFocus={() => setOverlayOpen(false)}
               />
               <button
