@@ -1,12 +1,13 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Pencil, GripVertical, ExternalLink } from 'lucide-react';
+import { Pencil, GripVertical, ExternalLink, Sparkles } from 'lucide-react';
 
 type Props = {
   id: number;
   editMode: boolean;
   hasLink?: boolean;
+  hasNudge?: boolean;
   className?: string;
   badge?: React.ReactNode;
   onActivate: () => void;
@@ -18,6 +19,7 @@ export function SortableTileCard({
   id,
   editMode,
   hasLink,
+  hasNudge,
   className,
   badge,
   onActivate,
@@ -62,6 +64,14 @@ export function SortableTileCard({
 
       {editMode && (
         <div data-edit-control className="absolute top-2 right-2 z-30 flex items-center gap-1">
+          {hasNudge && (
+            <span
+              className="p-1.5 rounded bg-primary/20 text-primary"
+              title="AI nudge set — private guidance the assistant uses for this card"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+            </span>
+          )}
           <button
             type="button"
             {...attributes}

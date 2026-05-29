@@ -80,6 +80,7 @@ export function Training() {
                         id={element.id}
                         editMode={tiles.editMode}
                         hasLink={!!element.linkUrl}
+                        hasNudge={!!element.aiGuidance}
                         onActivate={() => tiles.activate(element)}
                         onEdit={() => tiles.startEdit(element)}
                         className="glass-card rounded-xl p-5 transition-transform hover:-translate-y-1 duration-300 flex flex-col h-full text-center items-center"

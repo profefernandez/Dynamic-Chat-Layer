@@ -385,6 +385,8 @@ components:
         mode:
           type: ["string", "null"]
           enum: ["public", "admin", null]
+        elementId:
+          type: ["integer", "null"]
 
     ChatResponse:
       type: object
@@ -409,6 +411,8 @@ components:
           type: ["string", "null"]
         promptText:
           type: string
+        aiGuidance:
+          type: ["string", "null"]
         photoUrl:
           type: ["string", "null"]
         linkUrl:
@@ -432,6 +436,8 @@ components:
           type: ["string", "null"]
         promptText:
           type: string
+        aiGuidance:
+          type: ["string", "null"]
         photoUrl:
           type: ["string", "null"]
         linkUrl:
@@ -450,6 +456,8 @@ components:
           type: ["string", "null"]
         promptText:
           type: string
+        aiGuidance:
+          type: ["string", "null"]
         photoUrl:
           type: ["string", "null"]
         linkUrl:

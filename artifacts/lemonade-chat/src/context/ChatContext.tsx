@@ -10,7 +10,7 @@ export type Message = {
 
 type ChatContextType = {
   messages: Message[];
-  sendMessage: (content: string, hiddenPrompt?: boolean) => void;
+  sendMessage: (content: string, hiddenPrompt?: boolean, elementId?: number | null) => void;
   isSending: boolean;
   isOverlayOpen: boolean;
   setOverlayOpen: (open: boolean) => void;
@@ -33,7 +33,11 @@ export function ChatProvider({ children }: { children: ReactNode }) {
 
   const { mutate: sendChat, isPending: isSending } = useSendChat();
 
-  const sendMessage = (content: string, hiddenPrompt: boolean = false) => {
+  const sendMessage = (
+    content: string,
+    hiddenPrompt: boolean = false,
+    elementId: number | null = null,
+  ) => {
     if (!hiddenPrompt) {
       setMessages((prev) => [...prev, { role: 'user', content }]);
     } else {
@@ -41,7 +45,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
     }
 
     sendChat(
-      { data: { message: content, sessionId, hiddenPrompt, mode: editMode ? 'admin' : 'public' } },
+      { data: { message: content, sessionId, hiddenPrompt, mode: editMode ? 'admin' : 'public', elementId } },
       {
         onSuccess: (data) => {
           setSessionId(data.sessionId);

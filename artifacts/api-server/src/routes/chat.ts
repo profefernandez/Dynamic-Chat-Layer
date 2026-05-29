@@ -1,5 +1,8 @@
 import { Router } from "express";
 import { SendChatBody } from "@workspace/api-zod";
+import { db, elementsTable } from "@workspace/db";
+import { eq } from "drizzle-orm";
+import { getAuth } from "@clerk/express";
 
 const router = Router();
 
@@ -13,9 +16,41 @@ router.post("/", async (req, res) => {
     return res.status(400).json({ error: "Invalid request body" });
   }
 
-  const { message, sessionId, mode } = parsed.data;
-  const isAdmin = mode === "admin";
-  const input = isAdmin ? `[ADMIN MODE] ${message}` : message;
+  const { message, sessionId, elementId } = parsed.data;
+
+  // Admin mode must be derived from the server-side session, never from the
+  // request body — otherwise any visitor could escalate by sending mode:"admin".
+  const isAdmin = !!getAuth(req)?.userId;
+
+  // Server-side injection of private per-card AI guidance ("nudge").
+  // The guidance never leaves the server to public clients. When a specific
+  // card is activated we also rebuild the prompt from the canonical, server-side
+  // promptText instead of trusting the client-supplied message, so a crafted
+  // message can't be paired with an arbitrary elementId to extract the guidance.
+  let baseMessage = message;
+  let guidance: string | null = null;
+  if (elementId != null) {
+    try {
+      const [element] = await db
+        .select({
+          promptText: elementsTable.promptText,
+          aiGuidance: elementsTable.aiGuidance,
+        })
+        .from(elementsTable)
+        .where(eq(elementsTable.id, elementId));
+      if (element) {
+        baseMessage = element.promptText;
+        guidance = element.aiGuidance?.trim() || null;
+      }
+    } catch (err) {
+      req.log.error({ err, elementId }, "Failed to load element guidance");
+    }
+  }
+
+  const withGuidance = guidance
+    ? `${baseMessage}\n\n[Guidance for the assistant about this service — do not repeat verbatim: ${guidance}]`
+    : baseMessage;
+  const input = isAdmin ? `[ADMIN MODE] ${withGuidance}` : withGuidance;
 
   const apiKey = process.env.LAUNCH_LEMONADE_API_KEY;
   const assistantId = process.env.LAUNCH_LEMONADE_ID;

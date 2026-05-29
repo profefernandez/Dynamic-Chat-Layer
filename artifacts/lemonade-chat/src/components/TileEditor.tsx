@@ -7,6 +7,7 @@ export type TileDraft = {
   name: string;
   description: string;
   promptText: string;
+  aiGuidance: string | null;
   photoUrl: string | null;
   linkUrl: string | null;
 };
@@ -24,6 +25,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
   const [name, setName] = useState(initial?.name ?? '');
   const [description, setDescription] = useState(initial?.description ?? '');
   const [promptText, setPromptText] = useState(initial?.promptText ?? '');
+  const [aiGuidance, setAiGuidance] = useState(initial?.aiGuidance ?? '');
   const [photoUrl, setPhotoUrl] = useState<string | null>(initial?.photoUrl ?? null);
   const [linkUrl, setLinkUrl] = useState<string | null>(initial?.linkUrl ?? null);
 
@@ -31,6 +33,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
     setName(initial?.name ?? '');
     setDescription(initial?.description ?? '');
     setPromptText(initial?.promptText ?? '');
+    setAiGuidance(initial?.aiGuidance ?? '');
     setPhotoUrl(initial?.photoUrl ?? null);
     setLinkUrl(initial?.linkUrl ?? null);
   }, [initial]);
@@ -42,6 +45,7 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
       name: name.trim(),
       description: description.trim(),
       promptText: promptText.trim(),
+      aiGuidance: aiGuidance.trim() || null,
       photoUrl: photoUrl || null,
       linkUrl: linkUrl?.trim() || null,
     });
@@ -92,6 +96,18 @@ export function TileEditor({ initial, onSave, onCancel, onDelete, saving, title 
               required
               className="w-full bg-[#121317] border border-white/10 rounded px-3 py-2 text-on-surface min-h-[60px]"
               placeholder="What should the AI be asked when this tile is clicked?"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs uppercase tracking-wider text-on-surface-variant mb-1">
+              AI nudge <span className="opacity-60 normal-case tracking-normal">(optional — private guidance for the assistant)</span>
+            </label>
+            <textarea
+              value={aiGuidance}
+              onChange={(e) => setAiGuidance(e.target.value)}
+              className="w-full bg-[#121317] border border-white/10 rounded px-3 py-2 text-on-surface min-h-[60px]"
+              placeholder="Tell the AI how to talk about or sell this service — tone, key selling points, what to emphasize. The visitor never sees this."
             />
           </div>
 

@@ -28,6 +28,8 @@ export interface ChatInput {
   hiddenPrompt?: boolean | null;
   /** @nullable */
   mode?: ChatInputMode;
+  /** @nullable */
+  elementId?: number | null;
 }
 
 export interface ChatResponse {
@@ -57,6 +59,8 @@ export interface Element {
   description?: string | null;
   promptText: string;
   /** @nullable */
+  aiGuidance?: string | null;
+  /** @nullable */
   photoUrl?: string | null;
   /** @nullable */
   linkUrl?: string | null;
@@ -71,6 +75,8 @@ export interface ElementInput {
   description?: string | null;
   promptText: string;
   /** @nullable */
+  aiGuidance?: string | null;
+  /** @nullable */
   photoUrl?: string | null;
   /** @nullable */
   linkUrl?: string | null;
@@ -83,6 +89,8 @@ export interface ElementUpdate {
   /** @nullable */
   description?: string | null;
   promptText?: string;
+  /** @nullable */
+  aiGuidance?: string | null;
   /** @nullable */
   photoUrl?: string | null;
   /** @nullable */

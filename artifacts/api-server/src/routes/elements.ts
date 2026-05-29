@@ -10,12 +10,26 @@ import {
   ReorderElementsBody,
 } from "@workspace/api-zod";
 import { requireAuth } from "../middlewares/requireAuth";
+import { getAuth } from "@clerk/express";
 
 const router = Router();
+
+// aiGuidance is private owner-only content (the "nudge"). It must never be
+// exposed to unauthenticated visitors, so strip it unless the caller is a
+// signed-in admin.
+function stripPrivateFields<T extends { aiGuidance?: string | null }>(
+  el: T,
+  isAdmin: boolean,
+): T {
+  if (isAdmin) return el;
+  const { aiGuidance: _omit, ...rest } = el;
+  return rest as T;
+}
 
 router.get("/", async (req, res) => {
   try {
     const page = typeof req.query.page === "string" ? req.query.page : undefined;
+    const isAdmin = !!getAuth(req)?.userId;
 
     const elements = await db
       .select()
@@ -25,7 +39,7 @@ router.get("/", async (req, res) => {
     const subElements = await db.select().from(subElementsTable).orderBy(subElementsTable.order);
 
     const result = elements.map((el) => ({
-      ...el,
+      ...stripPrivateFields(el, isAdmin),
       subElements: subElements.filter((se) => se.elementId === el.id),
     }));
 
@@ -49,6 +63,7 @@ router.post("/", requireAuth, async (req, res) => {
         name: parsed.data.name,
         description: parsed.data.description ?? null,
         promptText: parsed.data.promptText,
+        aiGuidance: parsed.data.aiGuidance ?? null,
         photoUrl: parsed.data.photoUrl ?? null,
         linkUrl: parsed.data.linkUrl ?? null,
         order: parsed.data.order ?? 0,
@@ -106,13 +121,15 @@ router.get("/:id", async (req, res) => {
 
     if (!element) return res.status(404).json({ error: "Not found" });
 
+    const isAdmin = !!getAuth(req)?.userId;
+
     const subElements = await db
       .select()
       .from(subElementsTable)
       .where(eq(subElementsTable.elementId, parsed.data.id))
       .orderBy(subElementsTable.order);
 
-    return res.json({ ...element, subElements });
+    return res.json({ ...stripPrivateFields(element, isAdmin), subElements });
   } catch {
     return res.status(500).json({ error: "Failed to fetch element" });
   }
@@ -132,6 +149,7 @@ router.patch("/:id", requireAuth, async (req, res) => {
     if (body.name !== undefined) updates.name = body.name;
     if (body.description !== undefined) updates.description = body.description;
     if (body.promptText !== undefined) updates.promptText = body.promptText;
+    if (body.aiGuidance !== undefined) updates.aiGuidance = body.aiGuidance;
     if (body.photoUrl !== undefined) updates.photoUrl = body.photoUrl;
     if (body.linkUrl !== undefined) updates.linkUrl = body.linkUrl;
     if (body.order !== undefined) updates.order = body.order;

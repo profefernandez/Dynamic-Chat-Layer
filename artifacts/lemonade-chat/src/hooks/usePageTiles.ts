@@ -57,7 +57,7 @@ export function usePageTiles(page: string) {
       setOverlayOpen(false);
       return;
     }
-    sendMessage(el.promptText, true);
+    sendMessage(el.promptText, true, el.id);
   };
 
   const save = (draft: TileDraft) => {

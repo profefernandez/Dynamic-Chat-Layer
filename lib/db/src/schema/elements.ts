@@ -8,6 +8,7 @@ export const elementsTable = pgTable("elements", {
   name: text("name").notNull(),
   description: text("description"),
   promptText: text("prompt_text").notNull(),
+  aiGuidance: text("ai_guidance"),
   photoUrl: text("photo_url"),
   linkUrl: text("link_url"),
   order: integer("order").notNull().default(0),

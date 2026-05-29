@@ -16,7 +16,7 @@ export function Tile({ element, index = 0 }: { element: Element; index?: number 
     if (element.subElements && element.subElements.length > 0) {
       setIsExpanded(!isExpanded);
     } else {
-      sendMessage(element.promptText, true);
+      sendMessage(element.promptText, true, element.id);
     }
   };
 

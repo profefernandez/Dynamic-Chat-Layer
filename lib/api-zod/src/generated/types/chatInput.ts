@@ -15,4 +15,6 @@ export interface ChatInput {
   hiddenPrompt?: boolean | null;
   /** @nullable */
   mode?: ChatInputMode;
+  /** @nullable */
+  elementId?: number | null;
 }

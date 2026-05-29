@@ -83,6 +83,7 @@ export function About() {
                         id={element.id}
                         editMode={tiles.editMode}
                         hasLink={!!element.linkUrl}
+                        hasNudge={!!element.aiGuidance}
                         badge={badge}
                         onActivate={() => tiles.activate(element)}
                         onEdit={() => tiles.startEdit(element)}

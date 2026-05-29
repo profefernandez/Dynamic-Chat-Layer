@@ -17,7 +17,7 @@ import { useAdmin } from '../context/AdminContext';
 import { EditableText } from '../components/EditableText';
 import { TileEditor, TileDraft } from '../components/TileEditor';
 import { TileCardBody, TileVisual } from '../components/TileCardBase';
-import { Plus, Pencil, GripVertical, ExternalLink } from 'lucide-react';
+import { Plus, Pencil, GripVertical, ExternalLink, Sparkles } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -130,6 +130,14 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
 
       {editMode && (
         <div data-edit-control className="absolute top-2 right-2 z-30 flex items-center gap-1">
+          {element.aiGuidance && (
+            <span
+              className="p-1.5 rounded bg-primary/20 text-primary"
+              title="AI nudge set — private guidance the assistant uses for this card"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+            </span>
+          )}
           <button
             type="button"
             {...attributes}
@@ -225,7 +233,7 @@ export function Home() {
       setOverlayOpen(false);
       return;
     }
-    sendMessage(el.promptText, true);
+    sendMessage(el.promptText, true, el.id);
   };
 
   const handleSaveTile = (draft: TileDraft) => {

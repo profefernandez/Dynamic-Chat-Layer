@@ -13,6 +13,8 @@ export interface ElementInput {
   description?: string | null;
   promptText: string;
   /** @nullable */
+  aiGuidance?: string | null;
+  /** @nullable */
   photoUrl?: string | null;
   /** @nullable */
   linkUrl?: string | null;

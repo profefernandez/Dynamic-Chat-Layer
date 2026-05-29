@@ -106,6 +106,7 @@ export function Services() {
                         id={element.id}
                         editMode={tiles.editMode}
                         hasLink={!!element.linkUrl}
+                        hasNudge={!!element.aiGuidance}
                         onActivate={() => tiles.activate(element)}
                         onEdit={() => tiles.startEdit(element)}
                         className="glass-card rounded-xl p-5 transition-transform hover:translate-x-1.5 duration-300 flex flex-row items-center gap-5 text-left"

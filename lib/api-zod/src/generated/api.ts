@@ -23,7 +23,8 @@ export const SendChatBody = zod.object({
   "message": zod.string(),
   "sessionId": zod.string().nullish(),
   "hiddenPrompt": zod.boolean().nullish(),
-  "mode": zod.union([zod.literal('public'),zod.literal('admin'),zod.literal(null)]).nullish()
+  "mode": zod.union([zod.literal('public'),zod.literal('admin'),zod.literal(null)]).nullish(),
+  "elementId": zod.number().nullish()
 })
 
 export const SendChatResponse = zod.object({
@@ -45,6 +46,7 @@ export const ListElementsResponseItem = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
+  "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number(),
@@ -70,6 +72,7 @@ export const CreateElementBody = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
+  "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number().optional()
@@ -97,6 +100,7 @@ export const GetElementResponse = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
+  "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number(),
@@ -125,6 +129,7 @@ export const UpdateElementBody = zod.object({
   "name": zod.string().optional(),
   "description": zod.string().nullish(),
   "promptText": zod.string().optional(),
+  "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number().optional()
@@ -136,6 +141,7 @@ export const UpdateElementResponse = zod.object({
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
+  "aiGuidance": zod.string().nullish(),
   "photoUrl": zod.string().nullish(),
   "linkUrl": zod.string().nullish(),
   "order": zod.number(),
