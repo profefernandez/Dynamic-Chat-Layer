@@ -13,18 +13,19 @@ import {
   Mic,
   Paperclip,
   Languages,
-  User,
-  MapPin,
-  LineChart,
+  GraduationCap,
+  Globe,
+  HeartHandshake,
+  Briefcase,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
 const SUGGESTIONS = [
-  { icon: User, label: 'Learn AI in plain language', prompt: 'Teach me about AI in plain language — where do I start?' },
-  { icon: MapPin, label: 'Find local resources', prompt: 'What local resources can help me learn about AI?' },
-  { icon: LineChart, label: 'Build an AI training plan', prompt: 'Help me build an AI training plan.' },
-  { icon: User, label: 'Talk to a person', prompt: "I'd like to talk to a real person — how can I reach someone?" },
+  { icon: GraduationCap, label: 'Take AI Lesson', prompt: "I'd like to take an AI lesson. Can you teach me about AI in plain language and walk me through getting started?" },
+  { icon: Globe, label: 'Website and Development', prompt: 'Tell me about your website and development services — how can you help me build a website?' },
+  { icon: HeartHandshake, label: 'What is social work and AI', prompt: 'What is the connection between social work and AI? How does AI fit into social work?' },
+  { icon: Briefcase, label: 'AI consultation', prompt: 'I am interested in AI consultation. What does your consultation cover and how does it work?' },
 ];
 
 export function ChatLayer() {

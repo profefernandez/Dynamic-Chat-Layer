@@ -1,7 +1,30 @@
 import { Router } from "express";
 import { SendChatBody } from "@workspace/api-zod";
+import { ai } from "@workspace/integrations-gemini-ai";
 
 const router = Router();
+
+type Turn = { role: "user" | "model"; content: string };
+
+const conversations = new Map<string, Turn[]>();
+const MAX_TURNS = 20;
+
+const SYSTEM_PROMPT = `You are the AI guide for "60 Watts of Clarity", a practice that helps everyday people, nonprofits, and small organizations understand and use AI with confidence. The founder is a licensed social worker, AI consultant, educator, and website designer.
+
+Your purpose is to make AI feel approachable and human. Speak in warm, plain language — no jargon, no hype. Assume the person you are talking to may be new to AI. Be encouraging, clear, and concise.
+
+You can help people with four core areas:
+1. AI Lessons & Education — teaching AI literacy in plain language, one-on-one or in groups, from absolute basics to practical everyday use.
+2. Website and Development — designing and building approachable, accessible websites for individuals and small organizations.
+3. Social Work and AI — exploring how AI intersects with social work, ethics, equity, accessibility, and community care, and how helpers can use AI responsibly.
+4. AI Consultation — guiding individuals and organizations on choosing, implementing, and using AI tools safely and effectively.
+
+Guidelines:
+- Keep answers focused and friendly. Use short paragraphs and, when helpful, simple lists.
+- When someone shows interest in a service, briefly explain what it covers and invite them to take the next step (booking a lesson, a consultation, or getting in touch).
+- If you don't know a specific detail (exact pricing, scheduling, etc.), say so honestly and suggest reaching out directly rather than inventing specifics.
+- Center accessibility and inclusion — this practice is grounded in social work values.
+- Never overwhelm. Clarity over completeness.`;
 
 router.post("/", async (req, res) => {
   const parsed = SendChatBody.safeParse(req.body);
@@ -12,52 +35,33 @@ router.post("/", async (req, res) => {
   const { message, sessionId, mode } = parsed.data;
   const newSessionId = sessionId ?? crypto.randomUUID();
   const isAdmin = mode === "admin";
-  const messageForLemonade = isAdmin ? `[ADMIN MODE] ${message}` : message;
+
+  const history = conversations.get(newSessionId) ?? [];
+  history.push({ role: "user", content: message });
 
   try {
-    const apiKey = process.env.LAUNCH_LEMONADE_API_KEY;
-    const lemonadeId = process.env.LAUNCH_LEMONADE_ID;
-    const endpoint =
-      process.env.LAUNCH_LEMONADE_ENDPOINT ?? "https://api.launchlemonade.app/v1/chat";
+    const systemInstruction = isAdmin
+      ? `${SYSTEM_PROMPT}\n\nNote: This is an admin preview session. Prefix your reply with "[ADMIN MODE] " so the operator can distinguish preview responses.`
+      : SYSTEM_PROMPT;
 
-    let reply: string;
+    const response = await ai.models.generateContent({
+      model: "gemini-2.5-flash",
+      contents: history.map((turn) => ({
+        role: turn.role,
+        parts: [{ text: turn.content }],
+      })),
+      config: {
+        systemInstruction,
+        maxOutputTokens: 8192,
+      },
+    });
 
-    if (apiKey && lemonadeId) {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${apiKey}`,
-        },
-        body: JSON.stringify({
-          lemonade_id: lemonadeId,
-          message: messageForLemonade,
-          conversation_id: newSessionId,
-        }),
-      });
+    const reply =
+      response.text?.trim() ||
+      "I'm sorry — I didn't quite catch that. Could you rephrase your question?";
 
-      if (!response.ok) {
-        throw new Error(`Launch Lemonade API error: ${response.status}`);
-      }
-
-      const data = (await response.json()) as {
-        response?: string;
-        reply?: string;
-        message?: string;
-        content?: string;
-        conversation_id?: string;
-      };
-      reply =
-        data.response ??
-        data.reply ??
-        data.message ??
-        data.content ??
-        "I'm here to help. What would you like to know?";
-    } else {
-      reply = isAdmin
-        ? "[ADMIN MODE preview] Launch Lemonade isn't configured yet. Set LAUNCH_LEMONADE_API_KEY and LAUNCH_LEMONADE_ID to connect the live AI."
-        : "Thanks for your message! The Launch Lemonade AI is ready to assist. (Configure LAUNCH_LEMONADE_API_KEY and LAUNCH_LEMONADE_ID to connect the live AI.)";
-    }
+    history.push({ role: "model", content: reply });
+    conversations.set(newSessionId, history.slice(-MAX_TURNS));
 
     return res.json({ reply, sessionId: newSessionId });
   } catch (err) {
