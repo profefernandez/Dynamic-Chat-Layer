@@ -11,17 +11,15 @@ type Partner = {
   id: string;
   name: string;
   img: string;
-  /** image height — varied for a staggered collage look */
-  h: string;
 };
 
 const PARTNERS: Partner[] = [
-  { id: 'gcsw', name: 'Graduate College of Social Work', img: gcsw, h: 'h-44 md:h-52' },
-  { id: 'exhale', name: 'Exhale Therapy, Wellness & Consulting', img: exhale, h: 'h-28 md:h-32' },
-  { id: 'galveston', name: 'Galveston College', img: galveston, h: 'h-32 md:h-40' },
-  { id: 'jewish', name: 'Jewish Family Service', img: jewish, h: 'h-28 md:h-32' },
-  { id: 'jbertrand', name: 'FOCUS Care Counseling Services', img: jbertrand, h: 'h-40 md:h-48' },
-  { id: 'pasadena', name: 'Pasadena Public Library', img: pasadena, h: 'h-32 md:h-40' },
+  { id: 'gcsw', name: 'Graduate College of Social Work', img: gcsw },
+  { id: 'exhale', name: 'Exhale Therapy, Wellness & Consulting', img: exhale },
+  { id: 'galveston', name: 'Galveston College', img: galveston },
+  { id: 'jewish', name: 'Jewish Family Service', img: jewish },
+  { id: 'jbertrand', name: 'FOCUS Care Counseling Services', img: jbertrand },
+  { id: 'pasadena', name: 'Pasadena Public Library', img: pasadena },
 ];
 
 export function Contact() {
@@ -47,8 +45,8 @@ export function Contact() {
         </p>
       </div>
 
-      <div className="z-10 w-full max-w-[1100px] mx-auto">
-        <div className="columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+      <div className="z-10 w-full max-w-[1180px] mx-auto">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {PARTNERS.map((partner, i) => (
             <motion.div
               key={partner.id}
@@ -56,12 +54,12 @@ export function Contact() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
               whileHover={{ y: -4 }}
-              className="glass-card group relative overflow-hidden rounded-xl mb-4 break-inside-avoid"
+              className="glass-card group relative overflow-hidden rounded-xl"
             >
               <img
                 src={partner.img}
                 alt={partner.name}
-                className={`w-full ${partner.h} object-cover transition-transform duration-500 group-hover:scale-105`}
+                className="w-full h-36 md:h-44 object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent pointer-events-none" />
               <div className="absolute inset-x-0 bottom-0 p-3">
