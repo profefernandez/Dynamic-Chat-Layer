@@ -17,7 +17,7 @@ export function NavBar({ onToggle }: NavBarProps) {
     { href: '/',         label: 'Home' },
     { href: '/training', label: 'Training' },
     { href: '/services', label: 'Consultation' },
-    { href: '/about',    label: 'Web Dev' },
+    { href: '/about',    label: 'Websites' },
     { href: '/contact',  label: 'Community' },
   ];
 
