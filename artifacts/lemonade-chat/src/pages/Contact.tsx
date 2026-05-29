@@ -1,70 +1,77 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import exhale from '@assets/exhale_1780015620584.png';
+import galveston from '@assets/galveston_1780015620585.png';
+import gcsw from '@assets/GCSW_1780015620585.png';
+import jbertrand from '@assets/jbertrand_1780015629242.png';
+import jewish from '@assets/jewish_1780015629244.png';
+import pasadena from '@assets/pasadena_1780015637786.png';
+
+type Partner = {
+  id: string;
+  name: string;
+  img: string;
+  /** image height — varied for a staggered collage look */
+  h: string;
+};
+
+const PARTNERS: Partner[] = [
+  { id: 'gcsw', name: 'Graduate College of Social Work', img: gcsw, h: 'h-44 md:h-52' },
+  { id: 'exhale', name: 'Exhale Therapy, Wellness & Consulting', img: exhale, h: 'h-28 md:h-32' },
+  { id: 'galveston', name: 'Galveston College', img: galveston, h: 'h-32 md:h-40' },
+  { id: 'jewish', name: 'Jewish Family Service', img: jewish, h: 'h-28 md:h-32' },
+  { id: 'jbertrand', name: 'FOCUS Care Counseling Services', img: jbertrand, h: 'h-40 md:h-48' },
+  { id: 'pasadena', name: 'Pasadena Public Library', img: pasadena, h: 'h-32 md:h-40' },
+];
 
 export function Contact() {
   return (
-    <main className="flex flex-col items-center pt-16 pb-20 px-margin-mobile md:px-margin-desktop">
-      <div className="z-10 text-center max-w-3xl mx-auto mb-14">
-        <div className="flex items-center justify-center gap-4 mb-6 opacity-70">
+    <main className="min-h-full flex flex-col items-center justify-start pt-6 pb-4 relative px-margin-mobile md:px-margin-desktop overflow-hidden">
+      <div className="absolute inset-0 z-0 pointer-events-none bg-pattern opacity-50" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] z-0 pointer-events-none" />
+
+      <div className="z-10 text-center max-w-4xl mx-auto mb-8">
+        <div className="flex items-center justify-center gap-4 mb-3 opacity-70">
           <div className="h-px w-12 bg-on-surface-variant" />
           <span className="font-label-sm text-label-sm uppercase tracking-[0.2em] text-on-surface-variant">
-            Community
+            Partners
           </span>
           <div className="h-px w-12 bg-on-surface-variant" />
         </div>
-        <h2 className="font-headline-lg text-headline-lg text-on-surface mb-4">
-          The 60 Watts AI Rollidex
-        </h2>
+        <h1 className="font-headline-xl text-headline-xl text-on-surface leading-tight mb-3">
+          Collaborative Partners <span className="text-primary text-glow italic">in the Community</span>
+        </h1>
         <p className="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">
-          A growing circle for people learning how AI is shaping work, practice, and everyday life.
+          A few of the community partners and organizations we've had the privilege to work with.
         </p>
       </div>
 
-      <div className="z-10 w-full max-w-2xl mx-auto">
-        <form
-          className="glass-card rounded-xl p-8 space-y-5 relative overflow-hidden"
-          onSubmit={e => e.preventDefault()}
-        >
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(to right, transparent, rgba(242,202,80,0.4), transparent)' }} />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {[
-              { label: 'Name', type: 'text', placeholder: 'Your name' },
-              { label: 'Email', type: 'email', placeholder: 'your@email.com' },
-            ].map(f => (
-              <div key={f.label} className="space-y-1.5">
-                <label className="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">{f.label}</label>
-                <input
-                  type={f.type}
-                  placeholder={f.placeholder}
-                  className="w-full h-11 px-4 rounded-md font-body-md text-on-surface placeholder:text-outline outline-none focus:ring-1 focus:ring-primary/50 transition"
-                  style={{ background: 'rgba(30,31,35,0.7)', border: '1px solid rgba(77,70,53,0.6)' }}
-                />
+      <div className="z-10 w-full max-w-[1100px] mx-auto">
+        <div className="columns-2 lg:columns-3 gap-4 [column-fill:_balance]">
+          {PARTNERS.map((partner, i) => (
+            <motion.div
+              key={partner.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: i * 0.06 }}
+              whileHover={{ y: -4 }}
+              className="glass-card group relative overflow-hidden rounded-xl mb-4 break-inside-avoid"
+            >
+              <img
+                src={partner.img}
+                alt={partner.name}
+                className={`w-full ${partner.h} object-cover transition-transform duration-500 group-hover:scale-105`}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/30 to-transparent pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 p-3">
+                <p className="font-body-md text-xs md:text-sm text-white font-semibold leading-snug drop-shadow">
+                  {partner.name}
+                </p>
               </div>
-            ))}
-          </div>
-
-          <div className="space-y-1.5">
-            <label className="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Message</label>
-            <textarea
-              rows={4}
-              placeholder="Tell us about yourself or your organization..."
-              className="w-full px-4 py-3 rounded-md font-body-md text-on-surface placeholder:text-outline outline-none focus:ring-1 focus:ring-primary/50 transition resize-none"
-              style={{ background: 'rgba(30,31,35,0.7)', border: '1px solid rgba(77,70,53,0.6)' }}
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="w-full h-11 rounded-full font-label-sm text-label-sm uppercase tracking-widest transition-all hover:shadow-[0_0_15px_rgba(242,202,80,0.5)] active:scale-95"
-            style={{ background: '#f2ca50', color: '#3c2f00' }}
-          >
-            Join the Community
-          </button>
-        </form>
-
-        <p className="text-center font-body-md text-sm text-on-surface-variant mt-6 opacity-60">
-          © 2024 60 Watts of Clarity. Illuminating AI Literacy for a Brighter Future.
-        </p>
+            </motion.div>
+          ))}
+        </div>
       </div>
     </main>
   );
