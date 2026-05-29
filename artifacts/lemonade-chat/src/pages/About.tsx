@@ -9,6 +9,7 @@ type WebTile = {
   title: string;
   description: string;
   prompt: string;
+  badge?: string;
   visual: typeof CARD_VISUALS[number];
 };
 
@@ -22,12 +23,13 @@ const TILES: WebTile[] = [
     visual: CARD_VISUALS[2],
   },
   {
-    id: 'ai-powered',
-    title: 'Experience AI-Powered Help',
+    id: 'chatbot-site',
+    title: 'Explore a Chatbot as Your Website',
     description:
-      'A smart assistant that helps build your site and guides visitors dynamically.',
+      'A custom-designed chatbot that functions as your entire website — exactly like the one you are using right now.',
     prompt:
       'I want a smart assistant that helps build and guide visitors dynamically.',
+    badge: 'Like this website here',
     visual: CARD_VISUALS[3],
   },
 ];
@@ -57,8 +59,8 @@ export function About() {
         </p>
       </div>
 
-      <div className="z-10 w-full max-w-3xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+      <div className="z-10 w-full max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14">
           {TILES.map((tile) => (
             <motion.div
               key={tile.id}
@@ -75,6 +77,11 @@ export function About() {
               transition={{ duration: 0.25 }}
               className="glass-card rounded-xl p-6 relative group transition-transform duration-300 z-10 flex flex-col h-full text-center items-center cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/70 focus-visible:ring-offset-2 focus-visible:ring-offset-surface"
             >
+              {tile.badge && (
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-on-primary font-label-sm text-[11px] uppercase tracking-wide px-3 py-0.5 rounded-full z-20 whitespace-nowrap shadow-[0_0_12px_rgba(242,202,80,0.6)]">
+                  {tile.badge}
+                </div>
+              )}
               <TileCardBody
                 visual={tile.visual as TileVisual}
                 title={tile.title}
@@ -86,7 +93,7 @@ export function About() {
           ))}
         </div>
 
-        <p className="mt-8 text-center font-body-md text-sm text-on-surface-variant max-w-2xl mx-auto">
+        <p className="mt-10 text-center font-body-lg text-lg text-on-surface-variant max-w-3xl mx-auto leading-relaxed">
           Sites start at <span className="text-primary font-semibold">$500</span> for a simple build,
           up to <span className="text-primary font-semibold">$3,500</span> for small businesses &amp;
           organizations, with custom pricing for larger projects. Hosting on our own VPS available.
