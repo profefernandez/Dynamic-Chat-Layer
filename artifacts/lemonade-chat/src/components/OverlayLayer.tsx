@@ -19,8 +19,8 @@ export function OverlayLayer() {
       <motion.div
         initial={false}
         animate={{
-          y: isOverlayOpen ? 0 : '-72%',
-          opacity: isOverlayOpen ? 1 : 0.35,
+          y: isOverlayOpen ? 0 : '-100%',
+          opacity: isOverlayOpen ? 1 : 0,
           scale: isOverlayOpen ? 1 : 0.97,
         }}
         transition={{ type: 'spring', bounce: 0, duration: 0.55 }}

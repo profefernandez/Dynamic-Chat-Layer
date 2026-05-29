@@ -368,17 +368,6 @@ export function Home() {
                         onEdit={() => setEditingTile(element)}
                       />
                     ))}
-
-                {editMode && (
-                  <button
-                    type="button"
-                    onClick={() => setCreating(true)}
-                    className="glass-card rounded-xl p-6 h-64 z-10 flex flex-col items-center justify-center gap-3 border-2 border-dashed border-primary/30 hover:border-primary/60 hover:-translate-y-1 transition-all text-on-surface-variant hover:text-primary"
-                  >
-                    <Plus className="w-8 h-8" />
-                    <span className="font-body-md text-sm">Add tile</span>
-                  </button>
-                )}
               </div>
 
               {orderedItems.length > 4 && (
@@ -399,6 +388,18 @@ export function Home() {
               )}
             </SortableContext>
           </DndContext>
+
+          {editMode && (
+            <div className="mt-8 flex justify-center">
+              <button
+                type="button"
+                onClick={() => setCreating(true)}
+                className="inline-flex items-center gap-2 rounded-full px-5 py-2.5 border-2 border-dashed border-primary/30 hover:border-primary/60 transition-colors text-on-surface-variant hover:text-primary font-body-md text-sm"
+              >
+                <Plus className="w-4 h-4" /> Add tile
+              </button>
+            </div>
+          )}
         </div>
       </main>
 
