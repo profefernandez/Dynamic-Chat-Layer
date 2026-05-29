@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Show, useClerk, useUser } from '@clerk/react';
+import { Menu, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useChat } from '../context/ChatContext';
 
-interface NavBarProps {
-  onToggle: () => void;
-  isOpen: boolean;
-}
-
-export function NavBar({ onToggle }: NavBarProps) {
+export function NavBar() {
   const [location] = useLocation();
   const { signOut } = useClerk();
   const { user } = useUser();
+  const { setOverlayOpen } = useChat();
+  const [menuOpen, setMenuOpen] = useState(false);
   const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
   const links = [
@@ -21,35 +21,35 @@ export function NavBar({ onToggle }: NavBarProps) {
     { href: '/contact',  label: 'Partners' },
   ];
 
-  return (
-    <nav className="sticky top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 bg-surface/80 backdrop-blur-xl border-b border-white/10 transition-transform">
-      <Link href="/" className="font-headline-md text-headline-md text-primary cursor-pointer">
-        60 Watts of Clarity
-      </Link>
+  const toggleMenu = () => {
+    setOverlayOpen(true);
+    setMenuOpen(o => !o);
+  };
 
-      <div className="hidden md:flex items-center gap-8">
-        {links.map(link => {
-          const active = location === link.href;
-          return (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={
-                active
-                  ? 'text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest text-primary font-bold border-b-2 border-primary pb-1'
-                  : 'text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm uppercase tracking-widest hover:bg-white/5 transition-all duration-300 px-3 py-2 rounded-md'
-              }
-            >
-              {link.label}
-            </Link>
-          );
-        })}
+  const handleNav = () => {
+    setOverlayOpen(true);
+    setMenuOpen(false);
+  };
+
+  return (
+    <nav className="sticky top-0 left-0 w-full z-50 flex justify-between items-center px-margin-desktop h-14 bg-surface/70 backdrop-blur-xl border-b border-white/10">
+      <div className="flex items-center">
+        <button
+          onClick={toggleMenu}
+          aria-label="Menu"
+          aria-expanded={menuOpen}
+          className="h-9 w-9 rounded-lg flex items-center justify-center text-on-surface hover:text-primary transition-colors"
+          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+        >
+          {menuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+        </button>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Show when="signed-in">
+      <Show when="signed-in">
+        <div className="flex items-center gap-3">
           <Link
             href="/admin"
+            onClick={handleNav}
             className="hidden sm:inline-block font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary px-3 py-2 rounded-md transition-colors"
             title={user?.primaryEmailAddress?.emailAddress ?? 'Admin'}
           >
@@ -61,15 +61,50 @@ export function NavBar({ onToggle }: NavBarProps) {
           >
             Sign Out
           </button>
-        </Show>
+        </div>
+      </Show>
 
-        <button
-          onClick={onToggle}
-          className="font-label-sm text-label-sm uppercase tracking-widest bg-primary text-on-primary px-6 py-2.5 rounded-full hover:shadow-[0_0_15px_rgba(242,202,80,0.5)] transition-all duration-300 scale-95 active:scale-90"
-        >
-          Get Started
-        </button>
-      </div>
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            <button
+              aria-label="Close menu"
+              onClick={() => setMenuOpen(false)}
+              className="fixed inset-0 z-40 cursor-default"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -8, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -8, scale: 0.98 }}
+              transition={{ duration: 0.18 }}
+              className="absolute top-full left-margin-desktop mt-3 z-50 w-64 rounded-2xl p-2 shadow-2xl"
+              style={{
+                background: 'rgba(24, 25, 29, 0.98)',
+                border: '1px solid rgba(242, 202, 80, 0.22)',
+                backdropFilter: 'blur(20px)',
+              }}
+            >
+              {links.map(link => {
+                const active = location === link.href;
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={handleNav}
+                    className={
+                      active
+                        ? 'block px-4 py-2.5 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-primary bg-primary/10 font-bold'
+                        : 'block px-4 py-2.5 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary hover:bg-white/5 transition-colors'
+                    }
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

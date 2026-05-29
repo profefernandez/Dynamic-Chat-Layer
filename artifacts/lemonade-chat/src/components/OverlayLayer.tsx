@@ -2,6 +2,7 @@ import React from 'react';
 import { useChat } from '../context/ChatContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavBar } from './NavBar';
+import { GeometricBackground } from './GeometricBackground';
 import { Switch, Route, useLocation } from 'wouter';
 import { Home } from '../pages/Home';
 import { Training } from '../pages/Training';
@@ -10,7 +11,7 @@ import { About } from '../pages/About';
 import { Contact } from '../pages/Contact';
 
 export function OverlayLayer() {
-  const { isOverlayOpen, setOverlayOpen } = useChat();
+  const { isOverlayOpen } = useChat();
   const [location] = useLocation();
 
   return (
@@ -33,9 +34,11 @@ export function OverlayLayer() {
             borderBottom: '1px solid rgba(255,255,255,0.08)',
           }}
         >
-          <NavBar onToggle={() => setOverlayOpen(!isOverlayOpen)} isOpen={isOverlayOpen} />
+          <GeometricBackground className="absolute inset-0 w-full h-full z-0 pointer-events-none" />
 
-          <div className="flex-1 overflow-y-auto">
+          <NavBar />
+
+          <div className="relative z-10 flex-1 overflow-y-auto">
             <AnimatePresence mode="wait">
               <motion.div
                 key={location}
