@@ -59,6 +59,12 @@ paths:
       operationId: listElements
       tags: [elements]
       summary: List all element tiles
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: List of elements
@@ -278,6 +284,46 @@ paths:
               schema:
                 $ref: "#/components/schemas/SiteSettings"
 
+  /content:
+    get:
+      operationId: listContentBlocks
+      tags: [siteSettings]
+      summary: List all content blocks
+      responses:
+        "200":
+          description: List of content blocks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ContentBlock"
+
+  /content/{key}:
+    patch:
+      operationId: updateContentBlock
+      tags: [siteSettings]
+      summary: Create or update a content block by key
+      parameters:
+        - name: key
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContentBlockUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContentBlock"
+
   /storage/uploads/request-url:
     post:
       operationId: requestUploadUrl
@@ -351,10 +397,12 @@ components:
 
     Element:
       type: object
-      required: [id, name, promptText, order]
+      required: [id, page, name, promptText, order]
       properties:
         id:
           type: integer
+        page:
+          type: string
         name:
           type: string
         description:
@@ -376,6 +424,8 @@ components:
       type: object
       required: [name, promptText]
       properties:
+        page:
+          type: string
         name:
           type: string
         description:
@@ -392,6 +442,8 @@ components:
     ElementUpdate:
       type: object
       properties:
+        page:
+          type: string
         name:
           type: string
         description:
@@ -477,18 +529,55 @@ components:
         url:
           type: string
 
+    NavLink:
+      type: object
+      required: [label, href]
+      properties:
+        label:
+          type: string
+        href:
+          type: string
+
+    ChatSuggestion:
+      type: object
+      required: [icon, label, prompt]
+      properties:
+        icon:
+          type: string
+        label:
+          type: string
+        prompt:
+          type: string
+
+    Partner:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        photoUrl:
+          type: ["string", "null"]
+
     SiteSettings:
       type: object
       required:
         - heroEyebrow
+        - heroTitlePrefix
         - heroTitle
         - heroSubtitle
         - chatPlaceholder
         - footerTagline
         - footerCopyright
         - footerLinks
+        - navLinks
+        - chatSuggestions
+        - partners
       properties:
         heroEyebrow:
+          type: string
+        heroTitlePrefix:
           type: string
         heroTitle:
           type: string
@@ -504,12 +593,26 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/FooterLink"
+        navLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/NavLink"
+        chatSuggestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatSuggestion"
+        partners:
+          type: array
+          items:
+            $ref: "#/components/schemas/Partner"
 
     SiteSettingsUpdate:
       type: object
       properties:
         heroEyebrow:
           type: string
+        heroTitlePrefix:
+          type: string
         heroTitle:
           type: string
         heroSubtitle:
@@ -524,6 +627,34 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/FooterLink"
+        navLinks:
+          type: array
+          items:
+            $ref: "#/components/schemas/NavLink"
+        chatSuggestions:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatSuggestion"
+        partners:
+          type: array
+          items:
+            $ref: "#/components/schemas/Partner"
+
+    ContentBlock:
+      type: object
+      required: [key, value]
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+
+    ContentBlockUpdate:
+      type: object
+      required: [value]
+      properties:
+        value:
+          type: string
 
     UploadUrlRequest:
       type: object

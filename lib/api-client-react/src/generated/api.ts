@@ -22,12 +22,15 @@ import type {
 import type {
   ChatInput,
   ChatResponse,
+  ContentBlock,
+  ContentBlockUpdate,
   Element,
   ElementInput,
   ElementUpdate,
   GenerateImageInput,
   GeneratedImage,
   HealthStatus,
+  ListElementsParams,
   ReorderInput,
   SiteSettings,
   SiteSettingsUpdate,
@@ -198,20 +201,27 @@ export const useSendChat = <TError = ErrorType<unknown>,
       return useMutation(getSendChatMutationOptions(options));
     }
 
-export const getListElementsUrl = () => {
+export const getListElementsUrl = (params?: ListElementsParams,) => {
+  const normalizedParams = new URLSearchParams();
 
+  Object.entries(params || {}).forEach(([key, value]) => {
 
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? 'null' : value.toString())
+    }
+  });
 
+  const stringifiedParams = normalizedParams.toString();
 
-  return `/api/elements`
+  return stringifiedParams.length > 0 ? `/api/elements?${stringifiedParams}` : `/api/elements`
 }
 
 /**
  * @summary List all element tiles
  */
-export const listElements = async ( options?: RequestInit): Promise<Element[]> => {
+export const listElements = async (params?: ListElementsParams, options?: RequestInit): Promise<Element[]> => {
 
-  return customFetch<Element[]>(getListElementsUrl(),
+  return customFetch<Element[]>(getListElementsUrl(params),
   {
     ...options,
     method: 'GET'
@@ -224,23 +234,23 @@ export const listElements = async ( options?: RequestInit): Promise<Element[]> =
 
 
 
-export const getListElementsQueryKey = () => {
+export const getListElementsQueryKey = (params?: ListElementsParams,) => {
     return [
-    `/api/elements`
+    `/api/elements`, ...(params ? [params] : [])
     ] as const;
     }
 
 
-export const getListElementsQueryOptions = <TData = Awaited<ReturnType<typeof listElements>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listElements>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+export const getListElementsQueryOptions = <TData = Awaited<ReturnType<typeof listElements>>, TError = ErrorType<unknown>>(params?: ListElementsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listElements>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
 const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey =  queryOptions?.queryKey ?? getListElementsQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getListElementsQueryKey(params);
 
 
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof listElements>>> = ({ signal }) => listElements({ signal, ...requestOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listElements>>> = ({ signal }) => listElements(params, { signal, ...requestOptions });
 
 
 
@@ -258,11 +268,11 @@ export type ListElementsQueryError = ErrorType<unknown>
  */
 
 export function useListElements<TData = Awaited<ReturnType<typeof listElements>>, TError = ErrorType<unknown>>(
-  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listElements>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+ params?: ListElementsParams, options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listElements>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
 
  ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
 
-  const queryOptions = getListElementsQueryOptions(options)
+  const queryOptions = getListElementsQueryOptions(params,options)
 
   const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
 
@@ -1077,6 +1087,155 @@ export const useUpdateSiteSettings = <TError = ErrorType<unknown>,
         TContext
       > => {
       return useMutation(getUpdateSiteSettingsMutationOptions(options));
+    }
+
+export const getListContentBlocksUrl = () => {
+
+
+
+
+  return `/api/content`
+}
+
+/**
+ * @summary List all content blocks
+ */
+export const listContentBlocks = async ( options?: RequestInit): Promise<ContentBlock[]> => {
+
+  return customFetch<ContentBlock[]>(getListContentBlocksUrl(),
+  {
+    ...options,
+    method: 'GET'
+
+
+  }
+);}
+
+
+
+
+
+export const getListContentBlocksQueryKey = () => {
+    return [
+    `/api/content`
+    ] as const;
+    }
+
+
+export const getListContentBlocksQueryOptions = <TData = Awaited<ReturnType<typeof listContentBlocks>>, TError = ErrorType<unknown>>( options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listContentBlocks>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getListContentBlocksQueryKey();
+
+
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof listContentBlocks>>> = ({ signal }) => listContentBlocks({ signal, ...requestOptions });
+
+
+
+
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof listContentBlocks>>, TError, TData> & { queryKey: QueryKey }
+}
+
+export type ListContentBlocksQueryResult = NonNullable<Awaited<ReturnType<typeof listContentBlocks>>>
+export type ListContentBlocksQueryError = ErrorType<unknown>
+
+
+/**
+ * @summary List all content blocks
+ */
+
+export function useListContentBlocks<TData = Awaited<ReturnType<typeof listContentBlocks>>, TError = ErrorType<unknown>>(
+  options?: { query?:UseQueryOptions<Awaited<ReturnType<typeof listContentBlocks>>, TError, TData>, request?: SecondParameter<typeof customFetch>}
+
+ ):  UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+
+  const queryOptions = getListContentBlocksQueryOptions(options)
+
+  const query = useQuery(queryOptions) as  UseQueryResult<TData, TError> & { queryKey: QueryKey };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+
+
+
+export const getUpdateContentBlockUrl = (key: string,) => {
+
+
+
+
+  return `/api/content/${key}`
+}
+
+/**
+ * @summary Create or update a content block by key
+ */
+export const updateContentBlock = async (key: string,
+    contentBlockUpdate: ContentBlockUpdate, options?: RequestInit): Promise<ContentBlock> => {
+
+  return customFetch<ContentBlock>(getUpdateContentBlockUrl(key),
+  {
+    ...options,
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      contentBlockUpdate,)
+  }
+);}
+
+
+
+
+export const getUpdateContentBlockMutationOptions = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateContentBlock>>, TError,{key: string;data: BodyType<ContentBlockUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof updateContentBlock>>, TError,{key: string;data: BodyType<ContentBlockUpdate>}, TContext> => {
+
+const mutationKey = ['updateContentBlock'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
+
+
+
+
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof updateContentBlock>>, {key: string;data: BodyType<ContentBlockUpdate>}> = (props) => {
+          const {key,data} = props ?? {};
+
+          return  updateContentBlock(key,data,requestOptions)
+        }
+
+
+
+
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type UpdateContentBlockMutationResult = NonNullable<Awaited<ReturnType<typeof updateContentBlock>>>
+    export type UpdateContentBlockMutationBody = BodyType<ContentBlockUpdate>
+    export type UpdateContentBlockMutationError = ErrorType<unknown>
+
+    /**
+ * @summary Create or update a content block by key
+ */
+export const useUpdateContentBlock = <TError = ErrorType<unknown>,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof updateContentBlock>>, TError,{key: string;data: BodyType<ContentBlockUpdate>}, TContext>, request?: SecondParameter<typeof customFetch>}
+ ): UseMutationResult<
+        Awaited<ReturnType<typeof updateContentBlock>>,
+        TError,
+        {key: string;data: BodyType<ContentBlockUpdate>},
+        TContext
+      > => {
+      return useMutation(getUpdateContentBlockMutationOptions(options));
     }
 
 export const getRequestUploadUrlUrl = () => {

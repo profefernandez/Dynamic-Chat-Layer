@@ -51,6 +51,7 @@ export interface SubElement {
 
 export interface Element {
   id: number;
+  page: string;
   name: string;
   /** @nullable */
   description?: string | null;
@@ -64,6 +65,7 @@ export interface Element {
 }
 
 export interface ElementInput {
+  page?: string;
   name: string;
   /** @nullable */
   description?: string | null;
@@ -76,6 +78,7 @@ export interface ElementInput {
 }
 
 export interface ElementUpdate {
+  page?: string;
   name?: string;
   /** @nullable */
   description?: string | null;
@@ -120,24 +123,59 @@ export interface FooterLink {
   url: string;
 }
 
+export interface NavLink {
+  label: string;
+  href: string;
+}
+
+export interface ChatSuggestion {
+  icon: string;
+  label: string;
+  prompt: string;
+}
+
+export interface Partner {
+  id: string;
+  name: string;
+  /** @nullable */
+  photoUrl?: string | null;
+}
+
 export interface SiteSettings {
   heroEyebrow: string;
+  heroTitlePrefix: string;
   heroTitle: string;
   heroSubtitle: string;
   chatPlaceholder: string;
   footerTagline: string;
   footerCopyright: string;
   footerLinks: FooterLink[];
+  navLinks: NavLink[];
+  chatSuggestions: ChatSuggestion[];
+  partners: Partner[];
 }
 
 export interface SiteSettingsUpdate {
   heroEyebrow?: string;
+  heroTitlePrefix?: string;
   heroTitle?: string;
   heroSubtitle?: string;
   chatPlaceholder?: string;
   footerTagline?: string;
   footerCopyright?: string;
   footerLinks?: FooterLink[];
+  navLinks?: NavLink[];
+  chatSuggestions?: ChatSuggestion[];
+  partners?: Partner[];
+}
+
+export interface ContentBlock {
+  key: string;
+  value: string;
+}
+
+export interface ContentBlockUpdate {
+  value: string;
 }
 
 export interface UploadUrlRequest {
@@ -163,4 +201,8 @@ export interface GenerateImageInput {
 export interface GeneratedImage {
   objectPath: string;
 }
+
+export type ListElementsParams = {
+page?: string;
+};
 

@@ -11,6 +11,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 
 import { ChatProvider } from "./context/ChatContext";
 import { AdminProvider } from "./context/AdminContext";
+import { ContentProvider } from "./context/ContentContext";
 import { SiteShell } from "./components/SiteShell";
 import { Admin } from "./pages/Admin";
 
@@ -125,6 +126,7 @@ function RoutedShell() {
   const editMode = location.startsWith("/admin");
   return (
     <AdminProvider editMode={editMode}>
+      <ContentProvider>
       <ChatProvider>
         <Switch>
           <Route path="/sign-in/*?" component={SignInPage} />
@@ -133,6 +135,7 @@ function RoutedShell() {
           <Route path="/.*" component={MainApp} />
         </Switch>
       </ChatProvider>
+      </ContentProvider>
     </AdminProvider>
   );
 }

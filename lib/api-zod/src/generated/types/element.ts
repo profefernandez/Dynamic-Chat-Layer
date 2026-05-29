@@ -9,6 +9,7 @@ import type { SubElement } from './subElement';
 
 export interface Element {
   id: number;
+  page: string;
   name: string;
   /** @nullable */
   description?: string | null;

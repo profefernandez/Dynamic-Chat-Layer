@@ -7,6 +7,7 @@
  */
 
 export interface ElementUpdate {
+  page?: string;
   name?: string;
   /** @nullable */
   description?: string | null;

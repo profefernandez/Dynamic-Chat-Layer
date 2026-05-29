@@ -33,12 +33,16 @@ router.patch("/", requireAuth, async (req, res) => {
     const updates: Record<string, unknown> = {};
     const body = parsed.data;
     if (body.heroEyebrow !== undefined) updates.heroEyebrow = body.heroEyebrow;
+    if (body.heroTitlePrefix !== undefined) updates.heroTitlePrefix = body.heroTitlePrefix;
     if (body.heroTitle !== undefined) updates.heroTitle = body.heroTitle;
     if (body.heroSubtitle !== undefined) updates.heroSubtitle = body.heroSubtitle;
     if (body.chatPlaceholder !== undefined) updates.chatPlaceholder = body.chatPlaceholder;
     if (body.footerTagline !== undefined) updates.footerTagline = body.footerTagline;
     if (body.footerCopyright !== undefined) updates.footerCopyright = body.footerCopyright;
     if (body.footerLinks !== undefined) updates.footerLinks = body.footerLinks;
+    if (body.navLinks !== undefined) updates.navLinks = body.navLinks;
+    if (body.chatSuggestions !== undefined) updates.chatSuggestions = body.chatSuggestions;
+    if (body.partners !== undefined) updates.partners = body.partners;
 
     const [updated] = await db
       .update(siteSettingsTable)

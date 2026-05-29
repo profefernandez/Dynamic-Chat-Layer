@@ -5,14 +5,21 @@
  * Launch Lemonade API
  * OpenAPI spec version: 0.1.0
  */
+import type { ChatSuggestion } from './chatSuggestion';
 import type { FooterLink } from './footerLink';
+import type { NavLink } from './navLink';
+import type { Partner } from './partner';
 
 export interface SiteSettingsUpdate {
   heroEyebrow?: string;
+  heroTitlePrefix?: string;
   heroTitle?: string;
   heroSubtitle?: string;
   chatPlaceholder?: string;
   footerTagline?: string;
   footerCopyright?: string;
   footerLinks?: FooterLink[];
+  navLinks?: NavLink[];
+  chatSuggestions?: ChatSuggestion[];
+  partners?: Partner[];
 }

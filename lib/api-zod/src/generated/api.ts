@@ -35,8 +35,13 @@ export const SendChatResponse = zod.object({
 /**
  * @summary List all element tiles
  */
+export const ListElementsQueryParams = zod.object({
+  "page": zod.coerce.string().optional()
+})
+
 export const ListElementsResponseItem = zod.object({
   "id": zod.number(),
+  "page": zod.string(),
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
@@ -61,6 +66,7 @@ export const ListElementsResponse = zod.array(ListElementsResponseItem)
  * @summary Create a new element tile
  */
 export const CreateElementBody = zod.object({
+  "page": zod.string().optional(),
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
@@ -87,6 +93,7 @@ export const GetElementParams = zod.object({
 
 export const GetElementResponse = zod.object({
   "id": zod.number(),
+  "page": zod.string(),
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
@@ -114,6 +121,7 @@ export const UpdateElementParams = zod.object({
 })
 
 export const UpdateElementBody = zod.object({
+  "page": zod.string().optional(),
   "name": zod.string().optional(),
   "description": zod.string().nullish(),
   "promptText": zod.string().optional(),
@@ -124,6 +132,7 @@ export const UpdateElementBody = zod.object({
 
 export const UpdateElementResponse = zod.object({
   "id": zod.number(),
+  "page": zod.string(),
   "name": zod.string(),
   "description": zod.string().nullish(),
   "promptText": zod.string(),
@@ -231,6 +240,7 @@ export const DeleteSubElementParams = zod.object({
  */
 export const GetSiteSettingsResponse = zod.object({
   "heroEyebrow": zod.string(),
+  "heroTitlePrefix": zod.string(),
   "heroTitle": zod.string(),
   "heroSubtitle": zod.string(),
   "chatPlaceholder": zod.string(),
@@ -239,6 +249,20 @@ export const GetSiteSettingsResponse = zod.object({
   "footerLinks": zod.array(zod.object({
   "label": zod.string(),
   "url": zod.string()
+})),
+  "navLinks": zod.array(zod.object({
+  "label": zod.string(),
+  "href": zod.string()
+})),
+  "chatSuggestions": zod.array(zod.object({
+  "icon": zod.string(),
+  "label": zod.string(),
+  "prompt": zod.string()
+})),
+  "partners": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "photoUrl": zod.string().nullish()
 }))
 })
 
@@ -248,6 +272,7 @@ export const GetSiteSettingsResponse = zod.object({
  */
 export const UpdateSiteSettingsBody = zod.object({
   "heroEyebrow": zod.string().optional(),
+  "heroTitlePrefix": zod.string().optional(),
   "heroTitle": zod.string().optional(),
   "heroSubtitle": zod.string().optional(),
   "chatPlaceholder": zod.string().optional(),
@@ -256,11 +281,26 @@ export const UpdateSiteSettingsBody = zod.object({
   "footerLinks": zod.array(zod.object({
   "label": zod.string(),
   "url": zod.string()
+})).optional(),
+  "navLinks": zod.array(zod.object({
+  "label": zod.string(),
+  "href": zod.string()
+})).optional(),
+  "chatSuggestions": zod.array(zod.object({
+  "icon": zod.string(),
+  "label": zod.string(),
+  "prompt": zod.string()
+})).optional(),
+  "partners": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "photoUrl": zod.string().nullish()
 })).optional()
 })
 
 export const UpdateSiteSettingsResponse = zod.object({
   "heroEyebrow": zod.string(),
+  "heroTitlePrefix": zod.string(),
   "heroTitle": zod.string(),
   "heroSubtitle": zod.string(),
   "chatPlaceholder": zod.string(),
@@ -269,7 +309,48 @@ export const UpdateSiteSettingsResponse = zod.object({
   "footerLinks": zod.array(zod.object({
   "label": zod.string(),
   "url": zod.string()
+})),
+  "navLinks": zod.array(zod.object({
+  "label": zod.string(),
+  "href": zod.string()
+})),
+  "chatSuggestions": zod.array(zod.object({
+  "icon": zod.string(),
+  "label": zod.string(),
+  "prompt": zod.string()
+})),
+  "partners": zod.array(zod.object({
+  "id": zod.string(),
+  "name": zod.string(),
+  "photoUrl": zod.string().nullish()
 }))
+})
+
+
+/**
+ * @summary List all content blocks
+ */
+export const ListContentBlocksResponseItem = zod.object({
+  "key": zod.string(),
+  "value": zod.string()
+})
+export const ListContentBlocksResponse = zod.array(ListContentBlocksResponseItem)
+
+
+/**
+ * @summary Create or update a content block by key
+ */
+export const UpdateContentBlockParams = zod.object({
+  "key": zod.coerce.string()
+})
+
+export const UpdateContentBlockBody = zod.object({
+  "value": zod.string()
+})
+
+export const UpdateContentBlockResponse = zod.object({
+  "key": zod.string(),
+  "value": zod.string()
 })
 
 

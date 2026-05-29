@@ -13,9 +13,15 @@ import { requireAuth } from "../middlewares/requireAuth";
 
 const router = Router();
 
-router.get("/", async (_req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const elements = await db.select().from(elementsTable).orderBy(elementsTable.order);
+    const page = typeof req.query.page === "string" ? req.query.page : undefined;
+
+    const elements = await db
+      .select()
+      .from(elementsTable)
+      .where(page ? eq(elementsTable.page, page) : undefined)
+      .orderBy(elementsTable.order);
     const subElements = await db.select().from(subElementsTable).orderBy(subElementsTable.order);
 
     const result = elements.map((el) => ({
@@ -39,6 +45,7 @@ router.post("/", requireAuth, async (req, res) => {
     const [element] = await db
       .insert(elementsTable)
       .values({
+        page: parsed.data.page ?? "home",
         name: parsed.data.name,
         description: parsed.data.description ?? null,
         promptText: parsed.data.promptText,
@@ -121,6 +128,7 @@ router.patch("/:id", requireAuth, async (req, res) => {
   try {
     const updates: Record<string, unknown> = {};
     const body = bodyParsed.data;
+    if (body.page !== undefined) updates.page = body.page;
     if (body.name !== undefined) updates.name = body.name;
     if (body.description !== undefined) updates.description = body.description;
     if (body.promptText !== undefined) updates.promptText = body.promptText;

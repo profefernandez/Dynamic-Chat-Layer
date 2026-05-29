@@ -4,6 +4,7 @@ import chatRouter from "./chat";
 import elementsRouter from "./elements";
 import subElementsRouter from "./subelements";
 import siteSettingsRouter from "./site-settings";
+import contentRouter from "./content";
 import storageRouter from "./storage";
 import imagesRouter from "./images";
 
@@ -14,6 +15,7 @@ router.use("/chat", chatRouter);
 router.use("/elements", elementsRouter);
 router.use("/elements/:elementId/subelements", subElementsRouter);
 router.use("/site-settings", siteSettingsRouter);
+router.use("/content", contentRouter);
 router.use("/images", imagesRouter);
 router.use(storageRouter);
 

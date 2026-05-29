@@ -21,11 +21,24 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const SUGGESTIONS = [
-  { icon: GraduationCap, label: 'Take AI Lesson', prompt: "I'd like to take an AI lesson. Can you teach me about AI in plain language and walk me through getting started?" },
-  { icon: Globe, label: 'Website and Development', prompt: 'Tell me about your website and development services — how can you help me build a website?' },
-  { icon: HeartHandshake, label: 'What is social work and AI', prompt: 'What is the connection between social work and AI? How does AI fit into social work?' },
-  { icon: Briefcase, label: 'AI consultation', prompt: 'I am interested in AI consultation. What does your consultation cover and how does it work?' },
+import type { ChatSuggestion } from '@workspace/api-client-react';
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  GraduationCap,
+  Globe,
+  HeartHandshake,
+  Briefcase,
+  Sparkles,
+  Languages,
+};
+const ICON_NAMES = Object.keys(ICON_MAP);
+const iconFor = (name: string) => ICON_MAP[name] ?? Sparkles;
+
+const DEFAULT_SUGGESTIONS: ChatSuggestion[] = [
+  { icon: 'GraduationCap', label: 'Take AI Lesson', prompt: "I'd like to take an AI lesson. Can you teach me about AI in plain language and walk me through getting started?" },
+  { icon: 'Globe', label: 'Website and Development', prompt: 'Tell me about your website and development services — how can you help me build a website?' },
+  { icon: 'HeartHandshake', label: 'What is social work and AI', prompt: 'What is the connection between social work and AI? How does AI fit into social work?' },
+  { icon: 'Briefcase', label: 'AI consultation', prompt: 'I am interested in AI consultation. What does your consultation cover and how does it work?' },
 ];
 
 export function ChatLayer() {
@@ -41,6 +54,35 @@ export function ChatLayer() {
   const { mutate: updateSettings } = useUpdateSiteSettings();
   const [editingPlaceholder, setEditingPlaceholder] = useState(false);
   const [draftPlaceholder, setDraftPlaceholder] = useState(placeholder);
+
+  const suggestions: ChatSuggestion[] = settings?.chatSuggestions?.length
+    ? settings.chatSuggestions
+    : DEFAULT_SUGGESTIONS;
+  const [editingChip, setEditingChip] = useState<number | null>(null);
+  const [chipDraft, setChipDraft] = useState<ChatSuggestion>({ icon: 'Sparkles', label: '', prompt: '' });
+
+  const saveSuggestions = (next: ChatSuggestion[]) => {
+    updateSettings(
+      { data: { chatSuggestions: next } },
+      { onSuccess: () => queryClient.invalidateQueries({ queryKey: getGetSiteSettingsQueryKey() }) },
+    );
+  };
+  const commitChip = () => {
+    if (editingChip === null) return;
+    const next = suggestions.map((s, i) => (i === editingChip ? chipDraft : s));
+    saveSuggestions(next);
+    setEditingChip(null);
+  };
+  const addChip = () => {
+    const next = [...suggestions, { icon: 'Sparkles', label: 'New chip', prompt: 'Ask me about...' }];
+    saveSuggestions(next);
+    setChipDraft(next[next.length - 1]);
+    setEditingChip(next.length - 1);
+  };
+  const deleteChip = (index: number) => {
+    saveSuggestions(suggestions.filter((_, i) => i !== index));
+    setEditingChip(null);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -210,19 +252,33 @@ export function ChatLayer() {
             </form>
 
             <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 mt-2.5">
-              {SUGGESTIONS.map(({ icon: Icon, label, prompt }) => (
+              {suggestions.map((s, i) => {
+                const Icon = iconFor(s.icon);
+                return (
+                  <div key={i} className="relative group">
+                    <button
+                      type="button"
+                      onClick={() => (editMode ? (setChipDraft(s), setEditingChip(i)) : handleSuggestion(s.prompt))}
+                      disabled={isSending}
+                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-on-surface transition-colors disabled:opacity-50"
+                      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    >
+                      <Icon className="h-3.5 w-3.5 text-primary" />
+                      {s.label}
+                      {editMode && <Pencil className="h-3 w-3 ml-1 text-on-surface-variant" />}
+                    </button>
+                  </div>
+                );
+              })}
+              {editMode && (
                 <button
-                  key={label}
                   type="button"
-                  onClick={() => handleSuggestion(prompt)}
-                  disabled={isSending}
-                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-on-surface transition-colors disabled:opacity-50"
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
+                  onClick={addChip}
+                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors border border-dashed border-primary/30"
                 >
-                  <Icon className="h-3.5 w-3.5 text-primary" />
-                  {label}
+                  + Add chip
                 </button>
-              ))}
+              )}
             </div>
           </div>
 
@@ -231,6 +287,78 @@ export function ChatLayer() {
           </p>
         </div>
       </div>
+
+      {editMode && editingChip !== null && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setEditingChip(null)}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="bg-[#1e1f23] border border-white/10 rounded-xl w-full max-w-md"
+          >
+            <div className="flex items-center justify-between p-4 border-b border-white/10">
+              <h3 className="text-on-surface font-semibold">Edit suggestion chip</h3>
+              <button onClick={() => setEditingChip(null)} className="text-on-surface-variant hover:text-on-surface p-1">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-4 space-y-3">
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1">Label</label>
+                <input
+                  value={chipDraft.label}
+                  onChange={(e) => setChipDraft({ ...chipDraft, label: e.target.value })}
+                  className="w-full bg-[#121317] border border-white/10 rounded px-3 py-2 text-sm text-on-surface"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1">Icon</label>
+                <select
+                  value={chipDraft.icon}
+                  onChange={(e) => setChipDraft({ ...chipDraft, icon: e.target.value })}
+                  className="w-full bg-[#121317] border border-white/10 rounded px-3 py-2 text-sm text-on-surface"
+                >
+                  {ICON_NAMES.map((name) => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs text-on-surface-variant mb-1">Prompt sent to chat</label>
+                <textarea
+                  value={chipDraft.prompt}
+                  onChange={(e) => setChipDraft({ ...chipDraft, prompt: e.target.value })}
+                  rows={3}
+                  className="w-full bg-[#121317] border border-white/10 rounded px-3 py-2 text-sm text-on-surface resize-none"
+                />
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-4 border-t border-white/10">
+              <button
+                onClick={() => deleteChip(editingChip)}
+                className="px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded"
+              >
+                Delete
+              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setEditingChip(null)}
+                  className="px-4 py-2 text-sm bg-white/5 text-on-surface hover:bg-white/10 rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={commitChip}
+                  className="px-4 py-2 text-sm bg-primary text-on-primary rounded hover:opacity-90"
+                >
+                  Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,15 +6,9 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export interface ElementInput {
-  page?: string;
+export interface Partner {
+  id: string;
   name: string;
   /** @nullable */
-  description?: string | null;
-  promptText: string;
-  /** @nullable */
   photoUrl?: string | null;
-  /** @nullable */
-  linkUrl?: string | null;
-  order?: number;
 }

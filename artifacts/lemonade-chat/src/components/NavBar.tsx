@@ -1,29 +1,59 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'wouter';
 import { Show, useClerk, useUser } from '@clerk/react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Pencil, Trash2, Plus, Check } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useChat } from '../context/ChatContext';
+import { useAdmin } from '../context/AdminContext';
+import {
+  useGetSiteSettings,
+  useUpdateSiteSettings,
+  getGetSiteSettingsQueryKey,
+  NavLink,
+} from '@workspace/api-client-react';
+import { useQueryClient } from '@tanstack/react-query';
+
+const DEFAULT_LINKS: NavLink[] = [
+  { href: '/', label: 'Home' },
+  { href: '/training', label: 'Training' },
+  { href: '/services', label: 'Consultation' },
+  { href: '/about', label: 'Websites' },
+  { href: '/contact', label: 'Partners' },
+];
 
 export function NavBar() {
   const [location] = useLocation();
   const { signOut } = useClerk();
   const { user } = useUser();
   const { setOverlayOpen } = useChat();
+  const { editMode } = useAdmin();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [editingLinks, setEditingLinks] = useState(false);
   const basePath = import.meta.env.BASE_URL.replace(/\/$/, '');
 
-  const links = [
-    { href: '/',         label: 'Home' },
-    { href: '/training', label: 'Training' },
-    { href: '/services', label: 'Consultation' },
-    { href: '/about',    label: 'Websites' },
-    { href: '/contact',  label: 'Partners' },
-  ];
+  const queryClient = useQueryClient();
+  const { data: settings } = useGetSiteSettings();
+  const { mutate: updateSettings } = useUpdateSiteSettings();
+
+  const links: NavLink[] = settings?.navLinks?.length ? settings.navLinks : DEFAULT_LINKS;
+  const [draftLinks, setDraftLinks] = useState<NavLink[]>(links);
+
+  const openLinkEditor = () => {
+    setDraftLinks(links);
+    setEditingLinks(true);
+  };
+
+  const saveLinks = () => {
+    updateSettings(
+      { data: { navLinks: draftLinks } },
+      { onSuccess: () => queryClient.invalidateQueries({ queryKey: getGetSiteSettingsQueryKey() }) },
+    );
+    setEditingLinks(false);
+  };
 
   const toggleMenu = () => {
     setOverlayOpen(true);
-    setMenuOpen(o => !o);
+    setMenuOpen((o) => !o);
   };
 
   const handleNav = () => {
@@ -77,30 +107,91 @@ export function NavBar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -8, scale: 0.98 }}
               transition={{ duration: 0.18 }}
-              className="absolute top-full left-margin-desktop mt-3 z-50 w-64 rounded-2xl p-2 shadow-2xl"
+              className="absolute top-full left-margin-desktop mt-3 z-50 w-72 rounded-2xl p-2 shadow-2xl"
               style={{
                 background: 'rgba(24, 25, 29, 0.98)',
                 border: '1px solid rgba(242, 202, 80, 0.22)',
                 backdropFilter: 'blur(20px)',
               }}
             >
-              {links.map(link => {
-                const active = location === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={handleNav}
-                    className={
-                      active
-                        ? 'block px-4 py-2.5 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-primary bg-primary/10 font-bold'
-                        : 'block px-4 py-2.5 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary hover:bg-white/5 transition-colors'
-                    }
+              {editMode && editingLinks ? (
+                <div className="p-1 space-y-2">
+                  {draftLinks.map((link, i) => (
+                    <div key={i} className="flex items-center gap-1.5">
+                      <input
+                        value={link.label}
+                        onChange={(e) =>
+                          setDraftLinks(draftLinks.map((l, j) => (j === i ? { ...l, label: e.target.value } : l)))
+                        }
+                        placeholder="Label"
+                        className="w-1/2 bg-[#121317] border border-white/10 rounded px-2 py-1 text-xs text-on-surface"
+                      />
+                      <input
+                        value={link.href}
+                        onChange={(e) =>
+                          setDraftLinks(draftLinks.map((l, j) => (j === i ? { ...l, href: e.target.value } : l)))
+                        }
+                        placeholder="/path"
+                        className="flex-1 bg-[#121317] border border-white/10 rounded px-2 py-1 text-xs text-on-surface"
+                      />
+                      <button
+                        onClick={() => setDraftLinks(draftLinks.filter((_, j) => j !== i))}
+                        className="text-on-surface-variant hover:text-red-400 p-1"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    onClick={() => setDraftLinks([...draftLinks, { label: 'New', href: '/' }])}
+                    className="flex items-center gap-1 text-xs text-on-surface-variant hover:text-primary px-2 py-1"
                   >
-                    {link.label}
-                  </Link>
-                );
-              })}
+                    <Plus className="w-3.5 h-3.5" /> Add link
+                  </button>
+                  <div className="flex items-center justify-end gap-2 pt-1 border-t border-white/10">
+                    <button
+                      onClick={() => setEditingLinks(false)}
+                      className="text-xs text-on-surface-variant hover:text-on-surface px-2 py-1"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={saveLinks}
+                      className="flex items-center gap-1 text-xs bg-primary text-on-primary rounded px-2 py-1"
+                    >
+                      <Check className="w-3.5 h-3.5" /> Save
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  {links.map((link) => {
+                    const active = location === link.href;
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={handleNav}
+                        className={
+                          active
+                            ? 'block px-4 py-2.5 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-primary bg-primary/10 font-bold'
+                            : 'block px-4 py-2.5 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary hover:bg-white/5 transition-colors'
+                        }
+                      >
+                        {link.label}
+                      </Link>
+                    );
+                  })}
+                  {editMode && (
+                    <button
+                      onClick={openLinkEditor}
+                      className="flex items-center gap-1.5 w-full px-4 py-2.5 mt-1 rounded-xl font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant hover:text-primary hover:bg-white/5 transition-colors border-t border-white/10"
+                    >
+                      <Pencil className="w-3.5 h-3.5" /> Edit menu links
+                    </button>
+                  )}
+                </>
+              )}
             </motion.div>
           </>
         )}

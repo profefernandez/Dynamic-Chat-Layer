@@ -171,7 +171,10 @@ function TileCard({ element, visualIndex, editMode, onActivate, onEdit }: TileCa
 export function Home() {
   const { editMode } = useAdmin();
   const queryClient = useQueryClient();
-  const { data: elements, isLoading } = useListElements({ query: { queryKey: getListElementsQueryKey() } });
+  const { data: elements, isLoading } = useListElements(
+    { page: 'home' },
+    { query: { queryKey: getListElementsQueryKey({ page: 'home' }) } },
+  );
   const { data: settings } = useGetSiteSettings();
   const { sendMessage, setOverlayOpen } = useChat();
 
@@ -198,9 +201,9 @@ export function Home() {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const invalidateSettings = () => queryClient.invalidateQueries({ queryKey: getGetSiteSettingsQueryKey() });
-  const invalidateElements = () => queryClient.invalidateQueries({ queryKey: getListElementsQueryKey() });
+  const invalidateElements = () => queryClient.invalidateQueries({ queryKey: getListElementsQueryKey({ page: 'home' }) });
 
-  const saveSetting = (field: 'heroEyebrow' | 'heroTitle' | 'heroSubtitle' | 'footerTagline' | 'footerCopyright') => (value: string) => {
+  const saveSetting = (field: 'heroEyebrow' | 'heroTitlePrefix' | 'heroTitle' | 'heroSubtitle' | 'footerTagline' | 'footerCopyright') => (value: string) => {
     updateSettings({ data: { [field]: value } }, { onSuccess: invalidateSettings });
   };
 
@@ -238,7 +241,7 @@ export function Home() {
       );
     } else if (creating) {
       createElement(
-        { data: { ...draft, order: items.length } },
+        { data: { ...draft, page: 'home', order: items.length } },
         {
           onSuccess: () => {
             invalidateElements();
@@ -283,6 +286,7 @@ export function Home() {
 
   const heroEyebrow = settings?.heroEyebrow ?? 'AI Literacy Education and Development';
   const heroSubtitle = settings?.heroSubtitle ?? 'Licensed Social Worker • AI Consultant • Educator • Website Designer';
+  const heroTitlePrefix = settings?.heroTitlePrefix ?? '60 Watts of';
   const heroTitleSecond = settings?.heroTitle ?? 'Clarity';
   const footerTagline = settings?.footerTagline ?? '60 Watts of Clarity';
   const footerCopyright = settings?.footerCopyright ?? '© 2024 60 Watts of Clarity. Illuminating AI Literacy for a Brighter Future.';
@@ -313,7 +317,12 @@ export function Home() {
           </div>
 
           <h1 className="font-headline-xl text-headline-xl text-on-surface mb-3 leading-tight">
-            <span className="text-white">60 Watts of </span>
+            <EditableText
+              as="span"
+              value={heroTitlePrefix}
+              onSave={saveSetting('heroTitlePrefix')}
+              className="text-white"
+            />{' '}
             <EditableText
               as="span"
               value={heroTitleSecond}
