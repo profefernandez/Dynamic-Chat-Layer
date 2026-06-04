@@ -127,7 +127,7 @@ export function ChatLayer() {
 
   return (
     <div
-      className="fixed top-0 right-0 bottom-0 z-0 flex flex-col pt-16 transition-[left] duration-300 ease-out"
+      className="fixed top-0 right-0 bottom-0 z-0 flex flex-col pt-14 sm:pt-16 transition-[left] duration-300 ease-out"
       style={{ background: '#121317', left: leftOffset }}
     >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -136,7 +136,8 @@ export function ChatLayer() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 rounded-full blur-[100px]" style={{ background: 'rgba(191,205,255,0.1)' }} />
       </div>
 
-      <div className="flex-1 overflow-y-auto px-6 py-8 pb-56 relative z-10">
+      {/* Messages scroll area — pb accounts for the fixed bottom bar */}
+      <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-8 pb-48 sm:pb-56 relative z-10">
         <div className="max-w-3xl mx-auto space-y-6">
           {messages.filter(m => !m.hidden).map((msg) => (
             msg.element ? (
@@ -146,7 +147,7 @@ export function ChatLayer() {
             ) : (
               <div key={msg.id} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div
-                  className={`max-w-[80%] rounded-xl px-5 py-3 ${
+                  className={`max-w-[80%] rounded-xl px-4 py-2.5 sm:px-5 sm:py-3 ${
                     msg.role === 'user'
                       ? 'bg-primary/15 text-on-surface border border-primary/25'
                       : 'glass-card text-on-surface'
@@ -175,8 +176,9 @@ export function ChatLayer() {
         </div>
       </div>
 
+      {/* Fixed bottom chat bar — tighter on mobile, full on sm+ */}
       <div
-        className="absolute bottom-3 left-0 right-0 px-3 pt-2 pb-2 md:px-4 z-50"
+        className="absolute bottom-0 left-0 right-0 px-2 pt-1.5 pb-[env(safe-area-inset-bottom,0.5rem)] sm:px-4 sm:pt-2 sm:pb-3 z-50"
         style={{ background: 'linear-gradient(to top, #121317 72%, transparent)' }}
       >
         <div className="max-w-3xl mx-auto relative">
@@ -216,14 +218,15 @@ export function ChatLayer() {
             style={{ background: 'radial-gradient(ellipse at center, rgba(242,202,80,0.2), transparent 70%)', filter: 'blur(12px)' }}
           />
           <div
-            className="relative rounded-3xl p-2.5 md:p-3 shadow-2xl"
+            className="relative rounded-2xl sm:rounded-3xl p-2 sm:p-3 shadow-2xl"
             style={{
               background: 'rgba(30, 31, 35, 0.95)',
               border: '1px solid rgba(242, 202, 80, 0.28)',
             }}
           >
-            <form onSubmit={handleSubmit} className="flex flex-wrap sm:flex-nowrap items-center gap-1.5 md:gap-2">
-              <div className="flex items-center gap-1.5 shrink-0">
+            {/* Input row — never wraps; icon buttons hidden on xs to save space */}
+            <form onSubmit={handleSubmit} className="flex flex-nowrap items-center gap-1 sm:gap-2">
+              <div className="hidden sm:flex items-center gap-1.5 shrink-0">
                 {[
                   { Icon: Accessibility, label: 'Accessibility options' },
                   { Icon: Mic, label: 'Voice input' },
@@ -245,14 +248,14 @@ export function ChatLayer() {
                 value={inputValue}
                 onChange={e => setInputValue(e.target.value)}
                 placeholder={placeholder}
-                className="order-first basis-full sm:order-none sm:basis-0 sm:flex-1 bg-transparent border-none text-on-surface focus-visible:ring-0 px-3 text-sm placeholder:text-outline h-9 font-body-md"
+                className="flex-1 min-w-0 bg-transparent border-none text-on-surface focus-visible:ring-0 px-2 sm:px-3 text-sm placeholder:text-outline h-9 font-body-md"
                 onFocus={() => setOverlayOpen(false)}
               />
               <button
                 type="button"
                 title="Translate"
                 aria-label="Translate"
-                className="h-9 w-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors shrink-0"
+                className="hidden sm:flex h-9 w-9 rounded-xl items-center justify-center text-on-surface-variant hover:text-primary transition-colors shrink-0"
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
               >
                 <Languages className="h-4 w-4" />
@@ -260,24 +263,25 @@ export function ChatLayer() {
               <Button
                 type="submit"
                 size="icon"
-                className="rounded-full h-10 w-10 shrink-0 transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]"
+                className="rounded-full h-9 w-9 sm:h-10 sm:w-10 shrink-0 transition-transform active:scale-95 hover:shadow-[0_0_15px_rgba(242,202,80,0.5)]"
                 style={{ background: '#f2ca50', color: '#3c2f00' }}
                 disabled={!inputValue.trim() || isSending}
               >
-                <Send className="h-4 w-4" />
+                <Send className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               </Button>
             </form>
 
-            <div className="flex flex-wrap items-center justify-center gap-1.5 md:gap-2 mt-2.5">
+            {/* Chips — single horizontal scroll row on mobile, wrap on desktop */}
+            <div className="flex sm:flex-wrap items-center gap-1.5 mt-2 overflow-x-auto no-scrollbar pb-0.5 sm:pb-0 sm:justify-center sm:gap-2">
               {suggestions.map((s, i) => {
                 const Icon = iconFor(s.icon);
                 return (
-                  <div key={i} className="relative group">
+                  <div key={i} className="relative group shrink-0">
                     <button
                       type="button"
                       onClick={() => (editMode ? (setChipDraft(s), setEditingChip(i)) : handleSuggestion(s.prompt))}
                       disabled={isSending}
-                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-on-surface transition-colors disabled:opacity-50"
+                      className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-on-surface transition-colors disabled:opacity-50 whitespace-nowrap"
                       style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
                     >
                       <Icon className="h-3.5 w-3.5 text-primary" />
@@ -291,7 +295,7 @@ export function ChatLayer() {
                 <button
                   type="button"
                   onClick={addChip}
-                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors border border-dashed border-primary/30"
+                  className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors border border-dashed border-primary/30 shrink-0"
                 >
                   + Add chip
                 </button>
@@ -299,7 +303,7 @@ export function ChatLayer() {
             </div>
           </div>
 
-          <p className="text-center font-body-md text-[11px] md:text-xs text-on-surface-variant/70 mt-2">
+          <p className="text-center font-body-md text-[10px] sm:text-xs text-on-surface-variant/70 mt-1.5 sm:mt-2 leading-tight">
             Voice • image upload • translation • read-aloud — built so everyone in the community can use it.
           </p>
         </div>

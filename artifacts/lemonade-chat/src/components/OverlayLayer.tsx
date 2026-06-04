@@ -31,7 +31,7 @@ export function OverlayLayer() {
         }}
         transition={{ type: 'spring', bounce: 0, duration: 0.55 }}
         style={{ left: leftOffset }}
-        className="fixed top-0 right-0 bottom-44 z-10 origin-top pointer-events-none transition-[left] duration-300 ease-out"
+        className="fixed top-0 right-0 bottom-[7.5rem] sm:bottom-44 z-10 origin-top pointer-events-none transition-[left] duration-300 ease-out"
       >
         <div
           className="absolute inset-0 overflow-hidden pointer-events-auto flex flex-col"
