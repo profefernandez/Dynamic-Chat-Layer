@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dynamic-chat-layer-api
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      # Set these in a .env file or your hosting secrets
+      DATABASE_URL: ${DATABASE_URL}
+      CLERK_PUBLISHABLE_KEY: ${CLERK_PUBLISHABLE_KEY}
+      CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
+      AI_INTEGRATIONS_GEMINI_API_KEY: ${AI_INTEGRATIONS_GEMINI_API_KEY}
+      PUBLIC_OBJECT_SEARCH_PATHS: ${PUBLIC_OBJECT_SEARCH_PATHS}
+      PRIVATE_OBJECT_DIR: ${PRIVATE_OBJECT_DIR}
+      # Add any other variables you need
+    # If you want to use your external Postgres (recommended for ScalaHosting):
+    # No db service here - connect via DATABASE_URL
+    # Example: DATABASE_URL=postgresql://user:pass@165.140.156.47:6543/yourdb
+
+  # Optional: Add this if you want a local Postgres for development
+  # db:
+  #   image: postgres:16
+  #   environment:
+  #     POSTGRES_USER: app
+  #     POSTGRES_PASSWORD: changeme
+  #     POSTGRES_DB: dynamicchat
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+
+# volumes:
+#   postgres_data:
