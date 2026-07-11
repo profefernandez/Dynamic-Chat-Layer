@@ -10,17 +10,17 @@ import {
 } from "./objectAcl";
 
 // ============================================================
-// Self-hosting note:
-// On Replit this uses the Replit sidecar for credentials.
-// On normal servers (production) it uses standard Google Cloud
-// credentials via GOOGLE_APPLICATION_CREDENTIALS or ADC.
+// Self-hosting ready version
+// - On Replit: uses sidecar (kept for compatibility)
+// - On normal servers (recommended): uses standard Google Cloud credentials
+//   via GOOGLE_APPLICATION_CREDENTIALS or Application Default Credentials (ADC)
 // ============================================================
 
-const isReplit = !!process.env.REPL_ID || process.env.NODE_ENV !== "production";
+const isReplit = !!process.env.REPL_ID;
 
 const REPLIT_SIDECAR_ENDPOINT = "http://127.0.0.1:1106";
 
-// Client initialization - dual mode for Replit vs self-hosted
+// Client initialization - dual mode
 let objectStorageClient: Storage;
 
 if (isReplit) {
@@ -42,8 +42,7 @@ if (isReplit) {
     projectId: "",
   });
 } else {
-  // Standard Google Cloud (self-hosted / production)
-  // Set GOOGLE_APPLICATION_CREDENTIALS env var or use Application Default Credentials
+  // Standard Google Cloud for self-hosted / production servers
   objectStorageClient = new Storage();
 }
 
@@ -72,17 +71,17 @@ export class ObjectStorageService {
     );
     if (paths.length === 0) {
       throw new Error(
-        "PUBLIC_OBJECT_SEARCH_PATHS not set. Set the env var to comma-separated bucket paths (e.g. my-bucket/public)."
+        "PUBLIC_OBJECT_SEARCH_PATHS not set. Set the env var to comma-separated bucket paths."
       );
     }
     return paths;
   }
 
   getPrivateObjectDir(): string {
-ان    const dir = process.env.PRIVATE_OBJECT_DIR || "";
+    const dir = process.env.PRIVATE_OBJECT_DIR || "";
     if (!dir) {
       throw new Error(
-        "PRIVATE_OBJECT_DIR not set. Set the env var to your private bucket path (e.g. my-bucket/private)."
+        "PRIVATE_OBJECT_DIR not set. Set the env var to your private bucket path."
       );
     }
     return dir;
@@ -240,9 +239,9 @@ function parseObjectPath(path: string): {
 }
 
 /**
- * Get a signed URL for upload/download.
- * - On Replit: uses the Replit sidecar
- * - On self-hosted: uses Google Cloud Storage native signed URL (requires service account with proper permissions)
+ * Get a signed URL.
+ * - Replit: uses sidecar
+ * - Self-hosted: uses Google Cloud native getSignedUrl (requires proper service account permissions)
  */
 async function signObjectURL({
   bucketName,
@@ -256,7 +255,6 @@ async function signObjectURL({
   ttlSec: number;
 }): Promise<string> {
   if (isReplit) {
-    // Replit sidecar path (original behavior)
     const request = {
       bucket_name: bucketName,
       object_name: objectName,
@@ -273,21 +271,18 @@ async function signObjectURL({
       }
     );
     if (!response.ok) {
-      throw new Error(
-        `Failed to sign object URL via Replit sidecar (status ${response.status}). ` +
-        `For self-hosted servers, set NODE_ENV=production and configure Google Cloud credentials.`
-      );
+      throw new Error(`Failed to sign object URL via Replit sidecar (status ${response.status})`);
     }
     const { signed_url: signedURL } = await response.json();
     return signedURL;
   } else {
-    // Standard Google Cloud signed URL (self-hosted / production)
+    // Standard Google Cloud signed URL for self-hosted servers
     const bucket = objectStorageClient.bucket(bucketName);
     const file = bucket.file(objectName);
 
     const [signedUrl] = await file.getSignedUrl({
       version: "v4",
-      action: method.toLowerCase() as "read" | "write" | "delete" | "resumable",
+      action: method.toLowerCase() as any,
       expires: Date.now() + ttlSec * 1000,
     });
     return signedUrl;
