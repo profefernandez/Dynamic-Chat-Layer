@@ -2,39 +2,23 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 
-const rawPort = process.env.PORT;
-
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
-}
-
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
-}
+// Replit dev-only plugins (only loaded when running inside Replit)
+const isReplit = process.env.REPL_ID !== undefined;
+const isDev = process.env.NODE_ENV !== "production";
 
 export default defineConfig({
-  base: basePath,
+  // BASE_PATH allows hosting under a subpath (e.g. /app). Defaults to root.
+  base: process.env.BASE_PATH || "/",
   plugins: [
     react(),
     tailwindcss({ optimize: false }),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
+    // Only include Replit-specific dev plugins when inside a Replit environment
+    ...(isDev && isReplit
       ? [
+          await import("@replit/vite-plugin-runtime-error-modal").then((m) =>
+            m.default?.() ?? m,
+          ),
           await import("@replit/vite-plugin-cartographer").then((m) =>
             m.cartographer({
               root: path.resolve(import.meta.dirname, ".."),
@@ -59,8 +43,8 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
-    port,
-    strictPort: true,
+    port: Number(process.env.PORT) || 5173,
+    strictPort: false,
     host: "0.0.0.0",
     allowedHosts: true,
     fs: {
@@ -68,7 +52,7 @@ export default defineConfig({
     },
   },
   preview: {
-    port,
+    port: Number(process.env.PORT) || 4173,
     host: "0.0.0.0",
     allowedHosts: true,
   },
