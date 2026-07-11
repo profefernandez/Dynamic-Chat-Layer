@@ -1,93 +1,68 @@
 # Dynamic Chat Layer
 
-A full-stack TypeScript platform for dynamic, editable websites with integrated AI chat, content management, and admin tools. Built with React + Vite (frontend), Express + Drizzle (API), Postgres, Clerk auth, and Gemini AI.
+Full-stack platform for dynamic editable websites with AI chat, content management, and admin tools.
 
-## Self-Hosting (Recommended)
+**Replit has been removed** from the core functionality. The project now supports normal self-hosted servers and Docker.
 
-This project was originally developed on Replit. The changes below make it portable to any standard server (VPS, ScalaHosting, Docker, etc.).
+## Quick Start (Self-Hosted)
 
-### 1. Prerequisites
-- Node.js 20+ (or use Docker)
-- pnpm 9+
-- PostgreSQL database (your ScalaHosting DB on port 6543 works)
-- Clerk account (for authentication)
-- Google Gemini API key (for image generation)
-- Google Cloud Storage bucket (for file uploads) — note: some Replit-specific credential code may need small updates for full production use
-
-### 2. Environment Variables
+### 1. Environment Variables
 
 ```bash
 cp .env.example .env
-# Edit .env with your real values (never commit secrets)
+# Edit .env with your real values (Clerk, Gemini, DATABASE_URL, etc.)
 ```
 
-Key variables:
-- `DATABASE_URL` — your Postgres connection string
-- `CLERK_PUBLISHABLE_KEY` + `CLERK_SECRET_KEY`
-- `AI_INTEGRATIONS_GEMINI_API_KEY`
-- Object storage paths
-
-Set these in your hosting control panel (sPanel) or Docker.
-
-### 3. Build
+### 2. Build
 
 ```bash
 pnpm install
-pnpm run build          # typecheck + build all packages
+pnpm run build
 ```
 
-Frontend builds to `artifacts/lemonade-chat/dist/public`.
-API builds to `artifacts/api-server/dist/index.mjs`.
+### 3. Run with Docker (Recommended)
 
-### 4. Run the API Server
+```bash
+# Build and start the API
+docker compose up -d --build
+
+# View logs
+docker compose logs -f api
+```
+
+The API will be available on port 5000.
+
+### 4. Without Docker
 
 ```bash
 cd artifacts/api-server
 node dist/index.mjs
 ```
 
-Or use PM2 / your hosting's Node process manager.
+Serve the built frontend (`artifacts/lemonade-chat/dist/public`) with Nginx, Caddy, or your hosting's static file serving.
 
-### 5. Serve the Frontend
+## Database
 
-Options:
-- Use your web server (Nginx/Caddy) to serve the static files from `artifacts/lemonade-chat/dist/public`
-- Or enhance the Express app to serve static files from a `public` folder
+This project uses your external Postgres (ScalaHosting on port 6543 is supported).
+Set `DATABASE_URL` in your environment.
 
-### 6. Database
+## Important Notes
 
-```bash
-cd lib/db
-pnpm run push   # or use proper migrations
-```
+- **Object Storage**: Uses Google Cloud Storage. On self-hosted servers it uses standard credentials (`GOOGLE_APPLICATION_CREDENTIALS` or ADC). Make sure your service account has proper permissions for the buckets.
+- **Clerk Auth**: Works with custom domains. The proxy at `/api/__clerk` is already production-ready.
+- **Frontend**: Built with Vite. Output is in `artifacts/lemonade-chat/dist/public`.
 
-### Docker (Easiest for most servers)
+## Project Structure
 
-```bash
-# Coming soon - Dockerfile and docker-compose.yml will be added
-# For now you can build and run the services manually as above
-```
+- `artifacts/lemonade-chat` — React frontend + admin UI
+- `artifacts/api-server` — Express backend
+- `lib/*` — Shared libraries (DB, API client, Gemini, storage)
 
-## Development (original Replit flow)
+## Files Added for Self-Hosting
 
-See `replit.md` for original dev commands.
+- `Dockerfile`
+- `docker-compose.yml`
+- `.env.example`
+- `README.md` (this file)
 
-## Architecture
-
-- `artifacts/lemonade-chat` — Main React frontend + admin UI
-- `artifacts/api-server` — Express backend (chat, content, elements, images, storage)
-- `lib/*` — Shared packages (DB, API client, Gemini integration, object storage)
-
-## Notes for Self-Hosting on ScalaHosting / Custom Domain
-
-- Clerk proxy (`/api/__clerk`) already supports custom domains via `x-forwarded-*` headers.
-- Set proper allowed origins in your Clerk dashboard.
-- Object storage currently has some Replit sidecar code. For full self-host you may want to update `artifacts/api-server/src/lib/objectStorage.ts` to use standard `@google-cloud/storage` credentials + native `getSignedUrl()`.
-
-## Next Steps / Roadmap
-
-- Full multi-stage Dockerfile + docker-compose
-- Improved object storage for standard GCS / S3
-- Production logging, healthchecks, and deployment scripts
-
-Built with human-centered AI principles.
+Replit-specific code has been made conditional or removed where possible.
